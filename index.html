@@ -13,7 +13,7 @@
       --bg: rgb(248, 245, 233);
       --fg: #0e0f12;
       --muted: #5c5c5c;
-      --accent: #FF6B35;
+      --accent: #FF7601;
       --card: #ffffff;
       --border: #d6d4cf;
       --menu-item-h: 36px;
@@ -46,6 +46,7 @@
       margin: 0;
       overflow: hidden;
       display: flex;
+      flex-direction: column; /* 让标题和副标题上下排列 */
       justify-content: center;
       align-items: center;
     }
@@ -88,9 +89,7 @@
       left: 0;
       right: 0;
       z-index: 1000;
-      margin-left: calc(50% - 50vw);
-      margin-right: calc(50% - 50vw);
-      width: 100vw;
+      width: 100%;
     }
     .menu a {
       color: var(--fg);
@@ -133,19 +132,35 @@
     letter-spacing: .02em;
     text-shadow: 0 4px 12px rgba(0,0,0,.25);
     text-align: center;
-    display: flex;             /* 默认横排 */
+    display: block;             /* 默认纵排 */
     gap: 12px;                 /* Max 和 Web 的间距 */
     justify-content: center;   /* 居中 */
     position: relative;
     }
 
-    .brand span {
-    color: #FF6B35; 
-    font-weight: 800;
-    letter-spacing: .02em;
-    position: relative;
-    display: inline-block;
+    .brand-word {
+      position: relative;
+      color: #FF7601; /* Mm's 为橙色 */
     }
+
+    .brand span {
+      font-weight: 800;
+      letter-spacing: .02em;
+      position: relative;
+      display: inline-block;
+    }
+
+    .brand-subtitle {
+      margin-top: 16px;
+      font-size: clamp(20px, 3vw, 28px);
+      font-weight: 600;
+      color: var(--fg); /* 使用默认前景色（黑色） */
+      text-align: center;
+      opacity: 0.85;
+      position: relative;
+      z-index: 2; /* 保证副标题显示在遮罩之上 */
+    }
+
 
     /* 手机视图下改为纵向排列 */
     @media (max-width: 600px) {
@@ -179,10 +194,11 @@
     /* 标题左上角的准星图标（相对 MaX 缩放和定位） */
     .brand-crosshair {
       position: absolute;
-      width: 0.7em;   /* 与 MaX 字体等比缩放 */
-      height: auto;
-      left: -0.50em;  /* 相对 MaX 左上角的偏移 */
-      top: -0.45em;
+      font-size: 0.7em; /* 比主标题略小，随字体缩放 */
+      left: 0.55em;    /* 往左上角移动 */
+      top: -1em;
+      color: #0e0f12 !important; /* 。为黑色 */
+      -webkit-text-stroke: 1px currentColor;
       pointer-events: none;
       filter: drop-shadow(0 0 6px rgba(0,0,0,.25));
     }
@@ -242,7 +258,7 @@
       text-shadow: 0 2px 6px rgba(0,0,0,.2);
     }
     .menu a.menu-logo::after {
-      background: linear-gradient(90deg, transparent, #FF6B35, transparent);
+      background: linear-gradient(90deg, transparent, #FF7601, transparent);
     }
     .menu a.menu-logo:hover {
       transform: scale(1.08);
@@ -265,8 +281,8 @@
     }
     .brand-crosshair {
       width: clamp(32px, 14vw, 64px);
-      left: -0.20em;
-      top: -0.65em;
+      left: 1.4em;    /* 往左上角移动 */
+      top: -1em;;
       transform: translateX(-50%);
     }
     .hero {
@@ -290,21 +306,21 @@
   </style>
 </head>
 <body>
+  <!-- 居中对齐的子菜单 -->
+  <nav class="menu" aria-label="主菜单">
+    <div class="menu-row menu-primary">
+      <a href="#" class="menu-logo">
+        Mmmmmm
+      </a>
+    </div>
+    <div class="menu-row menu-secondary">
+      <a href="#A">Research</a>
+      <a href="#B">Music</a>
+      <a href="#C">Craft</a>
+      <a href="#D">About</a>
+    </div>
+  </nav>
   <div class="frame">
-    <!-- 居中对齐的子菜单 -->
-    <nav class="menu" aria-label="主菜单">
-      <div class="menu-row menu-primary">
-        <a href="#" class="menu-logo">
-          Mmmmmm
-        </a>
-      </div>
-      <div class="menu-row menu-secondary">
-        <a href="#A">Research</a>
-        <a href="#B">Music</a>
-        <a href="#C">Craft</a>
-        <a href="#D">About</a>
-      </div>
-    </nav>
     <!-- 中央区域：菜单 + 标题（两者都作为定位参照） -->
     <main class="hero fade-in">
       <div class="hero-bg">
@@ -313,9 +329,10 @@
       <div class="hero-overlay"></div>
       <h1 class="brand" aria-label="Max Web">
         <span class="brand-word">
-          <img class="brand-crosshair" src="images/crosshair_vector.png" alt="Crosshair" />Mm's
+          <span class="brand-crosshair" aria-hidden="true">。</span>Mm's
         </span>Web
       </h1>
+      <p class="brand-subtitle">Coming Soon</p>
     </main>
 
     <a href="#" class="corner-image-link" aria-label="Back to top">
