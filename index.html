@@ -239,12 +239,12 @@
 
     .work-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 2rem;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.2rem;
     }
 
     .work-card {
-      border-radius: 20px;
+      border-radius: 14px;
       overflow: hidden;
       border: 1px solid var(--border);
       background: var(--surface);
@@ -255,8 +255,8 @@
     }
 
     .work-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.5);
       border-color: #3a3a3a;
     }
 
@@ -273,35 +273,35 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 2rem;
+      font-size: 1.5rem;
     }
 
     .work-card-body {
-      padding: 1.5rem;
+      padding: 1rem;
     }
 
     .work-card-tag {
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       font-weight: 600;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--text-muted);
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.35rem;
     }
 
     .work-card-title {
-      font-size: 1.15rem;
+      font-size: 0.95rem;
       font-weight: 700;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.35rem;
       line-height: 1.3;
       color: var(--text);
     }
 
     .work-card-desc {
-      font-size: 0.88rem;
+      font-size: 0.78rem;
       font-weight: 300;
       color: #777;
-      line-height: 1.7;
+      line-height: 1.6;
     }
 
     /* ── ABOUT / WHO IS Max ── */
@@ -399,50 +399,6 @@
       border: 1px solid var(--border);
       background: var(--surface-2);
       color: #ccc;
-    }
-
-    /* ── COMMUNITY ── */
-    .community-section { background: var(--bg); }
-
-    .community-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .community-card {
-      border-radius: 16px;
-      padding: 1.8rem;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      transition: border-color 0.2s;
-    }
-
-    .community-card:hover { border-color: #444; }
-
-    .community-card-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.3rem;
-      margin-bottom: 1rem;
-    }
-
-    .community-card-title {
-      font-size: 1rem;
-      font-weight: 700;
-      margin-bottom: 0.4rem;
-      color: var(--text);
-    }
-
-    .community-card-sub {
-      font-size: 0.82rem;
-      color: var(--text-muted);
-      font-weight: 300;
-      line-height: 1.6;
     }
 
     /* ── CONTACT ── */
@@ -664,9 +620,9 @@
   <nav>
     <a href="#" class="nav-logo">MaxWeb</a>
     <ul class="nav-links" id="nav-links">
-      <li><a href="#work">Research</a></li>
-      <li><a href="#community">Music</a></li>
-      <li><a href="#about">About</a></li>
+      <li><a href="research.html">Research</a></li>
+      <li><a href="#">Music</a></li>
+      <li><a href="#">About</a></li>
     </ul>
     <button class="nav-burger" id="nav-burger" aria-label="Toggle navigation" aria-expanded="false">
       <span></span>
@@ -726,40 +682,32 @@
         </div>
       </a>
 
-    </div>
-  </section>
+      <a href="#" class="work-card">
+        <div class="work-card-placeholder" style="background: linear-gradient(135deg,#2e1a0d,#4a2a0d);">🎧</div>
+        <div class="work-card-body">
+          <p class="work-card-tag">Music Production</p>
+          <h3 class="work-card-title">Project 4</h3>
+          <p class="work-card-desc">Description for project 4.</p>
+        </div>
+      </a>
 
-  <!-- COMMUNITY ENGAGEMENT -->
-  <section class="community-section" id="community">
-    <p class="section-label">Recognition</p>
-    <h2 class="section-heading">Community Engagement</h2>
-    <p class="section-sub">Featured appearances, speaking engagements, and contributions to the community.</p>
+      <a href="#" class="work-card">
+        <div class="work-card-placeholder" style="background: linear-gradient(135deg,#2e0d1a,#4a0d2e);">🎼</div>
+        <div class="work-card-body">
+          <p class="work-card-tag">Research</p>
+          <h3 class="work-card-title">Project 5</h3>
+          <p class="work-card-desc">Description for project 5.</p>
+        </div>
+      </a>
 
-    <div class="community-grid">
-
-      <div class="community-card">
-        <div class="community-card-icon" style="background:#0d2010;">🎙️</div>
-        <h4 class="community-card-title">Conference Speaker</h4>
-        <p class="community-card-sub">abc abc test direction.</p>
-      </div>
-
-      <div class="community-card">
-        <div class="community-card-icon" style="background:#200d10;">🎓</div>
-        <h4 class="community-card-title">Mentor & Educator</h4>
-        <p class="community-card-sub">live live live live live.</p>
-      </div>
-
-      <div class="community-card">
-        <div class="community-card-icon" style="background:#150d20;">🎵</div>
-        <h4 class="community-card-title">Podcast Guest</h4>
-        <p class="community-card-sub">ddddd left left left left.</p>
-      </div>
-
-      <div class="community-card">
-        <div class="community-card-icon" style="background:#1e1e0d;">✍️</div>
-        <h4 class="community-card-title">Writer & Activist</h4>
-        <p class="community-card-sub">Wzzzzzzzzzzz rite rite.</p>
-      </div>
+      <a href="#" class="work-card">
+        <div class="work-card-placeholder" style="background: linear-gradient(135deg,#1a2e0d,#2e4a1a);">🌏</div>
+        <div class="work-card-body">
+          <p class="work-card-tag">Policy · Culture</p>
+          <h3 class="work-card-title">Project 6</h3>
+          <p class="work-card-desc">Description for project 6.</p>
+        </div>
+      </a>
 
     </div>
   </section>
@@ -789,7 +737,7 @@
       });
     }, { threshold: 0.1 });
 
-    document.querySelectorAll('.work-card, .community-card, .about-inner').forEach(el => {
+    document.querySelectorAll('.work-card, .about-inner').forEach(el => {
       el.style.opacity = '0';
       el.style.transform = 'translateY(24px)';
       el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
