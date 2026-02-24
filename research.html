@@ -200,8 +200,70 @@
       color: var(--text-muted);
     }
 
-    @media (max-width: 600px) {
-      .nav-links { display: none; }
+    /* ── HAMBURGER BUTTON ── */
+    .nav-burger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      z-index: 101;
+    }
+
+    .nav-burger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: transform 0.3s ease, opacity 0.2s ease;
+    }
+
+    .nav-burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-burger.open span:nth-child(2) { opacity: 0; }
+    .nav-burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    @media (max-width: 768px) {
+      .nav-burger { display: flex; }
+
+      .nav-links {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: 72px;
+        left: 0;
+        right: 0;
+        background: rgba(10,10,10,0.97);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border);
+        padding: 0.5rem 5% 1rem;
+        gap: 0;
+        transform: translateY(-110%);
+        opacity: 0;
+        pointer-events: none;
+        transition: transform 0.32s ease, opacity 0.25s ease;
+      }
+
+      .nav-links.open {
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .nav-links li { border-bottom: 1px solid var(--border); }
+      .nav-links li:last-child { border-bottom: none; }
+
+      .nav-links a {
+        display: block;
+        padding: 1rem 0;
+        font-size: 1rem;
+        letter-spacing: 0.06em;
+      }
+
       .pub-section { padding: 0 5% 80px; }
     }
   </style>
@@ -211,11 +273,16 @@
   <!-- NAV -->
   <nav>
     <a href="index.html" class="nav-logo">MaxWeb</a>
-    <ul class="nav-links">
+    <ul class="nav-links" id="nav-links">
       <li><a href="research.html" class="active">Research</a></li>
       <li><a href="music.html">Music</a></li>
       <li><a href="about.html">About</a></li>
     </ul>
+    <button class="nav-burger" id="nav-burger" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </nav>
 
   <!-- PAGE HEADER -->
@@ -298,5 +365,23 @@
     <p class="footer-bottom">© 2026 Max Web. All rights reserved. · Perth, WA</p>
   </footer>
 
+  <script>
+    const burger = document.getElementById('nav-burger');
+    const navLinks = document.getElementById('nav-links');
+
+    burger.addEventListener('click', () => {
+      const isOpen = burger.classList.toggle('open');
+      navLinks.classList.toggle('open', isOpen);
+      burger.setAttribute('aria-expanded', isOpen);
+    });
+
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        burger.classList.remove('open');
+        navLinks.classList.remove('open');
+        burger.setAttribute('aria-expanded', 'false');
+      });
+    });
+  </script>
 </body>
 </html>
