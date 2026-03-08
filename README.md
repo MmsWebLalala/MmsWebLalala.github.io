@@ -1,2 +1,2 @@
 # MmsWebLalala.github.io
-max's website
+Mm's website
