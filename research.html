@@ -121,6 +121,65 @@
       line-height: 1.8;
     }
 
+    .kw-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-top: 1.6rem;
+      max-width: 520px;
+    }
+
+    .kw-item {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.35rem;
+    }
+
+    .kw-tag {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .kw-tag.amber   { background: rgba(251,191,36,0.13);  color: #fcd34d; }
+    .kw-tag.red     { background: rgba(248,113,113,0.13); color: #fca5a5; }
+    .kw-tag.violet  { background: rgba(155,121,232,0.15); color: #c4a8f5; }
+
+    .kw-desc {
+      font-size: 0.82rem;
+      font-weight: 300;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .page-header blockquote {
+      margin-top: 2rem;
+      max-width: 560px;
+      padding: 1.2rem 1.6rem;
+      border-left: 2px solid var(--border);
+    }
+
+    .page-header blockquote p {
+      font-size: 0.82rem;
+      font-style: italic;
+      color: var(--text-muted);
+      line-height: 1.9;
+      max-width: none;
+    }
+
+    .page-header blockquote footer {
+      margin-top: 0.9rem;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      opacity: 0.6;
+    }
+
     /* ── PUBLICATIONS ── */
     .pub-section {
       padding: 0 5% 120px;
@@ -149,8 +208,22 @@
 
     .pub-item {
       display: flex;
-      gap: 1rem;
+      flex-wrap: wrap;
+      gap: 0.5rem 1rem;
       align-items: baseline;
+    }
+
+    .pub-tags {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-top: 0.1rem;
+    }
+
+    .pub-tags .kw-tag {
+      font-size: 0.68rem;
+      padding: 0.15rem 0.55rem;
     }
 
     .pub-num {
@@ -290,6 +363,46 @@
     <p class="section-label">Publications</p>
     <h1>Research</h1>
     <p>A list of academic publications and research contributions.</p>
+    <div class="kw-list">
+      <div class="kw-item">
+        <span class="kw-tag amber">Values</span>
+        <span class="kw-desc">Why we choose. Why societies choose.</span>
+      </div>
+      <div class="kw-item">
+        <span class="kw-tag red">Hierarchy</span>
+        <span class="kw-desc">Inequality, are we just going to let it slide?</span>
+      </div>
+      <div class="kw-item">
+        <span class="kw-tag violet">Experience</span>
+        <span class="kw-desc">How things feel. Are you happy with your life? Are you happy with your choice?</span>
+      </div>
+    </div>
+    <blockquote>
+      <p>
+        Choose life；
+        Choose a job；
+        Choose a career；
+        Choose a family；
+        Choose a f***ing big television, Choose washing machines, cars, compact disc players, and electrical tin can openers；
+        Choose good health, low cholesterol and dental insurance；
+        Choose fixed-interest mortgage repayments；
+        Choose a starter home；
+        Choose your friends；
+        Choose leisure wear and matching luggage；
+        Choose a three piece suit on hire purchase in a range of f***ing fabrics；
+        Choose DIY and wondering who the f*** you are on a Sunday morning；
+        Choose sitting on that couch watching mind-numbing spirit-crushing game shows, stuffing f***ing junk food into your mouth；
+        Choose rotting away at the end of it all, pissing your last in a miserable home, nothing more than an embarrassment to the selfish, f***ed-up brats you have spawned to replace yourself；
+        Choose your future；
+        Choose life；
+        But why would I want to do a thing like that?；
+        I chose not to choose life；
+        I chose something else.
+      </p>
+      <footer>
+        <cite>Irvine Welsh, Trainspotting (1993)；电影版Movie Danny Boyle (1996)</cite>
+      </footer>
+    </blockquote>
   </header>
 
   <!-- PUBLICATIONS -->
@@ -301,6 +414,7 @@
         <li class="pub-item">
           <span class="pub-num">1.</span>
           <p class="pub-text">Fang, Z., Lv, X., Ma, X., Zhou, Y., Li, J., &amp; Gao, X. (2026). Does avatar's role reflect your personality? A network analysis among players in league of legends. <em>Entertainment Computing</em>, 101126. <a href="https://doi.org/10.1016/j.entcom.2026.101126" target="_blank">https://doi.org/10.1016/j.entcom.2026.101126</a></p>
+          <div class="pub-tags"><span class="kw-tag violet">Experience</span></div>
         </li>
       </ol>
     </div>
@@ -311,14 +425,17 @@
         <li class="pub-item">
           <span class="pub-num">1.</span>
           <p class="pub-text">Wu, F., Zhang, Y., Zhao, Y., Zhang, C., &amp; Ma, X. (2025). Willingness for Cross-Class Contact of Different Social Classes and the Mediating Role of Negative Contact Expectations. <em>Personality and Social Psychology Bulletin</em>, 01461672251316690. <a href="https://doi.org/10.1177/01461672251316690" target="_blank">https://doi.org/10.1177/01461672251316690</a></p>
+          <div class="pub-tags"><span class="kw-tag red">Hierarchy</span></div>
         </li>
         <li class="pub-item">
           <span class="pub-num">2.</span>
           <p class="pub-text">Ma, X., Zhao, Y., &amp; Fan, P. (2025). Striving for Success and Being Seen as Virtuous: The Impact of Achievement Values on Reputation Concerns. <em>Social and Personality Psychology Compass</em>, 19(4), e70049. <a href="https://doi.org/10.1111/spc3.70049" target="_blank">https://doi.org/10.1111/spc3.70049</a></p>
+          <div class="pub-tags"><span class="kw-tag amber">Values</span></div>
         </li>
         <li class="pub-item">
           <span class="pub-num">3.</span>
           <p class="pub-text">Shi, Y., Zhao, Y., Ma, X., &amp; Chen, S. (2025). From Gender Threat to Farsightedness: How Women's Perceived Intergroup Threat Shapes Their Long-Term Orientation. <em>Behavioral Sciences</em>, 15(11). <a href="https://doi.org/10.3390/bs15111542" target="_blank">https://doi.org/10.3390/bs15111542</a></p>
+          <div class="pub-tags"><span class="kw-tag red">Hierarchy</span></div>
         </li>
       </ol>
     </div>
@@ -329,10 +446,12 @@
         <li class="pub-item">
           <span class="pub-num">1.</span>
           <p class="pub-text">Ma, X., Chen, B., &amp; Zhao, Y. (2024). The paradox of pandemic mitigation? Moderating role of pandemic severity on the impact of social distancing policies: a cultural value perspective. <em>Globalization and Health</em>, 20(1), 13. <a href="https://doi.org/10.1186/s12992-024-01018-y" target="_blank">https://doi.org/10.1186/s12992-024-01018-y</a></p>
+          <div class="pub-tags"><span class="kw-tag amber">Values</span></div>
         </li>
         <li class="pub-item">
           <span class="pub-num">2.</span>
           <p class="pub-text">Zhao, N., Zhao, Y., Bao, Y., Mo, X., &amp; Ma, X. (2024). Effects of multicultural experiences on empathy: A model of the roles of positive emotion and critical thinking. <em>Journal of Applied Social Psychology</em>, 1–11. <a href="https://doi.org/10.1111/jasp.13068" target="_blank">https://doi.org/10.1111/jasp.13068</a></p>
+          <div class="pub-tags"><span class="kw-tag amber">Values</span><span class="kw-tag violet">Experience</span></div>
         </li>
       </ol>
     </div>
@@ -343,6 +462,7 @@
         <li class="pub-item">
           <span class="pub-num">1.</span>
           <p class="pub-text">赵玉芳, 马星杨 &amp; 张秀静.(2023).内卷"胜出者"真的幸福吗?——自我增强价值观对主观社会阶层和主观幸福感关系的调节作用.<em>辽宁师范大学学报(社会科学版)</em>(01),25-34. <a href="https://doi.org/10.16216/j.cnki.lsxbwk.202301025" target="_blank">https://doi.org/10.16216/j.cnki.lsxbwk.202301025</a></p>
+          <div class="pub-tags"><span class="kw-tag red">Hierarchy</span><span class="kw-tag amber">Values</span><span class="kw-tag violet">Experience</span></div>
         </li>
       </ol>
     </div>
@@ -353,6 +473,7 @@
         <li class="pub-item">
           <span class="pub-num">1.</span>
           <p class="pub-text">黄金华, 赵玉芳, 林静, 蒋丽娇 &amp; 马星杨.(2022).社会阶层对老年人负性情绪的影响：社会支持的调节作用.<em>西南大学学报(自然科学版)</em>(10),21-28. <a href="https://doi.org/10.13718/j.cnki.xdzk.2022.10.003" target="_blank">https://doi.org/10.13718/j.cnki.xdzk.2022.10.003</a></p>
+          <div class="pub-tags"><span class="kw-tag red">Hierarchy</span><span class="kw-tag violet">Experience</span></div>
         </li>
       </ol>
     </div>
@@ -363,6 +484,7 @@
         <li class="pub-item">
           <span class="pub-num">1.</span>
           <p class="pub-text">马星杨, 赵玉芳, 李元方, 姚菲 &amp; 龚宁馨.(2021).学习效能感、自我决定动机对学业期望的作用:基于统合模型的分析.<em>心理技术与应用</em>(01),12-19. <a href="https://doi.org/10.16842/j.cnki.issn2095-5588.2021.01.002" target="_blank">https://doi.org/10.16842/j.cnki.issn2095-5588.2021.01.002</a></p>
+          <div class="pub-tags"><span class="kw-tag amber">Values</span></div>
         </li>
       </ol>
     </div>
