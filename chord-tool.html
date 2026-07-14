@@ -309,6 +309,126 @@
 
       .diatonic-row { flex-wrap: wrap; }
     }
+
+    /* ── KEY FINDER ── */
+    .kf-hint {
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    .kf-clear {
+      display: block;
+      margin: 0 auto 1rem;
+      background: none;
+      border: none;
+      color: var(--accent);
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .kf-clear:hover { opacity: 0.7; }
+
+    .kf-results-title {
+      text-align: center;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.8rem;
+    }
+
+    .kf-empty {
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      opacity: 0.5;
+      padding: 3rem 0;
+    }
+
+    .key-match {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
+      margin-bottom: 0.5rem;
+      transition: border-color 0.2s;
+    }
+
+    .key-match.perfect { border-color: var(--accent); background: rgba(79,142,247,0.08); }
+
+    .key-match-name {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .key-match-notes {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-left: 0.6rem;
+    }
+
+    .key-match-badge {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 0.2rem 0.55rem;
+      border-radius: 999px;
+      background: var(--surface-2);
+      color: var(--text-muted);
+    }
+
+    .key-match.perfect .key-match-badge {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    /* ── KEY REFERENCE ── */
+    .kr-card {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--surface);
+      padding: 1.5rem;
+    }
+
+    .kr-title {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      color: var(--text);
+      margin-bottom: 0.6rem;
+    }
+
+    .kr-notes {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    .kr-notes b { color: var(--text); font-weight: 500; }
+
+    .kr-degrees {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 0.4rem;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .kr-deg-note {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .kr-deg-label {
+      font-size: 0.6rem;
+      color: var(--text-muted);
+      margin-top: 0.15rem;
+    }
   </style>
 </head>
 <body>
@@ -336,9 +456,11 @@
     <div class="tabs">
       <button class="tab-btn active" data-tab="chord">Chord Lookup</button>
       <button class="tab-btn" data-tab="diatonic">Diatonic Chords</button>
+      <button class="tab-btn" data-tab="keyfinder">Key Finder</button>
+      <button class="tab-btn" data-tab="keyref">Key Reference</button>
     </div>
 
-    <!-- Root selector (shared) -->
+    <!-- Root selector (shared, hidden on keyfinder) -->
     <div class="selector-row" id="root-selector"></div>
 
     <!-- Tab: Chord Query -->
@@ -352,6 +474,22 @@
       <div class="selector-row" id="scale-selector-d"></div>
       <div class="diatonic-row" id="diatonic-row"></div>
       <div id="diatonic-result"></div>
+    </div>
+
+    <!-- Tab: Key Finder -->
+    <div class="tab-panel" id="panel-keyfinder">
+      <p class="kf-hint">Select notes to find matching keys</p>
+      <div class="selector-row" id="kf-note-selector"></div>
+      <div id="kf-clear-wrap"></div>
+      <div id="kf-piano"></div>
+      <div id="kf-results"></div>
+    </div>
+
+    <!-- Tab: Key Reference -->
+    <div class="tab-panel" id="panel-keyref">
+      <div class="selector-row" id="kr-root-selector"></div>
+      <div class="selector-row" id="kr-scale-selector"></div>
+      <div id="kr-result"></div>
     </div>
   </div>
 
@@ -468,6 +606,32 @@
         </div>`;
     }
 
+    // ── Key Finder ──
+    function getScaleNotes(root, scale) {
+      const s = SCALES[scale];
+      const ri = nIdx(root);
+      return s.iv.map(i => nName(ri + i));
+    }
+
+    function findKeys(selectedNotes) {
+      if (selectedNotes.length === 0) return [];
+      const selected = new Set(selectedNotes.map(n => nIdx(n)));
+      const results = [];
+      for (const root of NOTES) {
+        for (const scale of ['major','minor']) {
+          const scaleNotes = getScaleNotes(root, scale);
+          const scaleSet = new Set(scaleNotes.map(n => nIdx(n)));
+          let matchCount = 0;
+          for (const s of selected) { if (scaleSet.has(s)) matchCount++; }
+          if (matchCount > 0) {
+            results.push({ root: norm(root), scale, scaleNotes, matchCount, totalNotes: selectedNotes.length });
+          }
+        }
+      }
+      results.sort((a, b) => b.matchCount - a.matchCount);
+      return results;
+    }
+
     // ── State ──
     let state = {
       tab: 'chord',
@@ -475,6 +639,9 @@
       chordType: 'maj',
       scale: 'major',
       diaIdx: 0,
+      kfNotes: [],
+      krRoot: 'C',
+      krScale: 'major',
     };
 
     // ── Render helpers ──
@@ -490,6 +657,9 @@
     }
 
     function render() {
+      // Hide root selector on keyfinder tab
+      document.getElementById('root-selector').style.display = (state.tab === 'keyfinder' || state.tab === 'keyref') ? 'none' : '';
+
       btnRow(
         document.getElementById('root-selector'),
         NOTES.map(n => ({val:n, text:n})),
@@ -502,6 +672,8 @@
 
       if (state.tab === 'chord') renderChord();
       else if (state.tab === 'diatonic') renderDiatonic();
+      else if (state.tab === 'keyfinder') renderKeyFinder();
+      else if (state.tab === 'keyref') renderKeyRef();
     }
 
     function renderChord() {
@@ -527,6 +699,89 @@
       });
 
       document.getElementById('diatonic-result').innerHTML = chordCardHTML(dia[state.diaIdx].chord);
+    }
+
+    function renderKeyFinder() {
+      // Note toggle buttons
+      const sel = document.getElementById('kf-note-selector');
+      sel.innerHTML = '';
+      NOTES.forEach(n => {
+        const b = document.createElement('button');
+        b.className = 'sel-btn' + (state.kfNotes.includes(n) ? ' active' : '');
+        b.textContent = n;
+        b.onclick = () => {
+          if (state.kfNotes.includes(n)) state.kfNotes = state.kfNotes.filter(x => x !== n);
+          else state.kfNotes.push(n);
+          render();
+        };
+        sel.appendChild(b);
+      });
+
+      // Clear button
+      const clearWrap = document.getElementById('kf-clear-wrap');
+      if (state.kfNotes.length > 0) {
+        clearWrap.innerHTML = '<button class="kf-clear">Clear all</button>';
+        clearWrap.querySelector('button').onclick = () => { state.kfNotes = []; render(); };
+      } else {
+        clearWrap.innerHTML = '';
+      }
+
+      // Piano
+      document.getElementById('kf-piano').innerHTML = state.kfNotes.length > 0
+        ? '<div class="piano-wrap">' + renderPiano(state.kfNotes) + '</div>'
+        : '';
+
+      // Results
+      const res = document.getElementById('kf-results');
+      if (state.kfNotes.length === 0) {
+        res.innerHTML = '<p class="kf-empty">Tap notes above to begin</p>';
+        return;
+      }
+
+      const matches = findKeys(state.kfNotes);
+      const shown = matches.filter(m => m.matchCount >= m.totalNotes - 1).slice(0, 12);
+      const hasPerfect = shown.some(m => m.matchCount === m.totalNotes);
+
+      let html = '<p class="kf-results-title">' + (hasPerfect ? 'Matching Keys' : 'Closest Keys') + '</p>';
+      shown.forEach(m => {
+        const perfect = m.matchCount === m.totalNotes;
+        html += `<div class="key-match${perfect ? ' perfect' : ''}">
+          <div>
+            <span class="key-match-name">${m.root} ${m.scale === 'major' ? 'Major' : 'Minor'}</span>
+            <span class="key-match-notes">${m.scaleNotes.join(' - ')}</span>
+          </div>
+          <span class="key-match-badge">${m.matchCount}/${m.totalNotes}</span>
+        </div>`;
+      });
+      res.innerHTML = html;
+    }
+
+    function renderKeyRef() {
+      btnRow(document.getElementById('kr-root-selector'),
+        NOTES.map(n => ({val:n, text:n})),
+        state.krRoot, v => { state.krRoot = v; render(); });
+
+      btnRow(document.getElementById('kr-scale-selector'),
+        [{val:'major',text:'Major'},{val:'minor',text:'Minor'}],
+        state.krScale, v => { state.krScale = v; render(); });
+
+      const notes = getScaleNotes(state.krRoot, state.krScale);
+      const degNames = state.krScale === 'major'
+        ? ['1 (Tonic)','2 (Supertonic)','3 (Mediant)','4 (Subdominant)','5 (Dominant)','6 (Submediant)','7 (Leading)']
+        : ['1 (Tonic)','2 (Supertonic)','3 (Mediant)','4 (Subdominant)','5 (Dominant)','6 (Submediant)','7 (Subtonic)'];
+
+      let degs = '';
+      notes.forEach((n, i) => {
+        degs += `<div><div class="kr-deg-note">${n}</div><div class="kr-deg-label">${degNames[i]}</div></div>`;
+      });
+
+      document.getElementById('kr-result').innerHTML = `
+        <div class="kr-card">
+          <div class="kr-title">${state.krRoot} ${state.krScale === 'major' ? 'Major' : 'Minor'}</div>
+          <div class="kr-notes">Notes: <b>${notes.join(' - ')}</b></div>
+          <div class="kr-degrees">${degs}</div>
+          <div class="piano-wrap">${renderPiano(notes, state.krRoot)}</div>
+        </div>`;
     }
 
     // ── Tab switching ──
