@@ -1,0 +1,235 @@
+/* Shared inner-page system. The home page keeps its own layout. */
+:root {
+  --shell-bg: #f4f5f4;
+  --shell-card: #dce1e2;
+  --shell-card-muted: #edf0f0;
+  --shell-ink: #1d2020;
+  --shell-soft: #5c6262;
+  --shell-line: #c7cdce;
+  --shell-accent: #e04b00;
+  --shell-mono: 'DM Mono', 'JetBrains Mono', ui-monospace, monospace;
+  --shell-body: 'Inter', 'Noto Sans SC', -apple-system, sans-serif;
+  /* Grey blocks sit close to the browser edge, like the MAD reference. */
+  --shell-gutter: clamp(.5rem, .8vw, 1rem);
+  --shell-title-inset: clamp(1rem, 1.2vw, 1.35rem);
+  --shell-edge: var(--shell-gutter);
+  --shell-mark-width: clamp(88px, 11vw, 132px);
+  --shell-top-width: clamp(3rem, 5vw, 4rem);
+  --shell-radius: clamp(.85rem, 1.2vw, 1.15rem);
+  --shell-gap: clamp(.65rem, 1.2vw, 1rem);
+  --symbol-particle-density: 1;
+  --shell-rail-center: calc((var(--shell-edge) + var(--shell-mark-width) + var(--shell-gutter)) / 2);
+}
+
+html { background: var(--shell-bg) !important; scroll-behavior: smooth; }
+body {
+  min-height: 100vh;
+  /* A compact right rail lets the MM mark sit outside the content blocks. */
+  padding: clamp(1rem, 2.5vw, 2rem) calc(var(--shell-edge) + var(--shell-mark-width) + var(--shell-gutter)) clamp(3rem, 7vw, 6rem) var(--shell-gutter) !important;
+  background: var(--shell-bg) !important;
+  color: var(--shell-ink) !important;
+  font-family: var(--shell-body) !important;
+}
+body::before { display: none !important; }
+body::after { opacity: .24 !important; }
+body > nav, body > footer { display: none !important; }
+
+/* The title sits directly on the page. Content, rather than every element,
+   receives the quiet grey block treatment. */
+.pub-section, .music-section {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 0 var(--shell-gap) !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+.page-header::before { display: none !important; }
+.page-header > *, body > main > * { position: relative; z-index: 1; }
+
+.page-header {
+  width: 100% !important;
+  max-width: none !important;
+  min-height: 0 !important;
+  margin: 0 0 var(--shell-gap) !important;
+  padding: clamp(3rem, 6vw, 6.25rem) var(--shell-title-inset) clamp(2rem, 4vw, 4rem) !important;
+  display: flex !important;
+  flex-direction: column;
+  justify-content: flex-start;
+  overflow: visible !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+.page-header h1, .about-card h1, .music-title, .chord-name, .kr-title {
+  color: var(--shell-accent) !important;
+  font-family: var(--shell-body) !important;
+  font-weight: 600 !important;
+  letter-spacing: -.055em !important;
+  text-shadow: none !important;
+}
+.page-header h1, .about-card h1 { font-size: clamp(2.75rem, 5vw, 5.5rem) !important; line-height: .9 !important; margin: 0 0 1.4rem !important; }
+.page-header p, .about-bio, .music-desc, .music-subtitle, .chord-label, .chord-detail, .kw-desc, .kf-hint, .kf-empty, .kr-notes {
+  color: var(--shell-soft) !important;
+  font-family: var(--shell-body) !important;
+}
+.page-header > p:not(.section-label), .page-header .intro-large { max-width: 39rem !important; font-size: clamp(.95rem, 1.4vw, 1.08rem) !important; line-height: 1.65 !important; }
+.page-header .subtitle { margin: -.7rem 0 .7rem !important; font-size: 1rem !important; }
+.section-label, .hero-eyebrow {
+  margin-bottom: 1.1rem !important;
+  color: var(--shell-accent) !important;
+  font: 500 .72rem/1 var(--shell-mono) !important;
+  letter-spacing: .14em !important;
+  text-transform: uppercase !important;
+}
+.page-header .section-label::before { content: none !important; display: none !important; }
+
+/* Shared inner-page title pattern: category → title → concise summary. */
+.page-header > .section-label { margin-bottom: .85rem !important; }
+.page-header h1 + p:not(.section-label) { margin-top: 0 !important; }
+.page-header > p.research-intro,
+.page-header > p.page-intro {
+  max-width: none !important;
+  color: #000 !important;
+  font: 600 clamp(2.75rem, 5vw, 5.5rem)/1.05 var(--shell-body) !important;
+  letter-spacing: -.055em !important;
+}
+.page-header.research-header { padding-bottom: clamp(.75rem, 1.5vw, 1.25rem) !important; }
+.research-header + .research-context { padding-top: 0 !important; }
+
+/* Research: keywords follow the introduction; the quote reads as a margin note. */
+.kw-list { display: flex !important; align-items: flex-start; flex-wrap: nowrap; gap: .65rem !important; margin-top: 1.6rem !important; }
+.page-header .kw-list { flex-direction: column !important; }
+.kw-heading { color: var(--shell-ink); font: 600 .67rem/1.2 var(--shell-mono); letter-spacing: .04em; }
+.kw-item { align-items: center !important; gap: .55rem !important; }
+.page-header .kw-item { display: flex !important; width: 100%; flex: 0 0 auto; }
+.kw-item > .kw-tag, .pub-tags .kw-tag {
+  display: inline-flex !important; flex-direction: row !important; align-items: center;
+  width: auto !important; padding: 0 !important; border: 0 !important; border-radius: 0 !important;
+  background: transparent !important; font: 700 .74rem/1.25 var(--shell-body) !important;
+  letter-spacing: .035em !important;
+}
+.kw-item > .kw-tag::before, .pub-tags .kw-tag::before {
+  display: inline-block !important; order: initial !important; width: auto !important; height: auto !important;
+  margin: 0 .45rem 0 0 !important; background: none !important; font-weight: 700;
+}
+.kw-tag.amber, .kw-tag.amber::before { color: #0799a5 !important; }
+.kw-tag.red, .kw-tag.red::before { color: #758d39 !important; }
+.kw-tag.violet, .kw-tag.violet::before { color: #de5723 !important; }
+.kw-item > .kw-tag.amber::before, .pub-tags .kw-tag.amber::before { content: '+' !important; background: none !important; }
+.kw-item > .kw-tag.red::before, .pub-tags .kw-tag.red::before { content: '▲' !important; background: none !important; font-size: .8em; }
+.kw-item > .kw-tag.violet::before, .pub-tags .kw-tag.violet::before { content: '●' !important; background: none !important; font-size: .78em; }
+.research-context {
+  width: 100%; margin: 0 0 var(--shell-gap); padding: clamp(.8rem, 1.5vw, 1.25rem) var(--shell-title-inset);
+}
+.research-context blockquote {
+  position: relative; max-width: 52rem !important; margin: 0 !important; padding: .15rem 0 .2rem 1.35rem !important;
+  border: 0 !important; border-left: 2px solid var(--shell-accent) !important;
+  border-radius: 0 !important; background: transparent !important;
+}
+.research-context blockquote::before {
+  content: 'EXCERPT · TRAINSPOTTING'; display: block; margin-bottom: .8rem;
+  color: var(--shell-accent); font: 500 .64rem/1 var(--shell-mono); letter-spacing: .1em;
+}
+.research-context blockquote p { color: var(--shell-soft) !important; font-size: .82rem !important; line-height: 1.7 !important; }
+.research-context blockquote cite { display: block; margin-top: .9rem; color: var(--shell-ink); font: 500 .7rem/1.45 var(--shell-mono); font-style: normal; }
+.pub-year-group {
+  margin: 0 0 var(--shell-gap) !important;
+  padding: clamp(1.25rem, 3vw, 2.4rem) !important;
+  background: var(--shell-card) !important;
+  border: 0 !important;
+  border-radius: var(--shell-radius) !important;
+  box-shadow: none !important;
+}
+.pub-year { color: var(--shell-ink) !important; font: 700 clamp(1.3rem, 2.2vw, 1.75rem)/1 'JetBrains Mono', var(--shell-mono) !important; letter-spacing: -.05em !important; border-bottom-color: rgba(29,32,32,.18) !important; }
+.pub-list { gap: 1.25rem !important; }
+.pub-item { padding-top: 1.25rem; border-top: 1px solid var(--shell-line); }
+.pub-item:first-child { padding-top: 0; border-top: 0; }
+.pub-item::before, .pub-num { color: var(--shell-accent) !important; }
+.pub-text { color: var(--shell-ink) !important; line-height: 1.7 !important; }
+.pub-text a { color: var(--shell-accent) !important; overflow-wrap: anywhere; }
+.pub-tags { flex: 0 0 100% !important; width: 100% !important; margin: .2rem 0 0 !important; }
+
+/* Music: each release is a block, rather than a continuous list row. */
+.music-list { gap: var(--shell-gap) !important; }
+.music-item {
+  grid-template-columns: minmax(170px, 34%) 1fr !important;
+  gap: clamp(1rem, 3vw, 2.4rem) !important;
+  padding: clamp(1.25rem, 3vw, 2.4rem) !important;
+  border: 0 !important;
+  border-radius: var(--shell-radius) !important;
+  background: var(--shell-card) !important;
+  box-shadow: none !important;
+}
+.music-item:last-child { border-bottom: 1px solid var(--shell-line) !important; }
+.music-cover { border-radius: calc(var(--shell-radius) - .35rem) !important; background: var(--shell-card-muted) !important; }
+.music-title { font-size: clamp(1.4rem, 2.6vw, 2.2rem) !important; }
+.music-meta-row { border-color: var(--shell-line) !important; }
+.music-meta-label { color: var(--shell-soft) !important; font-family: var(--shell-mono) !important; }
+.music-meta-value { color: var(--shell-ink) !important; }
+
+/* About and the interactive tool receive the same enclosed work-surface. */
+body > main, .main {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 0 var(--shell-gap) !important;
+  padding: clamp(1.5rem, 3.5vw, 3rem) !important;
+  min-height: min(620px, calc(100vh - 4rem)) !important;
+  display: block !important;
+  background: var(--shell-card) !important;
+  border: 0 !important;
+  border-radius: var(--shell-radius) !important;
+  box-shadow: none !important;
+}
+.about-card { max-width: 42rem !important; align-items: flex-start !important; text-align: left !important; }
+.about-intro { width: 100%; margin: 0 0 var(--shell-gap); padding: 0 var(--shell-title-inset); }
+.avatar-wrap { border-radius: calc(var(--shell-radius) - .35rem) !important; border-color: var(--shell-line) !important; }
+.about-bio { max-width: 35rem; font-size: 1rem !important; line-height: 1.75 !important; }
+.about-bio strong { color: var(--shell-ink) !important; }
+.divider { background: var(--shell-line) !important; margin-left: 0 !important; }
+.social-icons { justify-content: flex-start !important; }
+.social-icon { border-radius: 0 !important; border-color: var(--shell-line) !important; background: transparent !important; color: var(--shell-ink) !important; }
+.social-icon:hover { background: var(--shell-ink) !important; color: var(--shell-card) !important; border-color: var(--shell-ink) !important; }
+
+.main { min-height: 0 !important; }
+.tabs, .selector-row, .diatonic-row { justify-content: flex-start !important; }
+.tab-btn, .sel-btn {
+  border-color: var(--shell-line) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: var(--shell-ink) !important;
+  font-family: var(--shell-mono) !important;
+}
+.tab-btn.active, .sel-btn.active { background: var(--shell-ink) !important; border-color: var(--shell-ink) !important; color: var(--shell-card) !important; }
+.chord-card, .kr-card, .key-match { border-color: var(--shell-line) !important; border-radius: calc(var(--shell-radius) - .35rem) !important; background: var(--shell-card-muted) !important; box-shadow: none !important; }
+.chord-detail b, .kr-deg-note { color: var(--shell-ink) !important; }
+
+/* Fixed right rail: Mm returns home; the arrow only appears after scrolling. */
+.shell-card {
+  position: fixed; right: var(--shell-rail-center); top: var(--shell-edge); z-index: 10000;
+  width: var(--shell-mark-width); padding: 0; border: 0; background: transparent; text-decoration: none;
+  line-height: 0; cursor: pointer; overflow: visible; isolation: isolate; transform: translateX(50%);
+}
+.shell-card-symbol { display: block; width: 100%; height: auto; }
+.shell-top {
+  position: fixed; right: var(--shell-rail-center);
+  /* Align visible particle edges, not their transparent canvas boxes. */
+  bottom: calc(var(--shell-edge) + var(--shell-mark-width) * .27 - var(--shell-top-width) * .14);
+  z-index: 10000; width: var(--shell-top-width); padding: 0; border: 0;
+  background: transparent; line-height: 0; cursor: pointer; transform: translate(50%, .5rem);
+  opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .2s ease;
+}
+.shell-top.is-visible { opacity: 1; pointer-events: auto; transform: translateX(50%); }
+.shell-top-symbol { display: block; width: 100%; height: auto; }
+
+@media (max-width: 720px) {
+  :root { --shell-edge: var(--shell-gutter); --shell-mark-width: 70px; --shell-gutter: .5rem; --shell-title-inset: .75rem; --shell-radius: 1rem; --shell-gap: .65rem; }
+  body { padding: .8rem calc(var(--shell-edge) + var(--shell-mark-width) + var(--shell-gutter)) 2.5rem var(--shell-gutter) !important; }
+  .page-header, .pub-section, .music-section, body > main, .main { margin-bottom: 1rem !important; }
+  .page-header { min-height: 0 !important; padding-top: 3.5rem !important; }
+  .page-header h1, .about-card h1, .page-header > p.research-intro, .page-header > p.page-intro { font-size: clamp(2.75rem, 14vw, 4.5rem) !important; }
+  .music-item { grid-template-columns: 1fr !important; }
+  .music-cover { max-width: 100% !important; }
+}
