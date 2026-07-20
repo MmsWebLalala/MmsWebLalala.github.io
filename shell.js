@@ -2,6 +2,19 @@
 (function () {
   const SIZE = 260;
   const density = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--symbol-particle-density')) || 1;
+  // Same per-area weight as the home page's nav symbols (0.55 × 0.50 dots/px²)
+  // so the Mm mark and arrow read with the same cloud density everywhere.
+  const GLYPH_STEP = 1 / Math.sqrt(0.55 * 0.50 * density);
+  let shellInk = getComputedStyle(document.documentElement).getPropertyValue('--shell-ink').trim() || '#1d2020';
+  function updateShellInk() {
+    shellInk = getComputedStyle(document.documentElement).getPropertyValue('--shell-ink').trim() || '#1d2020';
+  }
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+    if (!localStorage.getItem('mm-theme')) {
+      document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+      updateShellInk();
+    }
+  });
 
   function sampleM() {
     const stencil = document.createElement('canvas');
@@ -9,7 +22,7 @@
     stencil.height = SIZE;
     const context = stencil.getContext('2d', { willReadFrequently: true });
     context.fillStyle = '#000';
-    context.font = '700 150px Inter, Arial, sans-serif';
+    context.font = '700 150px DM Sans, Arial, sans-serif';
     context.textBaseline = 'alphabetic';
     const baseline = 182;
     const stemRow = 150;
@@ -50,12 +63,12 @@
 
     const pixels = context.getImageData(0, 0, SIZE, SIZE).data;
     const points = [];
-    for (let y = 18; y < 226; y += 2) {
-      for (let x = 8; x < 252; x += 2) {
-        if (pixels[(y * SIZE + x) * 4 + 3] > 180) points.push({ x, y });
+    for (let y = 18; y < 226; y += GLYPH_STEP) {
+      for (let x = 8; x < 252; x += GLYPH_STEP) {
+        if (pixels[(Math.round(y) * SIZE + Math.round(x)) * 4 + 3] > 180) points.push({ x, y });
       }
     }
-    return points.sort(() => Math.random() - .5).slice(0, Math.round(3200 * density));
+    return points.sort(() => Math.random() - .5);
   }
 
   function sampleArrow() {
@@ -74,15 +87,15 @@
       }
       return hit;
     };
-    // Match Mm's 2 px sampling grid and shared particle budget so both marks
-    // carry the same visual weight when --symbol-particle-density changes.
+    // Match Mm's sampling grid and per-area density so both marks carry the
+    // same visual weight as the nav symbols.
     const points = [];
-    for (let y = 28; y <= 224; y += 2) {
-      for (let x = 36; x <= 224; x += 2) {
+    for (let y = 28; y <= 224; y += GLYPH_STEP) {
+      for (let x = 36; x <= 224; x += GLYPH_STEP) {
         if (inside(x, y)) points.push({ x: x + (Math.random() - .5), y: y + (Math.random() - .5) });
       }
     }
-    return points.sort(() => Math.random() - .5).slice(0, Math.round(3200 * density));
+    return points.sort(() => Math.random() - .5);
   }
 
   class ParticleGlyph {
@@ -98,11 +111,11 @@
       this.hover += (this.hoverTarget - this.hover) * .08;
       this.time += .025;
       this.context.clearRect(0, 0, SIZE, SIZE);
-      this.context.fillStyle = '#1d2020';
+      this.context.fillStyle = shellInk;
       this.points.forEach((point) => {
         const movement = Math.sin(this.time * 1.5 + point.phase) * (1.1 + this.hover * 3) + this.hover * (5 + Math.sin(this.time + point.phase) * 3);
         this.context.beginPath();
-        this.context.arc(point.x + Math.cos(point.direction) * movement, point.y + Math.sin(point.direction) * movement, 1.3 + this.hover * .45, 0, Math.PI * 2);
+        this.context.arc(point.x + Math.cos(point.direction) * movement, point.y + Math.sin(point.direction) * movement, 1.35 + this.hover * .55, 0, Math.PI * 2);
         this.context.fill();
       });
     }

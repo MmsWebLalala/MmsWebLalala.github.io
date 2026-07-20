@@ -8,7 +8,7 @@
   --shell-line: #c7cdce;
   --shell-accent: #e04b00;
   --shell-mono: 'DM Mono', 'JetBrains Mono', ui-monospace, monospace;
-  --shell-body: 'Inter', 'Noto Sans SC', -apple-system, sans-serif;
+  --shell-body: 'DM Sans', 'Noto Sans SC', -apple-system, sans-serif;
   /* Grey blocks sit close to the browser edge, like the MAD reference. */
   --shell-gutter: clamp(.5rem, .8vw, 1rem);
   --shell-title-inset: clamp(1rem, 1.2vw, 1.35rem);
@@ -67,7 +67,7 @@ body > nav, body > footer { display: none !important; }
   color: var(--shell-accent) !important;
   font-family: var(--shell-body) !important;
   font-weight: 600 !important;
-  letter-spacing: -.055em !important;
+  letter-spacing: -.035em !important;
   text-shadow: none !important;
 }
 .page-header h1, .about-card h1 { font-size: clamp(2.75rem, 5vw, 5.5rem) !important; line-height: .9 !important; margin: 0 0 1.4rem !important; }
@@ -94,7 +94,7 @@ body > nav, body > footer { display: none !important; }
   max-width: none !important;
   color: #000 !important;
   font: 600 clamp(2.75rem, 5vw, 5.5rem)/1.05 var(--shell-body) !important;
-  letter-spacing: -.055em !important;
+  letter-spacing: -.035em !important;
 }
 .page-header.research-header { padding-bottom: clamp(.75rem, 1.5vw, 1.25rem) !important; }
 
@@ -228,3 +228,32 @@ body > main, .main {
   .music-item { grid-template-columns: 1fr !important; }
   .music-cover { max-width: 100% !important; }
 }
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]) {
+    --shell-bg: #111211;
+    --shell-card: #1c1d1c;
+    --shell-card-muted: #161716;
+    --shell-ink: #e2e3e2;
+    --shell-soft: #7a7e7e;
+    --shell-line: #2e3232;
+  }
+  html:not([data-theme="light"]) body::after { mix-blend-mode: screen !important; opacity: 0.12 !important; }
+  html:not([data-theme="light"]) .pub-year { border-bottom-color: rgba(226,227,226,.18) !important; }
+  html:not([data-theme="light"]) .pub-item { border-top-color: var(--shell-line) !important; }
+  html:not([data-theme="light"]) .page-header > p.research-intro,
+  html:not([data-theme="light"]) .page-header > p.page-intro { color: var(--shell-ink) !important; }
+}
+html[data-theme="dark"] {
+  --shell-bg: #111211;
+  --shell-card: #1c1d1c;
+  --shell-card-muted: #161716;
+  --shell-ink: #e2e3e2;
+  --shell-soft: #7a7e7e;
+  --shell-line: #2e3232;
+}
+html[data-theme="dark"] body::after { mix-blend-mode: screen !important; opacity: 0.12 !important; }
+html[data-theme="dark"] .pub-year { border-bottom-color: rgba(226,227,226,.18) !important; }
+html[data-theme="dark"] .pub-item { border-top-color: var(--shell-line) !important; }
+html[data-theme="dark"] .page-header > p.research-intro,
+html[data-theme="dark"] .page-header > p.page-intro { color: var(--shell-ink) !important; }
