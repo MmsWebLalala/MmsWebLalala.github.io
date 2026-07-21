@@ -5,6 +5,7 @@
   // Same per-area weight as the home page's nav symbols (0.55 × 0.50 dots/px²)
   // so the Mm mark and arrow read with the same cloud density everywhere.
   const GLYPH_STEP = 1 / Math.sqrt(0.55 * 0.50 * density);
+  const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   let shellInk = getComputedStyle(document.documentElement).getPropertyValue('--shell-ink').trim() || '#1d2020';
   function updateShellInk() {
     shellInk = getComputedStyle(document.documentElement).getPropertyValue('--shell-ink').trim() || '#1d2020';
@@ -113,7 +114,7 @@
       this.context.clearRect(0, 0, SIZE, SIZE);
       this.context.fillStyle = shellInk;
       this.points.forEach((point) => {
-        const movement = Math.sin(this.time * 1.5 + point.phase) * (1.1 + this.hover * 3) + this.hover * (5 + Math.sin(this.time + point.phase) * 3);
+        const movement = REDUCED_MOTION ? 0 : Math.sin(this.time * 1.5 + point.phase) * (1.1 + this.hover * 3) + this.hover * (5 + Math.sin(this.time + point.phase) * 3);
         this.context.beginPath();
         this.context.arc(point.x + Math.cos(point.direction) * movement, point.y + Math.sin(point.direction) * movement, 1.35 + this.hover * .55, 0, Math.PI * 2);
         this.context.fill();

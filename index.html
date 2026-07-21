@@ -155,7 +155,7 @@
 
     /* ══════════ RESPONSIVE ══════════ */
     @media (max-width: 780px) {
-      :root { --shell-gutter: .5rem; --shell-edge: var(--shell-gutter); --shell-mark-width: 70px; --shell-top-width: 2.6rem; }
+      :root { --shell-gutter: .5rem; --shell-edge: var(--shell-gutter); --shell-mark-width: 70px; --shell-top-width: 2.6rem; --symbol-particle-density: .65; }
     }
 
     @media (max-width: 640px) {
@@ -341,8 +341,8 @@
         this.hover += (this.hoverTarget - this.hover) * 0.08;
         this.t += 0.025;
 
-        const waveAmp = 1.2 + this.hover * 6.5;         // amplitude of continuous breathing
-        const scatterAmt = this.hover * 4.0;             // extra chaos on hover
+        const waveAmp = REDUCED_MOTION ? 0 : 1.2 + this.hover * 6.5;         // amplitude of continuous breathing
+        const scatterAmt = REDUCED_MOTION ? 0 : this.hover * 4.0;             // extra chaos on hover
         const dotSize = 1.35 + this.hover * 0.55;
 
         for (const p of this.particles) {
@@ -367,6 +367,9 @@
     // One value controls every particle symbol on the home page, including Mm.
     // Use .5 for a lighter system, 1 for the default, or 1.5 for a denser system.
     const PARTICLE_DENSITY = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--symbol-particle-density')) || 1;
+    // Ambient breathing/scatter is decorative motion; OS-level reduced-motion
+    // preference turns it off, keeping only user-triggered transitions (e.g. the toggle morph).
+    const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     // Same per-area weight as the nav symbols (0.55 × 0.50 dots/px²), shared by
     // every other particle shape (Mm mark, toggle) so no cloud reads thinner.
     const GLYPH_STEP = 1 / Math.sqrt(0.55 * 0.50 * PARTICLE_DENSITY);
@@ -455,7 +458,7 @@
         this.ctx.clearRect(0, 0, SIZE, SIZE);
         this.ctx.fillStyle = particleInk;
         this.particles.forEach(p => {
-          const movement = Math.sin(this.t * 1.5 + p.phase) * (1.1 + this.hover * 3) + this.hover * (5 + Math.sin(this.t + p.phase) * 3);
+          const movement = REDUCED_MOTION ? 0 : Math.sin(this.t * 1.5 + p.phase) * (1.1 + this.hover * 3) + this.hover * (5 + Math.sin(this.t + p.phase) * 3);
           this.ctx.beginPath();
           this.ctx.arc(p.x + Math.cos(p.direction) * movement, p.y + Math.sin(p.direction) * movement, 1.35 + this.hover * .55, 0, Math.PI * 2);
           this.ctx.fill();
@@ -507,7 +510,7 @@
         this.t += .025;
         this.ctx.clearRect(0, 0, SIZE, SIZE);
         this.ctx.fillStyle = particleInk;
-        const amp = 1.0 + this.hover * 4, dot = 1.35 + this.hover * .55;
+        const amp = REDUCED_MOTION ? 0 : 1.0 + this.hover * 4, dot = 1.35 + this.hover * .55;
         for (const p of this.particles) {
           p.x += ((this.isDark ? p.sunX : p.moonX) - p.x) * .06;
           p.y += ((this.isDark ? p.sunY : p.moonY) - p.y) * .06;

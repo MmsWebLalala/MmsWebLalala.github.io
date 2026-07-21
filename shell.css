@@ -103,7 +103,7 @@ body > nav, body > footer { display: none !important; }
 .page-header .kw-list { flex-direction: column !important; }
 .kw-heading { color: var(--shell-ink); font: 600 .67rem/1.2 var(--shell-mono); letter-spacing: .04em; }
 .kw-item { align-items: center !important; gap: .55rem !important; }
-.page-header .kw-item { display: flex !important; width: 100%; flex: 0 0 auto; }
+.page-header .kw-item { display: flex !important; width: 100%; flex: 0 0 auto; flex-wrap: wrap !important; }
 .kw-item > .kw-tag, .pub-tags .kw-tag {
   display: inline-flex !important; flex-direction: row !important; align-items: center;
   width: auto !important; padding: 0 !important; border: 0 !important; border-radius: 0 !important;
@@ -129,7 +129,7 @@ body > nav, body > footer { display: none !important; }
 }
 .page-header .kw-heading { font-weight: 600 !important; letter-spacing: normal !important; }
 .page-header .kw-item > .kw-tag { font-weight: 700 !important; }
-.page-header .kw-desc { font-weight: 400 !important; }
+.page-header .kw-desc { font-weight: 400 !important; flex: 1 0 100% !important; margin-top: .3rem !important; }
 .pub-year-group {
   margin: 0 0 var(--shell-gap) !important;
   padding: clamp(1.25rem, 3vw, 2.4rem) !important;
@@ -220,11 +220,12 @@ body > main, .main {
 .shell-top-symbol { display: block; width: 100%; height: auto; }
 
 @media (max-width: 720px) {
-  :root { --shell-edge: var(--shell-gutter); --shell-mark-width: 70px; --shell-gutter: .5rem; --shell-title-inset: .75rem; --shell-radius: 1rem; --shell-gap: .65rem; }
+  :root { --shell-edge: var(--shell-gutter); --shell-mark-width: 70px; --shell-gutter: .5rem; --shell-title-inset: .75rem; --shell-radius: 1rem; --shell-gap: .65rem; --symbol-particle-density: .65; }
   body { padding: .8rem calc(var(--shell-edge) + var(--shell-mark-width) + var(--shell-gutter)) 2.5rem var(--shell-gutter) !important; }
   .page-header, .pub-section, .music-section, body > main, .main { margin-bottom: 1rem !important; }
   .page-header { min-height: 0 !important; padding-top: 3.5rem !important; }
-  .page-header h1, .about-card h1, .page-header > p.research-intro, .page-header > p.page-intro { font-size: clamp(2.75rem, 14vw, 4.5rem) !important; }
+  .page-header h1, .about-card h1 { font-size: clamp(2.75rem, 14vw, 4.5rem) !important; }
+  .page-header > p.research-intro, .page-header > p.page-intro { font-size: clamp(1.5rem, 7vw, 2.1rem) !important; line-height: 1.3 !important; }
   .music-item { grid-template-columns: 1fr !important; }
   .music-cover { max-width: 100% !important; }
 }
