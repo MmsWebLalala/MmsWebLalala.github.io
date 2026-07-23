@@ -31,7 +31,15 @@
   --shell-rail-center: calc((var(--shell-edge) + var(--shell-mark-width) + var(--shell-gutter)) / 2);
 }
 
-html { background: var(--shell-bg) !important; scroll-behavior: smooth; }
+html {
+  background: var(--shell-bg) !important;
+  scroll-behavior: smooth;
+}
+
+/* Kill the default mobile WebKit/Chrome tap-highlight rectangle — our own
+   hover/active/focus states already give feedback, and the browser default
+   is a plain gray box that clashes with pill and particle shapes. */
+* { -webkit-tap-highlight-color: transparent; }
 
 :focus-visible {
   outline: 2px solid var(--shell-accent-text);

@@ -39,6 +39,11 @@
       -webkit-font-smoothing: antialiased;
     }
 
+    /* Kill the default mobile tap-highlight rectangle — our own hover/active/
+       focus states already give feedback, and the browser default is a plain
+       gray box that clashes with the particle nav symbols. */
+    * { -webkit-tap-highlight-color: transparent; }
+
     :focus-visible {
       outline: 2px solid var(--accent);
       outline-offset: 3px;
