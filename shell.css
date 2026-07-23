@@ -7,6 +7,16 @@
   --shell-soft: #5c6262;
   --shell-line: #c7cdce;
   --shell-accent: #e04b00;
+  /* Darker orange for small/normal-size text on --shell-bg: #e04b00 only hits 3.7:1
+     there (fails WCAG AA's 4.5:1 for text), while large headline sizes are exempt
+     at the 3:1 large-text threshold and keep using --shell-accent directly. */
+  --shell-accent-text: #be3f00;
+  /* Same reasoning for the research keyword tags: their brighter hues only clear
+     4.5:1 against the dark theme's near-black background, so light mode gets a
+     darkened variant and dark mode keeps the original saturated hue. */
+  --kw-amber: #067b85;
+  --kw-red: #637730;
+  --kw-violet: #c04a1d;
   --shell-mono: 'DM Mono', 'JetBrains Mono', ui-monospace, monospace;
   --shell-body: 'DM Sans', 'Noto Sans SC', -apple-system, sans-serif;
   /* Grey blocks sit close to the browser edge, like the MAD reference. */
@@ -22,6 +32,13 @@
 }
 
 html { background: var(--shell-bg) !important; scroll-behavior: smooth; }
+
+:focus-visible {
+  outline: 2px solid var(--shell-accent-text);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
 body {
   min-height: 100vh;
   /* A compact right rail lets the MM mark sit outside the content blocks. */
@@ -70,8 +87,9 @@ body > nav, body > footer { display: none !important; }
   letter-spacing: -.035em !important;
   text-shadow: none !important;
 }
-.page-header h1, .about-card h1 { font-size: clamp(2.75rem, 5vw, 5.5rem) !important; line-height: .9 !important; margin: 0 0 1.4rem !important; }
-.page-header p, .about-bio, .music-desc, .music-subtitle, .chord-label, .chord-detail, .kw-desc, .kf-hint, .kf-empty, .kr-notes {
+.page-header h1, .about-card h1 { font-size: clamp(2.75rem, 5vw, 5.5rem) !important; line-height: .9 !important; margin: 0 0 1.4rem !important; text-wrap: balance; }
+.page-header > p.research-intro, .page-header > p.page-intro, .page-header .intro-large { text-wrap: pretty; }
+.page-header p:not(.section-label), .about-bio, .music-desc, .music-subtitle, .chord-label, .chord-detail, .kf-hint, .kf-empty, .kr-notes {
   color: var(--shell-soft) !important;
   font-family: var(--shell-body) !important;
 }
@@ -79,7 +97,7 @@ body > nav, body > footer { display: none !important; }
 .page-header .subtitle { margin: -.7rem 0 .7rem !important; font-size: 1rem !important; }
 .section-label, .hero-eyebrow {
   margin-bottom: 1.1rem !important;
-  color: var(--shell-accent) !important;
+  color: var(--shell-accent-text) !important;
   font: 500 .72rem/1 var(--shell-mono) !important;
   letter-spacing: .14em !important;
   text-transform: uppercase !important;
@@ -98,38 +116,56 @@ body > nav, body > footer { display: none !important; }
 }
 .page-header.research-header { padding-bottom: clamp(.75rem, 1.5vw, 1.25rem) !important; }
 
-/* Research keywords */
-.kw-list { display: flex !important; align-items: flex-start; flex-wrap: nowrap; gap: .65rem !important; margin-top: 1.6rem !important; }
-.page-header .kw-list { flex-direction: column !important; }
+/* Research keywords — also double as a publication filter bar on the header. */
+.kw-list { display: flex !important; align-items: center; flex-wrap: wrap; gap: .65rem !important; margin-top: 1.6rem !important; }
 .kw-heading { color: var(--shell-ink); font: 600 .67rem/1.2 var(--shell-mono); letter-spacing: .04em; }
-.kw-item { align-items: center !important; gap: .55rem !important; }
-.page-header .kw-item { display: flex !important; width: 100%; flex: 0 0 auto; flex-wrap: wrap !important; }
-.kw-item > .kw-tag, .pub-tags .kw-tag {
+.kw-list > .kw-tag, .pub-tags .kw-tag {
   display: inline-flex !important; flex-direction: row !important; align-items: center;
   width: auto !important; padding: 0 !important; border: 0 !important; border-radius: 0 !important;
   background: transparent !important; font: 700 .74rem/1.25 var(--shell-body) !important;
   letter-spacing: .035em !important;
 }
-.kw-item > .kw-tag::before, .pub-tags .kw-tag::before {
+.pub-tags .kw-tag::before {
   display: inline-block !important; order: initial !important; width: auto !important; height: auto !important;
   margin: 0 .45rem 0 0 !important; background: none !important; font-weight: 700;
 }
-.kw-tag.amber, .kw-tag.amber::before { color: #0799a5 !important; }
-.kw-tag.red, .kw-tag.red::before { color: #758d39 !important; }
-.kw-tag.violet, .kw-tag.violet::before { color: #de5723 !important; }
-.kw-item > .kw-tag.amber::before, .pub-tags .kw-tag.amber::before { content: '+' !important; background: none !important; }
-.kw-item > .kw-tag.red::before, .pub-tags .kw-tag.red::before { content: '▲' !important; background: none !important; font-size: .8em; }
-.kw-item > .kw-tag.violet::before, .pub-tags .kw-tag.violet::before { content: '●' !important; background: none !important; font-size: .78em; }
+.kw-tag.amber, .kw-tag.amber::before { color: var(--kw-amber) !important; }
+.kw-tag.red, .kw-tag.red::before { color: var(--kw-red) !important; }
+.kw-tag.violet, .kw-tag.violet::before { color: var(--kw-violet) !important; }
+.pub-tags .kw-tag.amber::before { content: '+' !important; background: none !important; }
+.pub-tags .kw-tag.red::before { content: '▲' !important; background: none !important; font-size: .8em; }
+.pub-tags .kw-tag.violet::before { content: '●' !important; background: none !important; font-size: .78em; }
 .page-header .kw-heading,
-.page-header .kw-item > .kw-tag,
-.page-header .kw-desc {
+.page-header .kw-list > .kw-tag {
   font-family: var(--shell-body) !important;
   font-size: 1rem !important;
   line-height: 1.5 !important;
 }
 .page-header .kw-heading { font-weight: 600 !important; letter-spacing: normal !important; }
-.page-header .kw-item > .kw-tag { font-weight: 700 !important; }
-.page-header .kw-desc { font-weight: 400 !important; flex: 1 0 100% !important; margin-top: .3rem !important; }
+.page-header .kw-list > .kw-tag {
+  font-weight: 700 !important;
+  cursor: pointer;
+  padding: .3rem .8rem .3rem .55rem !important;
+  border-radius: 999px !important;
+  transition: background-color .18s ease, color .18s ease;
+}
+.kw-badge { display: block; width: 1.5rem; height: 1.5rem; margin-right: .35rem; }
+.page-header .kw-list > .kw-tag:hover { background: var(--shell-card) !important; }
+.page-header .kw-list > .kw-tag[aria-pressed="true"] {
+  color: var(--shell-bg) !important;
+}
+.page-header .kw-list > .kw-tag.amber[aria-pressed="true"] { background: var(--kw-amber) !important; }
+.page-header .kw-list > .kw-tag.red[aria-pressed="true"] { background: var(--kw-red) !important; }
+.page-header .kw-list > .kw-tag.violet[aria-pressed="true"] { background: var(--kw-violet) !important; }
+.pub-item[hidden] { display: none !important; }
+.pub-year-group[hidden] { display: none !important; }
+@media (prefers-reduced-motion: no-preference) {
+  .pub-item:not([hidden]) { animation: pub-item-in .32s ease both; }
+}
+@keyframes pub-item-in {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 .pub-year-group {
   margin: 0 0 var(--shell-gap) !important;
   padding: clamp(1.25rem, 3vw, 2.4rem) !important;
@@ -142,9 +178,9 @@ body > nav, body > footer { display: none !important; }
 .pub-list { gap: 1.25rem !important; }
 .pub-item { padding-top: 1.25rem; border-top: 1px solid var(--shell-line); }
 .pub-item:first-child { padding-top: 0; border-top: 0; }
-.pub-item::before, .pub-num { color: var(--shell-accent) !important; }
+.pub-item::before, .pub-num { color: var(--shell-accent-text) !important; }
 .pub-text { color: var(--shell-ink) !important; line-height: 1.7 !important; }
-.pub-text a { color: var(--shell-accent) !important; overflow-wrap: anywhere; }
+.pub-text a { color: var(--shell-accent-text) !important; overflow-wrap: anywhere; }
 .pub-tags { flex: 0 0 100% !important; width: 100% !important; margin: .2rem 0 0 !important; }
 
 /* Music: each release is a block, rather than a continuous list row. */
@@ -238,6 +274,10 @@ body > main, .main {
     --shell-ink: #e2e3e2;
     --shell-soft: #7a7e7e;
     --shell-line: #2e3232;
+    --shell-accent-text: #e04b00;
+    --kw-amber: #0799a5;
+    --kw-red: #758d39;
+    --kw-violet: #de5723;
   }
   html:not([data-theme="light"]) body::after { mix-blend-mode: screen !important; opacity: 0.12 !important; }
   html:not([data-theme="light"]) .pub-year { border-bottom-color: rgba(226,227,226,.18) !important; }
@@ -252,6 +292,10 @@ html[data-theme="dark"] {
   --shell-ink: #e2e3e2;
   --shell-soft: #7a7e7e;
   --shell-line: #2e3232;
+  --shell-accent-text: #e04b00;
+  --kw-amber: #0799a5;
+  --kw-red: #758d39;
+  --kw-violet: #de5723;
 }
 html[data-theme="dark"] body::after { mix-blend-mode: screen !important; opacity: 0.12 !important; }
 html[data-theme="dark"] .pub-year { border-bottom-color: rgba(226,227,226,.18) !important; }

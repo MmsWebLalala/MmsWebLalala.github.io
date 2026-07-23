@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Chord Tool — Mm'sWeb</title>
+  <meta name="description" content="Piano chord lookup, diatonic chord explorer, key finder, and key reference tool." />
+  <link rel="icon" href="Image/mm-cutout-logo.svg" type="image/svg+xml" />
   <script>(function(){var t=localStorage.getItem('mm-theme');if(t)document.documentElement.setAttribute('data-theme',t);else if(window.matchMedia('(prefers-color-scheme:dark)').matches)document.documentElement.setAttribute('data-theme','dark')})()</script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -11,16 +13,16 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:         #0a0a0a;
-      --surface:    #141414;
-      --surface-2:  #1c1c1c;
-      --text:       #f0f0ee;
-      --text-muted: #888888;
-      --border:     #262626;
-      --accent:     #4f8ef7;
-      --accent-dim: #2a4a8a;
-      --font-display: 'JetBrains Mono', ui-monospace, monospace;
-      --font-body: 'DM Sans', 'Noto Sans SC', -apple-system, sans-serif;
+      --bg:         var(--shell-bg, #0a0a0a);
+      --surface:    var(--shell-card, #141414);
+      --surface-2:  var(--shell-card-muted, #1c1c1c);
+      --text:       var(--shell-ink, #f0f0ee);
+      --text-muted: var(--shell-soft, #888888);
+      --border:     var(--shell-line, #262626);
+      --accent:     var(--shell-accent, #e04b00);
+      --accent-dim: var(--shell-accent, #e04b00);
+      --font-display: var(--shell-mono, 'JetBrains Mono', ui-monospace, monospace);
+      --font-body: var(--shell-body, 'DM Sans', 'Noto Sans SC', -apple-system, sans-serif);
     }
 
     body {
@@ -30,60 +32,6 @@
       overflow-x: hidden;
       line-height: 1.6;
     }
-
-    /* ── NAV ── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 5%;
-      height: 72px;
-      background: rgba(10,10,10,0.88);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .nav-logo {
-      font-family: var(--font-display);
-      font-size: 1.5rem;
-      color: var(--text);
-      text-decoration: none;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2.5rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      font-size: 0.82rem;
-      font-weight: 500;
-      color: var(--text);
-      text-decoration: none;
-      letter-spacing: 0.04em;
-      text-transform: lowercase;
-      position: relative;
-      transition: opacity 0.2s;
-    }
-
-    .nav-links a::after {
-      content: '';
-      position: absolute;
-      bottom: -3px; left: 0;
-      width: 0; height: 1.5px;
-      background: var(--text);
-      transition: width 0.25s ease;
-    }
-
-    .nav-links a:hover::after { width: 100%; }
-    .nav-links a:hover { opacity: 0.5; }
-    .nav-links a.active { opacity: 0.5; }
-    .nav-links a.active::after { width: 100%; }
 
     /* ── PAGE HEADER ── */
     .page-header {
@@ -233,80 +181,7 @@
     .degree-roman { font-size: 0.82rem; font-weight: 700; }
     .degree-chord { font-size: 0.62rem; }
 
-    /* ── FOOTER ── */
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 2.5rem 5%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-
-    .footer-logo {
-      font-family: var(--font-display);
-      font-size: 1.2rem;
-      color: var(--text);
-      text-decoration: none;
-    }
-
-    .footer-bottom {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-    }
-
-    /* ── HAMBURGER ── */
-    .nav-burger {
-      display: none;
-      flex-direction: column;
-      justify-content: center;
-      gap: 5px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 4px;
-      z-index: 101;
-    }
-
-    .nav-burger span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: var(--text);
-      border-radius: 2px;
-      transition: transform 0.3s ease, opacity 0.2s ease;
-    }
-
-    .nav-burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-    .nav-burger.open span:nth-child(2) { opacity: 0; }
-    .nav-burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
     @media (max-width: 768px) {
-      .nav-burger { display: flex; }
-
-      .nav-links {
-        display: flex;
-        flex-direction: column;
-        position: fixed;
-        top: 72px; left: 0; right: 0;
-        background: rgba(10,10,10,0.97);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border-bottom: 1px solid var(--border);
-        padding: 0.5rem 5% 1rem;
-        gap: 0;
-        transform: translateY(-110%);
-        opacity: 0;
-        pointer-events: none;
-        transition: transform 0.32s ease, opacity 0.25s ease;
-      }
-
-      .nav-links.open { transform: translateY(0); opacity: 1; pointer-events: auto; }
-      .nav-links li { border-bottom: 1px solid var(--border); }
-      .nav-links li:last-child { border-bottom: none; }
-      .nav-links a { display: block; padding: 1rem 0; font-size: 1rem; }
-
       .diatonic-row { flex-wrap: wrap; }
 
       .tabs { flex-wrap: wrap; }
@@ -362,7 +237,7 @@
       transition: border-color 0.2s;
     }
 
-    .key-match.perfect { border-color: var(--accent); background: rgba(79,142,247,0.08); }
+    .key-match.perfect { border-color: var(--accent) !important; background: rgba(224,75,0,0.08) !important; }
 
     .key-match-name {
       font-size: 0.85rem;
@@ -383,10 +258,11 @@
       border-radius: 999px;
       background: var(--surface-2);
       color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
     }
 
     .key-match.perfect .key-match-badge {
-      background: var(--accent);
+      background: #be3f00;
       color: #fff;
     }
 
@@ -435,24 +311,18 @@
   </style>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
-    :root {
-      --font-display: 'JetBrains Mono', ui-monospace, monospace;
-      --font-body: 'DM Sans', 'Noto Sans SC', -apple-system, sans-serif;
-    }
     html { background: var(--bg) !important; }
     body { max-width: none !important; width: 100%; margin: 0; box-shadow: none !important; font-family: var(--font-body) !important; font-size: 1rem; }
     body::before { display: none !important; }
     body::after  { opacity: 0.28 !important; }
     body { text-shadow: none !important; }
 
-    .hero-name, .section-heading, .page-header h1, h1, h2, .footer-logo {
+    .page-header h1, h1, h2 {
       font-family: var(--font-display) !important;
       font-weight: 700 !important;
       text-transform: uppercase;
       letter-spacing: 0.1em;
     }
-    .nav-logo { font-family: var(--font-display) !important; font-weight: 700; }
-    .nav-logo::after { display: none !important; }
 
     .page-header { text-align: left; padding: 100px 5% 40px; }
     .page-header h1 { letter-spacing: 0.02em; }
@@ -529,10 +399,6 @@
       border-radius: 0 !important;
       border: 1px solid var(--border);
     }
-    .key-match.perfect {
-      border-color: var(--text);
-      background: rgba(30,29,26,0.05);
-    }
     .key-match-name { color: var(--text); font-family: var(--font-display) !important; font-weight: 700; }
     .key-match-notes { color: var(--text-muted); font-family: var(--font-body) !important; }
     .key-match-badge {
@@ -541,11 +407,6 @@
       color: var(--text-muted);
       font-family: var(--font-display) !important;
     }
-    .key-match.perfect .key-match-badge {
-      background: var(--text);
-      color: var(--bg);
-    }
-
     .kf-hint, .kf-empty { color: var(--text-muted); font-family: var(--font-body) !important; }
     .kf-clear { color: var(--text); font-family: var(--font-display) !important; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; }
     .kf-results-title { color: var(--text); font-family: var(--font-display) !important; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; }
@@ -553,23 +414,10 @@
     .kr-deg-note { color: var(--text); font-family: var(--font-display) !important; }
     .kr-deg-label { color: var(--text-muted); font-family: var(--font-body) !important; font-size: 0.6rem; }
   </style>
-  <link rel="stylesheet" href="shell.css?v=20260721-2" />
+  <link rel="stylesheet" href="shell.css?v=20260723-1" />
   <script src="shell.js" defer></script>
 </head>
 <body>
-
-  <!-- NAV -->
-  <nav>
-    <a href="index.html" class="nav-logo">Mm'sWeb</a>
-    <ul class="nav-links" id="nav-links">
-      <li><a href="research.html">Research</a></li>
-      <li><a href="craft.html">Craft</a></li>
-      <li><a href="about.html">About</a></li>
-    </ul>
-    <button class="nav-burger" id="nav-burger" aria-label="Toggle navigation" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-  </nav>
 
   <header class="page-header">
     <p class="section-label">Mind Tools</p>
@@ -618,11 +466,6 @@
       <div id="kr-result"></div>
     </div>
   </div>
-
-  <footer>
-    <a href="index.html" class="footer-logo">Mm'sWeb</a>
-    <p class="footer-bottom">© 2026 Mm'sWeb. All rights reserved. · Perth, WA</p>
-  </footer>
 
   <script>
     // ── Music Theory Engine ──
@@ -913,22 +756,6 @@
     // ── Tab switching ──
     document.querySelectorAll('.tab-btn').forEach(b => {
       b.onclick = () => { state.tab = b.dataset.tab; render(); };
-    });
-
-    // ── Hamburger ──
-    const burger = document.getElementById('nav-burger');
-    const navLinks = document.getElementById('nav-links');
-    burger.addEventListener('click', () => {
-      const isOpen = burger.classList.toggle('open');
-      navLinks.classList.toggle('open', isOpen);
-      burger.setAttribute('aria-expanded', isOpen);
-    });
-    navLinks.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        burger.classList.remove('open');
-        navLinks.classList.remove('open');
-        burger.setAttribute('aria-expanded', 'false');
-      });
     });
 
     // ── Init ──

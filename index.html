@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mm's Studio</title>
+  <meta name="description" content="Mm's personal site — research publications, mind tools, music, and contact." />
+  <link rel="icon" href="Image/mm-cutout-logo.svg" type="image/svg+xml" />
   <script>(function(){var t=localStorage.getItem('mm-theme');if(t)document.documentElement.setAttribute('data-theme',t);else if(window.matchMedia('(prefers-color-scheme:dark)').matches)document.documentElement.setAttribute('data-theme','dark')})()</script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -19,7 +21,6 @@
       --hair:      #C7CDCE;
       --accent:    #E04B00;
       --symbol-particle-density: 1;
-      --page-gutter-left: clamp(1rem, 3vw, 2.6rem);
       /* Matches the inner pages exactly, so the Mm mark never jumps on navigation. */
       --shell-gutter: clamp(.5rem, .8vw, 1rem);
       --shell-edge: var(--shell-gutter);
@@ -38,29 +39,16 @@
       -webkit-font-smoothing: antialiased;
     }
 
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+
     body {
       min-height: 100vh;
       overflow-x: hidden;
       position: relative;
-    }
-
-    /* ══════════ SITE INTRO ══════════ */
-    .site-intro {
-      position: absolute;
-      top: clamp(1.5rem, 3vw, 2.6rem);
-      left: var(--page-gutter-left);
-      z-index: 1;
-      max-width: min(62rem, calc(100vw - 3rem));
-    }
-
-    .site-intro h1 {
-      font-family: var(--font-body);
-      font-size: clamp(2.75rem, 5vw, 5.5rem);
-      font-weight: 600;
-      letter-spacing: -0.035em;
-      line-height: 0.87;
-      margin-bottom: 1.7rem;
-      color: var(--accent);
     }
 
     /* subtle paper grain */
@@ -154,7 +142,7 @@
     }
 
     /* ══════════ RESPONSIVE ══════════ */
-    @media (max-width: 780px) {
+    @media (max-width: 720px) {
       :root { --shell-gutter: .5rem; --shell-edge: var(--shell-gutter); --shell-mark-width: 70px; --shell-top-width: 2.6rem; --symbol-particle-density: .65; }
     }
 
