@@ -23,7 +23,10 @@
   --shell-gutter: clamp(.5rem, .8vw, 1rem);
   --shell-title-inset: clamp(1rem, 1.2vw, 1.35rem);
   --shell-edge: var(--shell-gutter);
-  --shell-mark-width: clamp(88px, 11vw, 132px);
+  /* Fixed, not vw-fluid: matches the home page's .nav-symbol at 130px so the
+     Mm mark is the same physical size (and same particle density) whether
+     it's floating over the nav grid or pinned to the corner of an inner page. */
+  --shell-mark-width: 130px;
   --shell-top-width: clamp(3rem, 5vw, 4rem);
   --shell-radius: clamp(.85rem, 1.2vw, 1.15rem);
   --shell-gap: clamp(.65rem, 1.2vw, 1rem);
