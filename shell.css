@@ -71,8 +71,6 @@ body {
   color: var(--shell-ink) !important;
   font-family: var(--shell-body) !important;
 }
-body::before { display: none !important; }
-body::after { opacity: .24 !important; }
 body > nav, body > footer { display: none !important; }
 
 /* The title sits directly on the page. Content, rather than every element,
@@ -308,25 +306,10 @@ body > main, .main {
   .music-cover { max-width: 100% !important; }
 }
 
-@media (prefers-color-scheme: dark) {
-  html:not([data-theme="light"]) {
-    --shell-bg: #111211;
-    --shell-card: #1c1d1c;
-    --shell-card-muted: #161716;
-    --shell-ink: #e2e3e2;
-    --shell-soft: #7a7e7e;
-    --shell-line: #2e3232;
-    --shell-accent-text: #e04b00;
-    --kw-amber: #0799a5;
-    --kw-red: #758d39;
-    --kw-violet: #de5723;
-  }
-  html:not([data-theme="light"]) body::after { mix-blend-mode: screen !important; opacity: 0.12 !important; }
-  html:not([data-theme="light"]) .pub-year { border-bottom-color: rgba(226,227,226,.18) !important; }
-  html:not([data-theme="light"]) .pub-item { border-top-color: var(--shell-line) !important; }
-  html:not([data-theme="light"]) .page-header > p.research-intro,
-  html:not([data-theme="light"]) .page-header > p.page-intro { color: var(--shell-ink) !important; }
-}
+/* One dark palette, keyed off the attribute only. The <head> boot script sets
+   data-theme before first paint — from localStorage if the reader has chosen,
+   otherwise from the OS preference — and shell.js keeps it in sync when the OS
+   flips, so a parallel prefers-color-scheme block would only restate this. */
 html[data-theme="dark"] {
   --shell-bg: #111211;
   --shell-card: #1c1d1c;
@@ -339,8 +322,6 @@ html[data-theme="dark"] {
   --kw-red: #758d39;
   --kw-violet: #de5723;
 }
-html[data-theme="dark"] body::after { mix-blend-mode: screen !important; opacity: 0.12 !important; }
 html[data-theme="dark"] .pub-year { border-bottom-color: rgba(226,227,226,.18) !important; }
-html[data-theme="dark"] .pub-item { border-top-color: var(--shell-line) !important; }
 html[data-theme="dark"] .page-header > p.research-intro,
 html[data-theme="dark"] .page-header > p.page-intro { color: var(--shell-ink) !important; }

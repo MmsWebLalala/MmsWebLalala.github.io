@@ -15,10 +15,8 @@
 
     :root {
       --bg:        #F4F5F4;
-      --bg-tint:   #DCE1E2;
       --ink:       #1D2020;
       --ink-soft:  #5C6262;
-      --hair:      #C7CDCE;
       --accent:    #E04B00;
       --symbol-particle-density: 1;
       /* Matches the inner pages exactly, so the Mm mark never jumps on navigation. */
@@ -164,14 +162,11 @@
       .stage { min-height: 100vh; padding: 4rem 1rem 2rem; }
     }
 
-    @media (prefers-color-scheme: dark) {
-      html:not([data-theme="light"]) {
-        --bg: #111211; --bg-tint: #1c1d1c; --ink: #e2e3e2; --ink-soft: #7a7e7e; --hair: #2e3232;
-      }
-      html:not([data-theme="light"]) body::after { mix-blend-mode: screen; opacity: 0.12; }
-    }
+    /* Keyed off the attribute only — the <head> boot script sets data-theme
+       before first paint (localStorage, else the OS preference) and the toggle
+       below keeps it current, so a prefers-color-scheme copy would be dead weight. */
     html[data-theme="dark"] {
-      --bg: #111211; --bg-tint: #1c1d1c; --ink: #e2e3e2; --ink-soft: #7a7e7e; --hair: #2e3232;
+      --bg: #111211; --ink: #e2e3e2; --ink-soft: #7a7e7e;
     }
     html[data-theme="dark"] body::after { mix-blend-mode: screen; opacity: 0.12; }
 
@@ -222,13 +217,14 @@
     <canvas width="260" height="260" aria-hidden="true"></canvas>
   </button>
 
+  <script src="particles.js"></script>
   <script>
     // ─────────── particle symbol renderer ───────────
     // Each nav-item's canvas draws a symbol as a cloud of small ink dots that
     // continually breathe with a sine wave. Hover intensifies the wave and
     // scatters the particles further, then they return to shape.
 
-    const SIZE = 260;                 // internal canvas resolution (matches width/height attrs)
+    const SIZE = MmParticles.SIZE;    // internal canvas resolution (matches width/height attrs)
     const CENTER = SIZE / 2;
 
     // sample target positions along each symbol's stroke
@@ -368,7 +364,7 @@
     const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     // Same per-area weight as the nav symbols (0.55 × 0.50 dots/px²), shared by
     // every other particle shape (Mm mark, toggle) so no cloud reads thinner.
-    const GLYPH_STEP = 1 / Math.sqrt(0.55 * 0.50 * PARTICLE_DENSITY);
+    const GLYPH_STEP = MmParticles.glyphStep(PARTICLE_DENSITY);
     let particleInk = getComputedStyle(document.documentElement).getPropertyValue('--ink').trim() || '#1D2020';
     function updateParticleInk() {
       particleInk = getComputedStyle(document.documentElement).getPropertyValue('--ink').trim() || '#1D2020';
@@ -379,88 +375,6 @@
         updateParticleInk();
       }
     });
-
-    function sampleFloatingM() {
-      const stencil = document.createElement('canvas');
-      stencil.width = SIZE;
-      stencil.height = SIZE;
-      const context = stencil.getContext('2d', { willReadFrequently: true });
-      context.fillStyle = '#1D2020';
-      context.font = '700 150px DM Sans, Arial, sans-serif';
-      context.textBaseline = 'alphabetic';
-      const baseline = 182;
-      const stemRow = 150;
-      const stemCenter = (letter, x, side) => {
-        context.clearRect(0, 0, SIZE, SIZE);
-        context.fillText(letter, x, baseline);
-        const data = context.getImageData(0, stemRow, SIZE, 1).data;
-        const runs = [];
-        let start = null;
-        for (let px = 0; px < SIZE; px++) {
-          if (data[px * 4 + 3] > 180 && start === null) start = px;
-          if ((data[px * 4 + 3] <= 180 || px === SIZE - 1) && start !== null) {
-            runs.push([start, px - 1]);
-            start = null;
-          }
-        }
-        const run = side === 'right' ? runs[runs.length - 1] : runs[0];
-        return (run[0] + run[1]) / 2;
-      };
-      const mRightStem = stemCenter('M', 8, 'right');
-      const mLeftStem = stemCenter('m', 0, 'left');
-      const mX = mRightStem - mLeftStem;
-      context.clearRect(0, 0, SIZE, SIZE);
-      context.fillText('M', 8, baseline);
-      context.fillText('m', mX, baseline);
-      const mark = context.getImageData(0, 0, SIZE, SIZE);
-      let minX = SIZE;
-      let maxX = 0;
-      for (let y = 0; y < SIZE; y++) {
-        for (let x = 0; x < SIZE; x++) {
-          if (mark.data[(y * SIZE + x) * 4 + 3] > 180) {
-            minX = Math.min(minX, x);
-            maxX = Math.max(maxX, x);
-          }
-        }
-      }
-      context.clearRect(0, 0, SIZE, SIZE);
-      context.putImageData(mark, Math.round(SIZE / 2 - (minX + maxX) / 2), 0);
-      const pixels = context.getImageData(0, 0, SIZE, SIZE).data;
-      const points = [];
-      for (let y = 18; y < 226; y += GLYPH_STEP) {
-        for (let x = 8; x < 252; x += GLYPH_STEP) {
-          if (pixels[(Math.round(y) * SIZE + Math.round(x)) * 4 + 3] > 180) points.push({ x, y });
-        }
-      }
-      return points.sort(() => Math.random() - .5);
-    }
-
-    class FloatingM {
-      constructor(canvas) {
-        this.canvas = canvas;
-        this.ctx = canvas.getContext('2d');
-        this.hover = 0;
-        this.hoverTarget = 0;
-        this.t = 0;
-        this.particles = sampleFloatingM().map(p => ({
-          x: p.x + (Math.random() - .5), y: p.y + (Math.random() - .5),
-          phase: Math.random() * Math.PI * 2, direction: Math.random() * Math.PI * 2
-        }));
-      }
-      setHover(on) { this.hoverTarget = on ? 1 : 0; }
-      draw() {
-        this.hover += (this.hoverTarget - this.hover) * .08;
-        this.t += .025;
-        this.ctx.clearRect(0, 0, SIZE, SIZE);
-        this.ctx.fillStyle = particleInk;
-        this.particles.forEach(p => {
-          const movement = REDUCED_MOTION ? 0 : Math.sin(this.t * 1.5 + p.phase) * (1.1 + this.hover * 3) + this.hover * (5 + Math.sin(this.t + p.phase) * 3);
-          this.ctx.beginPath();
-          this.ctx.arc(p.x + Math.cos(p.direction) * movement, p.y + Math.sin(p.direction) * movement, 1.35 + this.hover * .55, 0, Math.PI * 2);
-          this.ctx.fill();
-        });
-      }
-    }
 
     // Moon/Sun theme toggle
     const TC = SIZE / 2;
@@ -532,12 +446,13 @@
       item.addEventListener('blur',       () => s.setHover(false));
     });
 
-    const floatingM = new FloatingM(document.querySelector('.mm-symbol'));
     const floatingCard = document.querySelector('.mm-card');
-    floatingCard.addEventListener('mouseenter', () => floatingM.setHover(true));
-    floatingCard.addEventListener('mouseleave', () => floatingM.setHover(false));
-    floatingCard.addEventListener('focus', () => floatingM.setHover(true));
-    floatingCard.addEventListener('blur', () => floatingM.setHover(false));
+    const floatingM = new MmParticles.ParticleCloud(
+      floatingCard.querySelector('.mm-symbol'),
+      MmParticles.sampleMmMark(GLYPH_STEP),
+      () => particleInk
+    );
+    floatingM.bindHover(floatingCard);
 
     // theme toggle
     const toggleEl = document.querySelector('.theme-toggle');
