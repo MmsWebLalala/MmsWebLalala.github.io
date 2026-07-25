@@ -53,6 +53,7 @@
 
     body {
       min-height: 100vh;
+      min-height: 100dvh;
       overflow-x: hidden;
       position: relative;
     }
@@ -72,6 +73,7 @@
     /* ══════════ NAV GRID (2x2 centered) ══════════ */
     .stage {
       min-height: 100vh;
+      min-height: 100dvh;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -159,7 +161,7 @@
       .nav-symbol { width: 92px; height: 92px; }
       .nav-label { font-size: 0.74rem; letter-spacing: 0.18em; }
 
-      .stage { min-height: 100vh; padding: 4rem 1rem 2rem; }
+      .stage { min-height: 100vh; min-height: 100dvh; padding: 4rem 1rem 2rem; }
     }
 
     /* Keyed off the attribute only — the <head> boot script sets data-theme
