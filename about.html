@@ -136,18 +136,17 @@
 
     .places-list {
       display: flex;
-      flex-direction: column;
-      gap: 1.1rem;
-      max-width: 640px;
+      flex-direction: row;
+      gap: 1.5rem;
       width: 100%;
       margin-bottom: 2.4rem;
     }
 
     .place-item {
-      display: grid;
-      grid-template-columns: 38% 1fr;
-      gap: 1.5rem;
-      align-items: center;
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 0;
+      min-width: 0;
     }
 
     .place-photo {
@@ -155,6 +154,7 @@
       overflow: hidden;
       border: 1px solid var(--border);
       background: var(--surface);
+      margin-bottom: 0.9rem;
     }
 
     .place-photo img {
@@ -183,8 +183,8 @@
       color: var(--text-muted);
     }
 
-    @media (max-width: 480px) {
-      .place-item { grid-template-columns: 1fr; }
+    @media (max-width: 720px) {
+      .places-list { flex-direction: column; }
     }
 
     /* 分割线 */
