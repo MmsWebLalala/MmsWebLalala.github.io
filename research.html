@@ -9,27 +9,13 @@
   <script>(function(){var t=localStorage.getItem('mm-theme');if(t)document.documentElement.setAttribute('data-theme',t);else if(window.matchMedia('(prefers-color-scheme:dark)').matches)document.documentElement.setAttribute('data-theme','dark')})()</script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
-
-    :root {
-      --bg:         var(--shell-bg, #0a0a0a);
-      --surface:    var(--shell-card, #141414);
-      --surface-2:  var(--shell-card-muted, #1c1c1c);
-      --text:       var(--shell-ink, #f0f0ee);
-      --text-muted: var(--shell-soft, #888888);
-      --border:     var(--shell-line, #262626);
-      --accent:     var(--shell-accent, #a3473e);
-      --font-display: var(--shell-mono, 'JetBrains Mono', ui-monospace, monospace);
-      --font-body:    var(--shell-body, 'DM Sans', 'Noto Sans SC', -apple-system, sans-serif);
-    }
-
-    html { scroll-behavior: smooth; }
 
     body {
       font-family: var(--font-body);
@@ -88,28 +74,6 @@
       letter-spacing: 0.03em;
       white-space: nowrap;
       flex-shrink: 0;
-    }
-
-    .page-header blockquote {
-      margin-top: 2rem;
-      max-width: 560px;
-      padding: 1.2rem 1.6rem;
-      border-left: 2px solid var(--border);
-    }
-
-    .page-header blockquote p {
-      font-size: 0.82rem;
-      font-style: italic;
-      color: var(--text-muted);
-      line-height: 1.9;
-      max-width: none;
-    }
-
-    .page-header blockquote footer {
-      margin-top: 0.9rem;
-      font-size: 0.72rem;
-      color: var(--text-muted);
-      opacity: 0.6;
     }
 
     /* ── PUBLICATIONS ── */
@@ -186,13 +150,8 @@
       .pub-section { padding: 0 5% 80px; }
     }
   </style>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
-    html { background: var(--bg); }
-    body { max-width: none !important; width: 100%; margin: 0; background: var(--bg); box-shadow: none !important; color: var(--text); font-family: var(--font-body) !important; font-size: 1rem; }
-    body::before { display: none !important; }
-    body::after  { opacity: 0.28 !important; }
-    body { text-shadow: none !important; }
+    body { max-width: none !important; width: 100%; margin: 0; background: var(--bg); box-shadow: none !important; color: var(--text); font-family: var(--font-body) !important; font-size: 1rem; text-shadow: none !important; }
 
     .page-header h1, h1, h2 {
       font-family: var(--font-display) !important;
@@ -207,7 +166,7 @@
       text-transform: uppercase !important;
       font-feature-settings: normal !important;
     }
-    .pub-text, .page-header p, .page-header blockquote p {
+    .pub-text, .page-header p:not(.section-label) {
       font-family: var(--font-body) !important;
     }
 
@@ -215,9 +174,6 @@
     .page-header .section-label { color: var(--text-muted); font-size: 0.72rem; }
     .page-header h1 { font-size: clamp(2.4rem, 6vw, 4rem); line-height: 1.1; letter-spacing: 0.02em; margin-bottom: 1.5rem; }
     .page-header > p { max-width: 460px; color: var(--text-muted); font-size: 0.95rem; font-weight: 400; line-height: 1.7; }
-
-    .page-header blockquote { max-width: 620px; margin-top: 3rem; padding: 0 0 0 1.2rem; border-left: 2px solid var(--accent) !important; }
-    .page-header blockquote p { color: var(--text-muted); font-size: 0.85rem; font-style: normal; line-height: 1.7; }
 
     .pub-section { max-width: 1080px; padding: 0 clamp(1.5rem, 10vw, 10rem) 8rem; }
     .pub-year-group { margin-bottom: 4rem; }
@@ -238,7 +194,7 @@
       .pub-tags { width: calc(100% - 2.35rem); margin-left: 2.35rem; }
     }
   </style>
-  <link rel="stylesheet" href="shell.css?v=20260725-2" />
+  <link rel="stylesheet" href="shell.css?v=20260725-4" />
   <script src="shell.js" defer></script>
 </head>
 <body>

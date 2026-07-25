@@ -16,17 +16,6 @@
       padding: 0;
     }
 
-    :root {
-      --bg:         var(--shell-bg, #0a0a0a);
-      --surface:    var(--shell-card, #141414);
-      --surface-2:  var(--shell-card-muted, #1c1c1c);
-      --text:       var(--shell-ink, #f0f0ee);
-      --text-muted: var(--shell-soft, #888888);
-      --border:     var(--shell-line, #262626);
-      --font-display: var(--shell-mono, 'JetBrains Mono', ui-monospace, monospace);
-      --font-body: var(--shell-body, 'DM Sans', 'Noto Sans SC', -apple-system, sans-serif);
-    }
-
     body {
       font-family: var(--font-body);
       background-color: var(--bg);
@@ -34,32 +23,6 @@
       overflow-x: hidden;
       line-height: 1.6;
     }
-
-    /* ── MAIN ── */
-    main {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 100px 5% 80px;
-      position: relative;
-      overflow: hidden;
-      background: #000;
-    }
-
-    main::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: url('./Image/Pcity.jpg');
-      background-size: cover;
-      background-position: center;
-      filter: grayscale(100%);
-      opacity: 0.2;
-      z-index: 0;
-    }
-
-    main > * { position: relative; z-index: 1; }
 
     .about-card {
       max-width: 520px;
@@ -96,17 +59,6 @@
       height: 100%;
       object-fit: cover;
       display: block;
-    }
-
-    /* 无图时占位 */
-    .avatar-placeholder {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 3rem;
-      background: linear-gradient(135deg, #1a0d2e, #0d2e1a);
     }
 
     /* 介绍文字 */
@@ -232,10 +184,7 @@
   </style>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
-    body { max-width: none !important; width: 100%; margin: 0; box-shadow: none !important; font-family: var(--font-body) !important; font-size: 1rem; }
-    body::before { display: none !important; }
-    body::after  { opacity: 0.28 !important; }
-    body { text-shadow: none !important; }
+    body { max-width: none !important; width: 100%; margin: 0; box-shadow: none !important; font-family: var(--font-body) !important; font-size: 1rem; text-shadow: none !important; }
 
     h1, h2 {
       font-family: var(--font-display) !important;
@@ -277,7 +226,7 @@
     .divider { margin-left: 0; margin-right: 0; }
     .social-icons { justify-content: flex-start; }
   </style>
-  <link rel="stylesheet" href="shell.css?v=20260725-2" />
+  <link rel="stylesheet" href="shell.css?v=20260725-4" />
   <script src="shell.js" defer></script>
 </head>
 <body>

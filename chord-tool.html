@@ -12,19 +12,6 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
-      --bg:         var(--shell-bg, #0a0a0a);
-      --surface:    var(--shell-card, #141414);
-      --surface-2:  var(--shell-card-muted, #1c1c1c);
-      --text:       var(--shell-ink, #f0f0ee);
-      --text-muted: var(--shell-soft, #888888);
-      --border:     var(--shell-line, #262626);
-      --accent:     var(--shell-accent, #e04b00);
-      --accent-dim: var(--shell-accent, #e04b00);
-      --font-display: var(--shell-mono, 'JetBrains Mono', ui-monospace, monospace);
-      --font-body: var(--shell-body, 'DM Sans', 'Noto Sans SC', -apple-system, sans-serif);
-    }
-
     body {
       font-family: var(--font-body);
       background: var(--bg);
@@ -312,10 +299,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     html { background: var(--bg) !important; }
-    body { max-width: none !important; width: 100%; margin: 0; box-shadow: none !important; font-family: var(--font-body) !important; font-size: 1rem; }
-    body::before { display: none !important; }
-    body::after  { opacity: 0.28 !important; }
-    body { text-shadow: none !important; }
+    body { max-width: none !important; width: 100%; margin: 0; box-shadow: none !important; font-family: var(--font-body) !important; font-size: 1rem; text-shadow: none !important; }
 
     .page-header h1, h1, h2 {
       font-family: var(--font-display) !important;
@@ -326,7 +310,7 @@
 
     .page-header { text-align: left; padding: 100px 5% 40px; }
     .page-header h1 { letter-spacing: 0.02em; }
-    .page-header p { color: var(--text-muted); font-family: var(--font-body) !important; }
+    .page-header p:not(.section-label) { color: var(--text-muted); font-family: var(--font-body) !important; }
 
     .main { max-width: 820px; padding: 2rem 5% 6rem; }
 
@@ -414,7 +398,7 @@
     .kr-deg-note { color: var(--text); font-family: var(--font-display) !important; }
     .kr-deg-label { color: var(--text-muted); font-family: var(--font-body) !important; font-size: 0.6rem; }
   </style>
-  <link rel="stylesheet" href="shell.css?v=20260725-2" />
+  <link rel="stylesheet" href="shell.css?v=20260725-4" />
   <script src="shell.js" defer></script>
 </head>
 <body>

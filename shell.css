@@ -17,7 +17,7 @@
   --kw-amber: #067b85;
   --kw-red: #637730;
   --kw-violet: #c04a1d;
-  --shell-mono: 'DM Mono', 'JetBrains Mono', ui-monospace, monospace;
+  --shell-mono: 'JetBrains Mono', ui-monospace, monospace;
   --shell-body: 'DM Sans', 'Noto Sans SC', -apple-system, sans-serif;
   /* Grey blocks sit close to the browser edge, like the MAD reference. */
   --shell-gutter: clamp(.5rem, .8vw, 1rem);
@@ -32,6 +32,19 @@
   --shell-gap: clamp(.65rem, 1.2vw, 1rem);
   --symbol-particle-density: 1;
   --shell-rail-center: calc((var(--shell-edge) + var(--shell-mark-width) + var(--shell-gutter)) / 2);
+
+  /* Short aliases the inner pages' own stylesheets are written against. Declared
+     once here rather than repeated in every page's <style>: custom properties
+     resolve at use time, so rules earlier in the document still pick these up. */
+  --bg: var(--shell-bg);
+  --surface: var(--shell-card);
+  --surface-2: var(--shell-card-muted);
+  --text: var(--shell-ink);
+  --text-muted: var(--shell-soft);
+  --border: var(--shell-line);
+  --accent: var(--shell-accent);
+  --font-display: var(--shell-mono);
+  --font-body: var(--shell-body);
 }
 
 html {
@@ -99,14 +112,13 @@ body > nav, body > footer { display: none !important; }
   text-shadow: none !important;
 }
 .page-header h1, .about-card h1 { font-size: clamp(2.75rem, 5vw, 5.5rem) !important; line-height: .9 !important; margin: 0 0 1.4rem !important; text-wrap: balance; }
-.page-header > p.research-intro, .page-header > p.page-intro, .page-header .intro-large { text-wrap: pretty; }
+.page-header > p.research-intro, .page-header > p.page-intro { text-wrap: pretty; }
 .page-header p:not(.section-label), .about-bio, .music-desc, .music-subtitle, .chord-label, .chord-detail, .kf-hint, .kf-empty, .kr-notes {
   color: var(--shell-soft) !important;
   font-family: var(--shell-body) !important;
 }
-.page-header > p:not(.section-label), .page-header .intro-large { max-width: 39rem !important; font-size: clamp(.95rem, 1.4vw, 1.08rem) !important; line-height: 1.65 !important; }
-.page-header .subtitle { margin: -.7rem 0 .7rem !important; font-size: 1rem !important; }
-.section-label, .hero-eyebrow {
+.page-header > p:not(.section-label) { max-width: 39rem !important; font-size: clamp(.95rem, 1.4vw, 1.08rem) !important; line-height: 1.65 !important; }
+.section-label {
   margin-bottom: 1.1rem !important;
   color: var(--shell-accent-text) !important;
   font: 500 .72rem/1 var(--shell-mono) !important;
@@ -185,7 +197,7 @@ body > nav, body > footer { display: none !important; }
   border-radius: var(--shell-radius) !important;
   box-shadow: none !important;
 }
-.pub-year { color: var(--shell-ink) !important; font: 700 clamp(1.3rem, 2.2vw, 1.75rem)/1 'JetBrains Mono', var(--shell-mono) !important; letter-spacing: -.05em !important; border-bottom-color: rgba(29,32,32,.18) !important; }
+.pub-year { color: var(--shell-ink) !important; font: 700 clamp(1.3rem, 2.2vw, 1.75rem)/1 var(--shell-mono) !important; letter-spacing: -.05em !important; border-bottom-color: rgba(29,32,32,.18) !important; }
 .pub-list { gap: 1.25rem !important; }
 .pub-item { padding-top: 1.25rem; border-top: 1px solid var(--shell-line); }
 .pub-item:first-child { padding-top: 0; border-top: 0; }

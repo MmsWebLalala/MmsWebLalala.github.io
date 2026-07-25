@@ -16,17 +16,6 @@
       padding: 0;
     }
 
-    :root {
-      --bg:         var(--shell-bg, #0a0a0a);
-      --surface:    var(--shell-card, #141414);
-      --surface-2:  var(--shell-card-muted, #1c1c1c);
-      --text:       var(--shell-ink, #f0f0ee);
-      --text-muted: var(--shell-soft, #888888);
-      --border:     var(--shell-line, #262626);
-      --font-display: var(--shell-mono, 'JetBrains Mono', ui-monospace, monospace);
-      --font-body: var(--shell-body, 'DM Sans', 'Noto Sans SC', -apple-system, sans-serif);
-    }
-
     body {
       font-family: var(--font-body);
       background-color: var(--bg);
@@ -157,10 +146,7 @@
   </style>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
-    body { max-width: none !important; width: 100%; margin: 0; box-shadow: none !important; font-family: var(--font-body) !important; font-size: 1rem; }
-    body::before { display: none !important; }
-    body::after  { opacity: 0.28 !important; }
-    body { text-shadow: none !important; }
+    body { max-width: none !important; width: 100%; margin: 0; box-shadow: none !important; font-family: var(--font-body) !important; font-size: 1rem; text-shadow: none !important; }
 
     .page-header h1, h1, h2, .tool-title {
       font-family: var(--font-display) !important;
@@ -175,7 +161,7 @@
       text-transform: uppercase !important;
       font-feature-settings: normal !important;
     }
-    .tool-desc, .page-header p {
+    .tool-desc, .page-header p:not(.section-label) {
       font-family: var(--font-body) !important;
     }
     .tool-cta {
@@ -184,7 +170,7 @@
       text-transform: uppercase;
     }
   </style>
-  <link rel="stylesheet" href="shell.css?v=20260725-2" />
+  <link rel="stylesheet" href="shell.css?v=20260725-4" />
   <script src="shell.js" defer></script>
 </head>
 <body>

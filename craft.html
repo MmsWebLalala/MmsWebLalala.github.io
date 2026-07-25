@@ -16,17 +16,6 @@
       padding: 0;
     }
 
-    :root {
-      --bg:         var(--shell-bg, #0a0a0a);
-      --surface:    var(--shell-card, #141414);
-      --surface-2:  var(--shell-card-muted, #1c1c1c);
-      --text:       var(--shell-ink, #f0f0ee);
-      --text-muted: var(--shell-soft, #888888);
-      --border:     var(--shell-line, #262626);
-      --font-display: var(--shell-mono, 'JetBrains Mono', ui-monospace, monospace);
-      --font-body: var(--shell-body, 'DM Sans', 'Noto Sans SC', -apple-system, sans-serif);
-    }
-
     body {
       font-family: var(--font-body);
       background-color: var(--bg);
@@ -37,25 +26,8 @@
 
     /* ── PAGE HEADER ── */
     .page-header {
-      position: relative;
-      overflow: hidden;
       padding: 140px 5% 80px;
-      background: #000;
     }
-
-    .page-header::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: url('./Image/IMG_1888.JPG');
-      background-size: cover;
-      background-position: center center;
-      filter: grayscale(100%);
-      opacity: 0.22;
-      z-index: 0;
-    }
-
-    .page-header > * { position: relative; z-index: 1; }
 
     .section-label {
       font-size: 0.7rem;
@@ -72,30 +44,6 @@
       line-height: 1.05;
       color: var(--text);
       margin-bottom: 0.3rem;
-    }
-
-    .page-header .subtitle {
-      font-family: var(--font-display);
-      font-size: clamp(1.2rem, 3vw, 1.8rem);
-      color: var(--text-muted);
-      margin-bottom: 1.6rem;
-    }
-
-    .page-header .intro-large {
-      font-size: 1rem;
-      font-weight: 400;
-      color: var(--text);
-      max-width: 560px;
-      line-height: 1.8;
-      margin-bottom: 1rem;
-    }
-
-    .page-header .intro-small {
-      font-size: 0.85rem;
-      font-weight: 300;
-      color: var(--text-muted);
-      max-width: 560px;
-      line-height: 1.8;
     }
 
     /* ── MUSIC LIST ── */
@@ -298,10 +246,7 @@
   </style>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
-    body { max-width: none !important; width: 100%; margin: 0; box-shadow: none !important; font-family: var(--font-body) !important; font-size: 1rem; }
-    body::before { display: none !important; }
-    body::after  { opacity: 0.28 !important; }
-    body { text-shadow: none !important; }
+    body { max-width: none !important; width: 100%; margin: 0; box-shadow: none !important; font-family: var(--font-body) !important; font-size: 1rem; text-shadow: none !important; }
 
     .page-header h1, h1, h2, .music-title {
       font-family: var(--font-display) !important;
@@ -316,12 +261,12 @@
       text-transform: uppercase !important;
       font-feature-settings: normal !important;
     }
-    .music-desc, .music-subtitle, .page-header p {
+    .music-desc, .music-subtitle, .page-header p:not(.section-label) {
       font-family: var(--font-body) !important;
     }
     .music-meta-value { font-family: var(--font-body) !important; }
   </style>
-  <link rel="stylesheet" href="shell.css?v=20260725-2" />
+  <link rel="stylesheet" href="shell.css?v=20260725-4" />
   <script src="shell.js" defer></script>
 </head>
 <body>
