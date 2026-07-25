@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tools — Mm'sWeb</title>
+  <meta name="description" content="Interactive tools — chord lookup, diatonic chords, and key reference." />
+  <link rel="icon" href="Image/mm-cutout-logo.svg" type="image/svg+xml" />
+  <script>(function(){var t=localStorage.getItem('mm-theme');if(t)document.documentElement.setAttribute('data-theme',t);else if(window.matchMedia('(prefers-color-scheme:dark)').matches)document.documentElement.setAttribute('data-theme','dark')})()</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg:         var(--shell-bg, #0a0a0a);
+      --surface:    var(--shell-card, #141414);
+      --surface-2:  var(--shell-card-muted, #1c1c1c);
+      --text:       var(--shell-ink, #f0f0ee);
+      --text-muted: var(--shell-soft, #888888);
+      --border:     var(--shell-line, #262626);
+      --font-display: var(--shell-mono, 'JetBrains Mono', ui-monospace, monospace);
+      --font-body: var(--shell-body, 'DM Sans', 'Noto Sans SC', -apple-system, sans-serif);
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      padding: 140px 5% 60px;
+      max-width: 760px;
+    }
+
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    .page-header h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      line-height: 1.1;
+      color: var(--text);
+      margin-bottom: 1.2rem;
+    }
+
+    .page-header p {
+      font-size: 0.95rem;
+      font-weight: 300;
+      color: var(--text-muted);
+      max-width: 520px;
+      line-height: 1.8;
+    }
+
+    /* ── TOOL LIST ── */
+    .tools-section {
+      padding: 0 5% 120px;
+    }
+
+    .tools-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .tool-item {
+      display: grid;
+      grid-template-columns: 34% 1fr;
+      align-items: center;
+      gap: 2.5rem;
+      border-top: 1px solid var(--border);
+      padding: 3rem 0;
+      text-decoration: none;
+      color: inherit;
+      transition: background-color 0.2s ease;
+    }
+
+    .tool-item:last-child {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tool-preview {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--surface);
+      border-radius: 4px;
+      padding: 1.5rem 1rem;
+    }
+
+    .tool-preview svg {
+      width: 100%;
+      max-width: 220px;
+      height: auto;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+
+    .tool-item:hover .tool-preview svg {
+      transform: scale(1.04);
+    }
+
+    .tool-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 400;
+      color: var(--text);
+      line-height: 1.15;
+      margin-bottom: 0.6rem;
+    }
+
+    .tool-desc {
+      font-size: 0.85rem;
+      font-weight: 300;
+      color: var(--text-muted);
+      line-height: 1.8;
+      max-width: 460px;
+      margin-bottom: 1.2rem;
+    }
+
+    .tool-cta {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: color 0.2s, gap 0.2s;
+    }
+
+    .tool-item:hover .tool-cta {
+      color: var(--text);
+      gap: 0.6rem;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .tool-item {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        padding: 2.5rem 0;
+      }
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body { max-width: none !important; width: 100%; margin: 0; box-shadow: none !important; font-family: var(--font-body) !important; font-size: 1rem; }
+    body::before { display: none !important; }
+    body::after  { opacity: 0.28 !important; }
+    body { text-shadow: none !important; }
+
+    .page-header h1, h1, h2, .tool-title {
+      font-family: var(--font-display) !important;
+      font-weight: 700 !important;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .section-label {
+      font-family: var(--font-display) !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.18em !important;
+      text-transform: uppercase !important;
+      font-feature-settings: normal !important;
+    }
+    .tool-desc, .page-header p {
+      font-family: var(--font-body) !important;
+    }
+    .tool-cta {
+      font-family: var(--font-display) !important;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+  </style>
+  <link rel="stylesheet" href="shell.css?v=20260725-2" />
+  <script src="shell.js" defer></script>
+</head>
+<body>
+
+  <!-- PAGE HEADER -->
+  <header class="page-header">
+    <p class="section-label">Toolkit</p>
+    <h1>Tools</h1>
+    <p class="page-intro">Small interactive tools for exploring music theory.</p>
+  </header>
+
+  <!-- TOOL LIST -->
+  <section class="tools-section">
+    <div class="tools-list">
+
+      <a class="tool-item" href="chord-tool.html">
+        <div class="tool-preview">
+          <svg viewBox="0 0 182 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="0"   y="0" width="25" height="100" rx="0" ry="2" fill="#A3473E" stroke="#6B655A" stroke-width="0.5"/>
+            <rect x="26"  y="0" width="25" height="100" rx="0" ry="2" fill="#F1EADA" stroke="#6B655A" stroke-width="0.5"/>
+            <rect x="52"  y="0" width="25" height="100" rx="0" ry="2" fill="#C0533C" stroke="#6B655A" stroke-width="0.5"/>
+            <rect x="78"  y="0" width="25" height="100" rx="0" ry="2" fill="#F1EADA" stroke="#6B655A" stroke-width="0.5"/>
+            <rect x="104" y="0" width="25" height="100" rx="0" ry="2" fill="#C0533C" stroke="#6B655A" stroke-width="0.5"/>
+            <rect x="130" y="0" width="25" height="100" rx="0" ry="2" fill="#F1EADA" stroke="#6B655A" stroke-width="0.5"/>
+            <rect x="156" y="0" width="25" height="100" rx="0" ry="2" fill="#F1EADA" stroke="#6B655A" stroke-width="0.5"/>
+            <rect x="18"  y="0" width="16" height="62" rx="0" ry="2" fill="#1A1815" stroke="#000" stroke-width="0.5"/>
+            <rect x="44"  y="0" width="16" height="62" rx="0" ry="2" fill="#1A1815" stroke="#000" stroke-width="0.5"/>
+            <rect x="96"  y="0" width="16" height="62" rx="0" ry="2" fill="#1A1815" stroke="#000" stroke-width="0.5"/>
+            <rect x="122" y="0" width="16" height="62" rx="0" ry="2" fill="#1A1815" stroke="#000" stroke-width="0.5"/>
+            <rect x="148" y="0" width="16" height="62" rx="0" ry="2" fill="#1A1815" stroke="#000" stroke-width="0.5"/>
+          </svg>
+        </div>
+        <div class="tool-body">
+          <h2 class="tool-title">Chord Tool</h2>
+          <p class="tool-desc">Look up any chord, browse the diatonic chords in a key, or find a matching key from a handful of notes.</p>
+          <span class="tool-cta">Open Chord Tool →</span>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+</body>
+</html>

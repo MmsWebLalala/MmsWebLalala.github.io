@@ -64,7 +64,7 @@ body > nav, body > footer { display: none !important; }
 
 /* The title sits directly on the page. Content, rather than every element,
    receives the quiet grey block treatment. */
-.pub-section, .music-section {
+.pub-section, .music-section, .tools-section {
   width: 100% !important;
   max-width: none !important;
   margin: 0 0 var(--shell-gap) !important;
@@ -212,6 +212,25 @@ body > nav, body > footer { display: none !important; }
 .music-meta-label { color: var(--shell-soft) !important; font-family: var(--shell-mono) !important; }
 .music-meta-value { color: var(--shell-ink) !important; }
 
+/* Tools: same card-block treatment as the music list. */
+.tools-list { gap: var(--shell-gap) !important; }
+.tool-item {
+  grid-template-columns: minmax(170px, 34%) 1fr !important;
+  gap: clamp(1rem, 3vw, 2.4rem) !important;
+  padding: clamp(1.25rem, 3vw, 2.4rem) !important;
+  border: 0 !important;
+  border-radius: var(--shell-radius) !important;
+  background: var(--shell-card) !important;
+  box-shadow: none !important;
+}
+.tool-item:hover { background: var(--shell-card-muted) !important; }
+.tool-preview { border-radius: calc(var(--shell-radius) - .35rem) !important; background: var(--shell-card-muted) !important; }
+.tool-item:hover .tool-preview { background: var(--shell-bg) !important; }
+.tool-title { color: var(--shell-ink) !important; font-size: clamp(1.4rem, 2.6vw, 2rem) !important; }
+.tool-desc { color: var(--shell-soft) !important; }
+.tool-cta { color: var(--shell-accent-text) !important; }
+.tool-item:hover .tool-cta { color: var(--shell-accent) !important; }
+
 /* About and the interactive tool receive the same enclosed work-surface. */
 body > main, .main {
   width: 100% !important;
@@ -269,11 +288,11 @@ body > main, .main {
 @media (max-width: 720px) {
   :root { --shell-edge: var(--shell-gutter); --shell-mark-width: 70px; --shell-gutter: .5rem; --shell-title-inset: .75rem; --shell-radius: 1rem; --shell-gap: .65rem; --symbol-particle-density: .65; }
   body { padding: .8rem calc(var(--shell-edge) + var(--shell-mark-width) + var(--shell-gutter)) 2.5rem var(--shell-gutter) !important; }
-  .page-header, .pub-section, .music-section, body > main, .main { margin-bottom: 1rem !important; }
+  .page-header, .pub-section, .music-section, .tools-section, body > main, .main { margin-bottom: 1rem !important; }
   .page-header { min-height: 0 !important; padding-top: 3.5rem !important; }
   .page-header h1, .about-card h1 { font-size: clamp(2.75rem, 14vw, 4.5rem) !important; }
   .page-header > p.research-intro, .page-header > p.page-intro { font-size: clamp(1.5rem, 7vw, 2.1rem) !important; line-height: 1.3 !important; }
-  .music-item { grid-template-columns: 1fr !important; }
+  .music-item, .tool-item { grid-template-columns: 1fr !important; }
   .music-cover { max-width: 100% !important; }
 }
 
