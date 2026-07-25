@@ -123,6 +123,70 @@
       font-weight: 500;
     }
 
+    /* 地点 */
+    .places-label {
+      font-family: var(--font-display);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    .places-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+      max-width: 640px;
+      width: 100%;
+      margin-bottom: 2.4rem;
+    }
+
+    .place-item {
+      display: grid;
+      grid-template-columns: 38% 1fr;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .place-photo {
+      aspect-ratio: 4 / 3;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    .place-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: grayscale(100%);
+      transition: transform 0.5s ease;
+    }
+
+    .place-item:hover .place-photo img {
+      transform: scale(1.04);
+    }
+
+    .place-name {
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 0.2rem;
+    }
+
+    .place-region {
+      font-size: 0.78rem;
+      font-weight: 300;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 480px) {
+      .place-item { grid-template-columns: 1fr; }
+    }
+
     /* 分割线 */
     .divider {
       width: 40px;
@@ -168,10 +232,6 @@
   </style>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
-    :root {
-      --font-display: 'JetBrains Mono', ui-monospace, monospace;
-      --font-body: 'DM Sans', 'Noto Sans SC', -apple-system, sans-serif;
-    }
     body { max-width: none !important; width: 100%; margin: 0; box-shadow: none !important; font-family: var(--font-body) !important; font-size: 1rem; }
     body::before { display: none !important; }
     body::after  { opacity: 0.28 !important; }
@@ -185,6 +245,21 @@
     }
 
     .about-bio { font-family: var(--font-body) !important; }
+
+    .places-label {
+      font-family: var(--font-display) !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.18em !important;
+      text-transform: uppercase !important;
+    }
+    .place-name {
+      font-family: var(--font-display) !important;
+      font-weight: 700 !important;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .place-region { font-family: var(--font-body) !important; }
+    .place-photo { border-color: var(--border) !important; }
 
     .social-icon {
       border-radius: 0 !important;
@@ -223,12 +298,43 @@
       </div>
 
       <p class="about-bio">
-        Hi, I'm 马星杨 (Xingyang Ma, Max). From <strong>Kunming, China</strong>.<br>
+        Hi, I'm 马星杨 (Xingyang Ma, Max).<br>
         Bla, bla, bla, <strong>bla, bla, bla.</strong><br>
-        Thank you for visiting 😉😉😉. 
+        Thank you for visiting 😉😉😉.
         <br><br>
         <!-- 在这里继续添加介绍 -->
       </p>
+
+      <p class="places-label">Places</p>
+      <div class="places-list">
+        <div class="place-item">
+          <div class="place-photo">
+            <img src="Image/Bridge.jpg" alt="Wetland boardwalk in Kunming">
+          </div>
+          <div class="place-body">
+            <h3 class="place-name">Kunming</h3>
+            <p class="place-region">Yunnan, China</p>
+          </div>
+        </div>
+        <div class="place-item">
+          <div class="place-photo">
+            <img src="Image/beibei.jpg" alt="Riverbank in Beibei, Chongqing">
+          </div>
+          <div class="place-body">
+            <h3 class="place-name">Chongqing · Beibei</h3>
+            <p class="place-region">Chongqing, China</p>
+          </div>
+        </div>
+        <div class="place-item">
+          <div class="place-photo">
+            <img src="Image/Pcity.jpg" alt="Perth city skyline across the Swan River">
+          </div>
+          <div class="place-body">
+            <h3 class="place-name">Perth</h3>
+            <p class="place-region">Western Australia</p>
+          </div>
+        </div>
+      </div>
 
       <div class="divider"></div>
 
