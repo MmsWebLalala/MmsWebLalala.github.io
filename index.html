@@ -114,6 +114,10 @@
     }
 
     .nav-item:hover .nav-label { color: var(--accent); }
+    /* Research's nav item hovers into the same teal as its own page's accent
+       (the "Values & Personality" keyword color), rather than the site-wide
+       orange every other nav item still uses. */
+    .nav-item[href="research.html"]:hover .nav-label { color: #067b85; }
 
     .site-caption {
       margin-top: clamp(2.5rem, 4vw, 3.5rem);
@@ -126,6 +130,22 @@
 
     .site-caption + .site-caption {
       margin-top: 0.4rem;
+    }
+
+    /* ══════════ FOOTER ══════════ */
+    /* Absolutely positioned against body (already position: relative below),
+       not a sibling in flow — sits at the true bottom without adding height
+       that would push the page past 100dvh into a scrollbar. */
+    .site-footer {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: var(--shell-edge);
+      text-align: center;
+      color: var(--ink-soft);
+      font-family: var(--font-body);
+      font-size: 0.78rem;
+      font-weight: 300;
     }
 
     /* ══════════ MM FLOATING MARK ══════════ */
@@ -172,16 +192,20 @@
     }
     html[data-theme="dark"] body::after { mix-blend-mode: screen; opacity: 0.12; }
 
-    /* Theme toggle */
+    /* Theme toggle — top-left. `left: rail-center` + translateX(-50%) puts
+       the icon's horizontal center on the mark's own central axis, mirrored
+       to the left edge; the top calc centers it vertically against the
+       mark's height too, so both icons share the exact same center point
+       height-wise, not just a common top edge. */
     .theme-toggle {
       position: fixed;
-      right: var(--shell-rail-center);
-      bottom: calc(var(--shell-edge) + var(--shell-mark-width) * .27 - var(--shell-top-width) * .14);
+      left: var(--shell-rail-center);
+      top: calc(var(--shell-edge) + (var(--shell-mark-width) - var(--shell-top-width)) / 2);
       z-index: 10000;
       width: var(--shell-top-width);
       padding: 0; border: 0; background: transparent;
       cursor: pointer; line-height: 0;
-      transform: translateX(50%);
+      transform: translateX(-50%);
     }
     .theme-toggle canvas { display: block; width: 100%; height: auto; }
   </style>
@@ -210,6 +234,8 @@
     <p class="site-caption">Mm's Personal Website</p>
     <p class="site-caption">Kunming, Chongqing, Perth</p>
   </main>
+
+  <p class="site-footer">© 2026 Mm's Studio. All rights reserved.</p>
 
   <button class="mm-card" type="button" aria-label="Back to top" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">
     <canvas class="mm-symbol" width="260" height="260" aria-hidden="true"></canvas>

@@ -194,7 +194,21 @@
       .pub-tags { width: calc(100% - 2.35rem); margin-left: 2.35rem; }
     }
   </style>
-  <link rel="stylesheet" href="shell.css?v=20260725-5" />
+  <link rel="stylesheet" href="shell.css?v=20260725-12" />
+  <style>
+    /* Research gets its own accent — the same teal as its own "Values &
+       Personality" keyword tag (--kw-amber), instead of the site-wide orange
+       — kept in sync with the home page's Research nav-item hover in
+       index.html. Passes AA at this size on both themes (4.6:1 light,
+       5.5:1 dark) without needing a separate small-text-safe variant. */
+    :root {
+      --shell-accent: #067b85;
+      --shell-accent-text: #067b85;
+    }
+    html[data-theme="dark"] {
+      --shell-accent-text: #0799a5;
+    }
+  </style>
   <script src="particles.js" defer></script>
   <script src="shell.js" defer></script>
 </head>
@@ -454,5 +468,6 @@
       requestAnimationFrame(loop);
     })();
   </script>
+  <p class="site-footer">© 2026 Mm's Studio. All rights reserved.</p>
 </body>
 </html>

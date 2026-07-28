@@ -30,6 +30,12 @@
   --shell-top-width: clamp(3rem, 5vw, 4rem);
   --shell-radius: clamp(.85rem, 1.2vw, 1.15rem);
   --shell-gap: clamp(.65rem, 1.2vw, 1rem);
+  /* Room below the last card — sized to clear the *top* of the fixed arrow
+     (bottom offset + its own height, mirroring .shell-top's formula below),
+     plus a bit of breathing room, so the reserved strip always extends past
+     it rather than just tucking under its bottom edge. .site-footer sits
+     inside this strip, absolutely positioned to its bottom edge. */
+  --shell-pad-bottom: calc(var(--shell-edge) + var(--shell-mark-width) * .27 + var(--shell-top-width) * .86 + var(--shell-gap));
   --symbol-particle-density: 1;
   --shell-rail-center: calc((var(--shell-edge) + var(--shell-mark-width) + var(--shell-gutter)) / 2);
 
@@ -65,8 +71,12 @@ html {
 
 body {
   min-height: 100vh;
+  min-height: 100dvh;
+  /* Containing block for .site-footer, which is absolutely positioned to the
+     bottom of this box — including the reserved padding below, not past it. */
+  position: relative;
   /* A compact right rail lets the MM mark sit outside the content blocks. */
-  padding: clamp(1rem, 2.5vw, 2rem) calc(var(--shell-edge) + var(--shell-mark-width) + var(--shell-gutter)) clamp(3rem, 7vw, 6rem) var(--shell-gutter) !important;
+  padding: clamp(1rem, 2.5vw, 2rem) calc(var(--shell-edge) + var(--shell-mark-width) + var(--shell-gutter)) var(--shell-pad-bottom) var(--shell-gutter) !important;
   background: var(--shell-bg) !important;
   color: var(--shell-ink) !important;
   font-family: var(--shell-body) !important;
@@ -215,7 +225,6 @@ body > nav, body > footer { display: none !important; }
   background: var(--shell-card) !important;
   box-shadow: none !important;
 }
-.music-item:last-child { border-bottom: 1px solid var(--shell-line) !important; }
 .music-cover { border-radius: calc(var(--shell-radius) - .35rem) !important; background: var(--shell-card-muted) !important; }
 .music-title { font-size: clamp(1.4rem, 2.6vw, 2.2rem) !important; }
 .music-meta-row { border-color: var(--shell-line) !important; }
@@ -295,9 +304,28 @@ body > main, .main {
 .shell-top.is-visible { opacity: 1; pointer-events: auto; transform: translateX(50%); }
 .shell-top-symbol { display: block; width: 100%; height: auto; }
 
+/* Sits at the true end of the page — reachable only by scrolling past all
+   content, not pinned over it. Anchored to body's own bottom edge (padding
+   included), not appended after it, so it sits inside the reserved strip
+   below the last card rather than adding to it. left/right are relative to
+   body's padding box (its full outer width, ignoring body's own asymmetric
+   left/right padding), so this centers on the true viewport, not the
+   lopsided content column the Mm-mark rail leaves on the right. */
+.site-footer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: var(--shell-edge);
+  text-align: center;
+  color: var(--shell-soft);
+  font-family: var(--shell-body);
+  font-size: 0.78rem;
+  font-weight: 300;
+}
+
 @media (max-width: 720px) {
   :root { --shell-edge: var(--shell-gutter); --shell-mark-width: 70px; --shell-gutter: .5rem; --shell-title-inset: .75rem; --shell-radius: 1rem; --shell-gap: .65rem; --symbol-particle-density: .65; }
-  body { padding: .8rem calc(var(--shell-edge) + var(--shell-mark-width) + var(--shell-gutter)) 2.5rem var(--shell-gutter) !important; }
+  body { padding: .8rem calc(var(--shell-edge) + var(--shell-mark-width) + var(--shell-gutter)) var(--shell-pad-bottom) var(--shell-gutter) !important; }
   .page-header, .pub-section, .music-section, .tools-section, body > main, .main { margin-bottom: 1rem !important; }
   .page-header { min-height: 0 !important; padding-top: 3.5rem !important; }
   .page-header h1, .about-card h1 { font-size: clamp(2.75rem, 14vw, 4.5rem) !important; }
