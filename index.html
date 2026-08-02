@@ -119,6 +119,11 @@
        orange every other nav item still uses. */
     .nav-item[href="research.html"]:hover .nav-label { color: #067b85; }
 
+    /* Music: no content yet, so the tile stays visible but reads as inert —
+       dimmed, default cursor, no hover color change. */
+    .nav-item--disabled { cursor: default; opacity: 0.45; }
+    .nav-item--disabled:hover .nav-label { color: var(--ink); }
+
     .site-caption {
       margin-top: clamp(2.5rem, 4vw, 3.5rem);
       color: var(--ink-soft);
@@ -222,10 +227,12 @@
         <canvas class="nav-symbol" width="260" height="260" aria-hidden="true"></canvas>
         <span class="nav-label">Tools</span>
       </a>
-      <a class="nav-item" href="craft.html" data-symbol="triangle">
+      <!-- Temporarily unlinked — craft.html has no content yet. Restore by
+           swapping this <div> back to <a href="craft.html">. -->
+      <div class="nav-item nav-item--disabled" data-symbol="triangle">
         <canvas class="nav-symbol" width="260" height="260" aria-hidden="true"></canvas>
         <span class="nav-label">Music</span>
-      </a>
+      </div>
       <a class="nav-item" href="about.html" data-symbol="plus">
         <canvas class="nav-symbol" width="260" height="260" aria-hidden="true"></canvas>
         <span class="nav-label">Contact</span>
