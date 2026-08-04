@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>About — Mm'sWeb</title>
+  <title>Connect — Mm'sWeb</title>
   <meta name="description" content="Profile and contact for Xingyang Ma (Max)." />
   <link rel="icon" href="Image/mm-logo-icon.png" type="image/png" />
   <script>(function(){var t=localStorage.getItem('mm-theme');if(t)document.documentElement.setAttribute('data-theme',t);else if(window.matchMedia('(prefers-color-scheme:dark)').matches)document.documentElement.setAttribute('data-theme','dark')})()</script>
@@ -227,6 +227,18 @@
     .social-icons { justify-content: flex-start; }
   </style>
   <link rel="stylesheet" href="shell.css?v=20260725-13" />
+  <style>
+    /* Connect reuses Research's exact teal accent scheme (see
+       research.html), kept in sync with the home page's Connect nav-item
+       hover in index.html. */
+    :root {
+      --shell-accent: #067b85;
+      --shell-accent-text: #067b85;
+    }
+    html[data-theme="dark"] {
+      --shell-accent-text: #0799a5;
+    }
+  </style>
   <script src="particles.js" defer></script>
   <script src="shell.js" defer></script>
 </head>
@@ -235,7 +247,7 @@
   <!-- ABOUT -->
   <header class="page-header about-header">
     <p class="section-label">Profile</p>
-    <h1>About</h1>
+    <h1>Connect</h1>
     <p class="page-intro">Personal profile and contact.</p>
   </header>
 
