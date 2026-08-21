@@ -80,33 +80,58 @@
     .pub-section {
       padding: 0 5% 120px;
       max-width: 860px;
-    }
-
-    .pub-year-group {
-      margin-bottom: 3rem;
-    }
-
-    .pub-year {
-      font-family: var(--font-display);
-      font-size: 1.4rem;
-      color: var(--text);
-      margin-bottom: 1.2rem;
-      padding-bottom: 0.6rem;
-      border-bottom: 1px solid var(--border);
+      position: relative;
     }
 
     .pub-list {
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: 0;
+    }
+
+    /* Timeline rail: a single line spanning the visible dots, repositioned
+       by JS (see the script at the bottom) so it never breaks or overshoots
+       when the keyword filter hides items. */
+    .pub-rail {
+      position: absolute;
+      left: 3px;
+      width: 1px;
+      background: var(--border);
+      top: 0;
+      height: 0;
     }
 
     .pub-item {
+      position: relative;
+      padding: 1.15rem 0 1.15rem 1.8rem;
+    }
+
+    .pub-dot {
+      position: absolute;
+      left: 0;
+      top: 1.5rem;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .pub-year {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 0.7rem;
+    }
+
+    /* One year can hold several citations; each gets its own entry so the
+       dot/rail above only marks the year once. */
+    .pub-entries {
       display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem 1rem;
-      align-items: baseline;
+      flex-direction: column;
+      gap: 1rem;
     }
 
     .pub-tags {
@@ -114,20 +139,12 @@
       display: flex;
       flex-wrap: wrap;
       gap: 0.35rem;
-      margin-top: 0.1rem;
+      margin-top: 0.35rem;
     }
 
     .pub-tags .kw-tag {
       font-size: 0.68rem;
       padding: 0.15rem 0.55rem;
-    }
-
-    .pub-num {
-      font-size: 0.72rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      min-width: 1.4rem;
-      padding-top: 0.05rem;
     }
 
     .pub-text {
@@ -176,22 +193,15 @@
     .page-header > p { max-width: 460px; color: var(--text-muted); font-size: 0.95rem; font-weight: 400; line-height: 1.7; }
 
     .pub-section { max-width: 1080px; padding: 0 clamp(1.5rem, 10vw, 10rem) 8rem; }
-    .pub-year-group { margin-bottom: 4rem; }
-    .pub-year { color: var(--text); font-size: 0.9rem; font-weight: 700; letter-spacing: 0.18em; padding-bottom: 0.75rem; border-bottom: 1px solid var(--text) !important; background: none !important; }
-    .pub-list { gap: 0; }
     .pub-section, .pub-list { width: 100% !important; min-width: 0; }
-    .pub-item { display: flex !important; width: 100% !important; min-width: 0; flex-wrap: wrap !important; align-items: flex-start !important; gap: 0.3rem 0.8rem; padding: 1.15rem 0; border-bottom: 1px solid var(--border); }
+    .pub-item { display: block !important; width: 100% !important; min-width: 0; }
     .pub-item::before { display: none !important; }
-    .pub-num { min-width: auto; color: var(--accent); font-size: 0.76rem; font-weight: 600; padding-top: 0.16rem; }
-    .pub-text { flex: 1 1 calc(100% - 3.3rem); width: auto !important; min-width: 0; color: var(--text-muted) !important; font-size: 0.92rem !important; font-weight: 400 !important; line-height: 1.65 !important; overflow-wrap: break-word; word-break: normal; }
+    .pub-text { width: auto !important; min-width: 0; color: var(--text-muted) !important; font-size: 0.92rem !important; font-weight: 400 !important; line-height: 1.65 !important; overflow-wrap: break-word; word-break: normal; }
     .pub-text a { color: var(--text); text-decoration-color: var(--border); text-underline-offset: 3px; }
-    .pub-tags { width: calc(100% - 3.3rem); margin: 0.2rem 0 0 3.3rem; }
+    .pub-tags { margin-top: 0.35rem; }
     @media (max-width: 768px) {
       .page-header { padding-top: 110px; }
       .page-header h1 { font-size: clamp(2rem, 10vw, 3rem); }
-      .pub-num { flex-basis: 1.8rem; }
-      .pub-text { flex-basis: calc(100% - 2.35rem); }
-      .pub-tags { width: calc(100% - 2.35rem); margin-left: 2.35rem; }
     }
   </style>
   <link rel="stylesheet" href="shell.css?v=20260725-13" />
@@ -238,88 +248,86 @@
 
   <!-- PUBLICATIONS -->
   <section class="pub-section">
+    <div class="pub-rail" aria-hidden="true"></div>
+    <ol class="pub-list">
+      <li class="pub-item">
+        <span class="pub-dot" aria-hidden="true"></span>
+        <div class="pub-year">2026</div>
+        <div class="pub-entries">
+          <div class="pub-entry">
+            <p class="pub-text">Fang, Z., Lv, X., Ma, X., Zhou, Y., Li, J., &amp; Gao, X. (2026). Does avatar's role reflect your personality? A network analysis among players in league of legends. <em>Entertainment Computing</em>, 101126. <a href="https://doi.org/10.1016/j.entcom.2026.101126" target="_blank">https://doi.org/10.1016/j.entcom.2026.101126</a></p>
+            <div class="pub-tags"><span class="kw-tag amber">Values & Personality</span></div>
+          </div>
+        </div>
+      </li>
 
-    <div class="pub-year-group">
-      <div class="pub-year">2026</div>
-      <ol class="pub-list">
-        <li class="pub-item">
-          <span class="pub-num">1.</span>
-          <p class="pub-text">Fang, Z., Lv, X., Ma, X., Zhou, Y., Li, J., &amp; Gao, X. (2026). Does avatar's role reflect your personality? A network analysis among players in league of legends. <em>Entertainment Computing</em>, 101126. <a href="https://doi.org/10.1016/j.entcom.2026.101126" target="_blank">https://doi.org/10.1016/j.entcom.2026.101126</a></p>
-          <div class="pub-tags"><span class="kw-tag amber">Values & Personality</span></div>
-        </li>
-      </ol>
-    </div>
+      <li class="pub-item">
+        <span class="pub-dot" aria-hidden="true"></span>
+        <div class="pub-year">2025</div>
+        <div class="pub-entries">
+          <div class="pub-entry">
+            <p class="pub-text">Wu, F., Zhang, Y., Zhao, Y., Zhang, C., &amp; Ma, X. (2025). Willingness for Cross-Class Contact of Different Social Classes and the Mediating Role of Negative Contact Expectations. <em>Personality and Social Psychology Bulletin</em>, 01461672251316690. <a href="https://doi.org/10.1177/01461672251316690" target="_blank">https://doi.org/10.1177/01461672251316690</a></p>
+            <div class="pub-tags"><span class="kw-tag red">Inequality & Hierarchy</span></div>
+          </div>
+          <div class="pub-entry">
+            <p class="pub-text">Ma, X., Zhao, Y., &amp; Fan, P. (2025). Striving for Success and Being Seen as Virtuous: The Impact of Achievement Values on Reputation Concerns. <em>Social and Personality Psychology Compass</em>, 19(4), e70049. <a href="https://doi.org/10.1111/spc3.70049" target="_blank">https://doi.org/10.1111/spc3.70049</a></p>
+            <div class="pub-tags"><span class="kw-tag amber">Values & Personality</span></div>
+          </div>
+          <div class="pub-entry">
+            <p class="pub-text">Shi, Y., Zhao, Y., Ma, X., &amp; Chen, S. (2025). From Gender Threat to Farsightedness: How Women's Perceived Intergroup Threat Shapes Their Long-Term Orientation. <em>Behavioral Sciences</em>, 15(11). <a href="https://doi.org/10.3390/bs15111542" target="_blank">https://doi.org/10.3390/bs15111542</a></p>
+            <div class="pub-tags"><span class="kw-tag red">Inequality & Hierarchy</span></div>
+          </div>
+        </div>
+      </li>
 
-    <div class="pub-year-group">
-      <div class="pub-year">2025</div>
-      <ol class="pub-list">
-        <li class="pub-item">
-          <span class="pub-num">1.</span>
-          <p class="pub-text">Wu, F., Zhang, Y., Zhao, Y., Zhang, C., &amp; Ma, X. (2025). Willingness for Cross-Class Contact of Different Social Classes and the Mediating Role of Negative Contact Expectations. <em>Personality and Social Psychology Bulletin</em>, 01461672251316690. <a href="https://doi.org/10.1177/01461672251316690" target="_blank">https://doi.org/10.1177/01461672251316690</a></p>
-          <div class="pub-tags"><span class="kw-tag red">Inequality & Hierarchy</span></div>
-        </li>
-        <li class="pub-item">
-          <span class="pub-num">2.</span>
-          <p class="pub-text">Ma, X., Zhao, Y., &amp; Fan, P. (2025). Striving for Success and Being Seen as Virtuous: The Impact of Achievement Values on Reputation Concerns. <em>Social and Personality Psychology Compass</em>, 19(4), e70049. <a href="https://doi.org/10.1111/spc3.70049" target="_blank">https://doi.org/10.1111/spc3.70049</a></p>
-          <div class="pub-tags"><span class="kw-tag amber">Values & Personality</span></div>
-        </li>
-        <li class="pub-item">
-          <span class="pub-num">3.</span>
-          <p class="pub-text">Shi, Y., Zhao, Y., Ma, X., &amp; Chen, S. (2025). From Gender Threat to Farsightedness: How Women's Perceived Intergroup Threat Shapes Their Long-Term Orientation. <em>Behavioral Sciences</em>, 15(11). <a href="https://doi.org/10.3390/bs15111542" target="_blank">https://doi.org/10.3390/bs15111542</a></p>
-          <div class="pub-tags"><span class="kw-tag red">Inequality & Hierarchy</span></div>
-        </li>
-      </ol>
-    </div>
+      <li class="pub-item">
+        <span class="pub-dot" aria-hidden="true"></span>
+        <div class="pub-year">2024</div>
+        <div class="pub-entries">
+          <div class="pub-entry">
+            <p class="pub-text">Ma, X., Chen, B., &amp; Zhao, Y. (2024). The paradox of pandemic mitigation? Moderating role of pandemic severity on the impact of social distancing policies: a cultural value perspective. <em>Globalization and Health</em>, 20(1), 13. <a href="https://doi.org/10.1186/s12992-024-01018-y" target="_blank">https://doi.org/10.1186/s12992-024-01018-y</a></p>
+            <div class="pub-tags"><span class="kw-tag amber">Values & Personality</span></div>
+          </div>
+          <div class="pub-entry">
+            <p class="pub-text">Zhao, N., Zhao, Y., Bao, Y., Mo, X., &amp; Ma, X. (2024). Effects of multicultural experiences on empathy: A model of the roles of positive emotion and critical thinking. <em>Journal of Applied Social Psychology</em>, 1–11. <a href="https://doi.org/10.1111/jasp.13068" target="_blank">https://doi.org/10.1111/jasp.13068</a></p>
+            <div class="pub-tags"><span class="kw-tag amber">Values & Personality</span><span class="kw-tag violet">Experience & Well-being</span></div>
+          </div>
+        </div>
+      </li>
 
-    <div class="pub-year-group">
-      <div class="pub-year">2024</div>
-      <ol class="pub-list">
-        <li class="pub-item">
-          <span class="pub-num">1.</span>
-          <p class="pub-text">Ma, X., Chen, B., &amp; Zhao, Y. (2024). The paradox of pandemic mitigation? Moderating role of pandemic severity on the impact of social distancing policies: a cultural value perspective. <em>Globalization and Health</em>, 20(1), 13. <a href="https://doi.org/10.1186/s12992-024-01018-y" target="_blank">https://doi.org/10.1186/s12992-024-01018-y</a></p>
-          <div class="pub-tags"><span class="kw-tag amber">Values & Personality</span></div>
-        </li>
-        <li class="pub-item">
-          <span class="pub-num">2.</span>
-          <p class="pub-text">Zhao, N., Zhao, Y., Bao, Y., Mo, X., &amp; Ma, X. (2024). Effects of multicultural experiences on empathy: A model of the roles of positive emotion and critical thinking. <em>Journal of Applied Social Psychology</em>, 1–11. <a href="https://doi.org/10.1111/jasp.13068" target="_blank">https://doi.org/10.1111/jasp.13068</a></p>
-          <div class="pub-tags"><span class="kw-tag amber">Values & Personality</span><span class="kw-tag violet">Experience & Well-being</span></div>
-        </li>
-      </ol>
-    </div>
+      <li class="pub-item">
+        <span class="pub-dot" aria-hidden="true"></span>
+        <div class="pub-year">2023</div>
+        <div class="pub-entries">
+          <div class="pub-entry">
+            <p class="pub-text" lang="zh">赵玉芳, 马星杨 &amp; 张秀静.(2023).内卷"胜出者"真的幸福吗?——自我增强价值观对主观社会阶层和主观幸福感关系的调节作用.<em>辽宁师范大学学报(社会科学版)</em>(01),25-34. <a href="https://doi.org/10.16216/j.cnki.lsxbwk.202301025" target="_blank">https://doi.org/10.16216/j.cnki.lsxbwk.202301025</a></p>
+            <div class="pub-tags"><span class="kw-tag red">Inequality & Hierarchy</span><span class="kw-tag amber">Values & Personality</span><span class="kw-tag violet">Experience & Well-being</span></div>
+          </div>
+        </div>
+      </li>
 
-    <div class="pub-year-group">
-      <div class="pub-year">2023</div>
-      <ol class="pub-list">
-        <li class="pub-item">
-          <span class="pub-num">1.</span>
-          <p class="pub-text" lang="zh">赵玉芳, 马星杨 &amp; 张秀静.(2023).内卷"胜出者"真的幸福吗?——自我增强价值观对主观社会阶层和主观幸福感关系的调节作用.<em>辽宁师范大学学报(社会科学版)</em>(01),25-34. <a href="https://doi.org/10.16216/j.cnki.lsxbwk.202301025" target="_blank">https://doi.org/10.16216/j.cnki.lsxbwk.202301025</a></p>
-          <div class="pub-tags"><span class="kw-tag red">Inequality & Hierarchy</span><span class="kw-tag amber">Values & Personality</span><span class="kw-tag violet">Experience & Well-being</span></div>
-        </li>
-      </ol>
-    </div>
+      <li class="pub-item">
+        <span class="pub-dot" aria-hidden="true"></span>
+        <div class="pub-year">2022</div>
+        <div class="pub-entries">
+          <div class="pub-entry">
+            <p class="pub-text" lang="zh">黄金华, 赵玉芳, 林静, 蒋丽娇 &amp; 马星杨.(2022).社会阶层对老年人负性情绪的影响：社会支持的调节作用.<em>西南大学学报(自然科学版)</em>(10),21-28. <a href="https://doi.org/10.13718/j.cnki.xdzk.2022.10.003" target="_blank">https://doi.org/10.13718/j.cnki.xdzk.2022.10.003</a></p>
+            <div class="pub-tags"><span class="kw-tag red">Inequality & Hierarchy</span><span class="kw-tag violet">Experience & Well-being</span></div>
+          </div>
+        </div>
+      </li>
 
-    <div class="pub-year-group">
-      <div class="pub-year">2022</div>
-      <ol class="pub-list">
-        <li class="pub-item">
-          <span class="pub-num">1.</span>
-          <p class="pub-text" lang="zh">黄金华, 赵玉芳, 林静, 蒋丽娇 &amp; 马星杨.(2022).社会阶层对老年人负性情绪的影响：社会支持的调节作用.<em>西南大学学报(自然科学版)</em>(10),21-28. <a href="https://doi.org/10.13718/j.cnki.xdzk.2022.10.003" target="_blank">https://doi.org/10.13718/j.cnki.xdzk.2022.10.003</a></p>
-          <div class="pub-tags"><span class="kw-tag red">Inequality & Hierarchy</span><span class="kw-tag violet">Experience & Well-being</span></div>
-        </li>
-      </ol>
-    </div>
-
-    <div class="pub-year-group">
-      <div class="pub-year">2021</div>
-      <ol class="pub-list">
-        <li class="pub-item">
-          <span class="pub-num">1.</span>
-          <p class="pub-text" lang="zh">马星杨, 赵玉芳, 李元方, 姚菲 &amp; 龚宁馨.(2021).学习效能感、自我决定动机对学业期望的作用:基于统合模型的分析.<em>心理技术与应用</em>(01),12-19. <a href="https://doi.org/10.16842/j.cnki.issn2095-5588.2021.01.002" target="_blank">https://doi.org/10.16842/j.cnki.issn2095-5588.2021.01.002</a></p>
-          <div class="pub-tags"><span class="kw-tag amber">Values & Personality</span></div>
-        </li>
-      </ol>
-    </div>
-
+      <li class="pub-item">
+        <span class="pub-dot" aria-hidden="true"></span>
+        <div class="pub-year">2021</div>
+        <div class="pub-entries">
+          <div class="pub-entry">
+            <p class="pub-text" lang="zh">马星杨, 赵玉芳, 李元方, 姚菲 &amp; 龚宁馨.(2021).学习效能感、自我决定动机对学业期望的作用:基于统合模型的分析.<em>心理技术与应用</em>(01),12-19. <a href="https://doi.org/10.16842/j.cnki.issn2095-5588.2021.01.002" target="_blank">https://doi.org/10.16842/j.cnki.issn2095-5588.2021.01.002</a></p>
+            <div class="pub-tags"><span class="kw-tag amber">Values & Personality</span></div>
+          </div>
+        </div>
+      </li>
+    </ol>
   </section>
 
   <script>
@@ -423,20 +431,41 @@
 
     // ── Header keyword pills double as a filter for the publication list below ──
     const filterBtns = document.querySelectorAll('.kw-list [data-filter]');
-    const pubItems = document.querySelectorAll('.pub-item');
-    const yearGroups = document.querySelectorAll('.pub-year-group');
+    const pubItems = document.querySelectorAll('.pub-item'); // one row (dot + year) per year
+    const pubEntries = document.querySelectorAll('.pub-entry'); // one per citation
+    const pubSection = document.querySelector('.pub-section');
+    const pubRail = document.querySelector('.pub-rail');
     let activeFilter = null;
 
-    function applyFilter() {
-      pubItems.forEach((item) => {
-        const matches = !activeFilter || item.querySelector('.pub-tags .kw-tag.' + activeFilter);
-        item.hidden = !matches;
-      });
-      yearGroups.forEach((group) => {
-        const hasVisible = Array.from(group.querySelectorAll('.pub-item')).some((item) => !item.hidden);
-        group.hidden = !hasVisible;
-      });
+    // The timeline rail is one line spanning the first-to-last *visible*
+    // dot, recomputed on every filter change so it never breaks across a
+    // hidden item or overshoots past the last visible one.
+    function relayoutRail() {
+      const visible = Array.from(pubItems).filter((item) => !item.hidden);
+      if (!visible.length) { pubRail.style.height = '0px'; return; }
+      const containerTop = pubSection.getBoundingClientRect().top;
+      const firstDot = visible[0].querySelector('.pub-dot').getBoundingClientRect();
+      const lastDot = visible[visible.length - 1].querySelector('.pub-dot').getBoundingClientRect();
+      const top = firstDot.top - containerTop + firstDot.height / 2;
+      const bottom = lastDot.top - containerTop + lastDot.height / 2;
+      pubRail.style.top = top + 'px';
+      pubRail.style.height = Math.max(0, bottom - top) + 'px';
     }
+
+    function applyFilter() {
+      pubEntries.forEach((entry) => {
+        const matches = !activeFilter || entry.querySelector('.pub-tags .kw-tag.' + activeFilter);
+        entry.hidden = !matches;
+      });
+      pubItems.forEach((item) => {
+        const hasVisible = Array.from(item.querySelectorAll('.pub-entry')).some((entry) => !entry.hidden);
+        item.hidden = !hasVisible;
+      });
+      requestAnimationFrame(relayoutRail);
+    }
+
+    window.addEventListener('resize', relayoutRail);
+    window.addEventListener('load', relayoutRail);
 
     const badges = [];
     filterBtns.forEach((btn) => {
@@ -462,6 +491,8 @@
         applyFilter();
       });
     });
+
+    relayoutRail();
 
     (function loop() {
       badges.forEach((b) => b.draw());

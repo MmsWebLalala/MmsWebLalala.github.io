@@ -75,6 +75,93 @@
       font-weight: 500;
     }
 
+    /* 组织/合作 */
+    .orgs-label {
+      font-family: var(--font-display);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    .orgs-list {
+      display: flex;
+      flex-direction: row;
+      gap: 1.5rem;
+      width: 100%;
+      margin-bottom: 2.4rem;
+    }
+
+    .org-item {
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 0;
+      min-width: 0;
+    }
+
+    .org-preview {
+      aspect-ratio: 4 / 3;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      margin-bottom: 0.9rem;
+    }
+
+    .org-preview svg {
+      width: 72%;
+      height: auto;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+
+    .org-item:hover .org-preview svg {
+      transform: scale(1.04);
+    }
+
+    .org-role {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.35rem;
+    }
+
+    .org-name {
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 0.4rem;
+    }
+
+    .org-cta {
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      text-decoration: none;
+      transition: color 0.2s, gap 0.2s;
+    }
+
+    .org-item:hover .org-cta {
+      color: var(--accent);
+      gap: 0.6rem;
+    }
+
+    @media (max-width: 720px) {
+      .orgs-list { gap: 0.6rem; }
+      .org-role { font-size: 0.62rem; }
+      .org-name { font-size: 0.82rem; letter-spacing: 0.04em; }
+      .org-cta { font-size: 0.68rem; }
+    }
+
     /* 地点 */
     .places-label {
       font-family: var(--font-display);
@@ -197,20 +284,25 @@
 
     .about-bio { font-family: var(--font-body) !important; }
 
-    .places-label {
+    .places-label, .orgs-label {
       font-family: var(--font-display) !important;
       font-weight: 700 !important;
       letter-spacing: 0.18em !important;
       text-transform: uppercase !important;
     }
-    .place-name {
+    .place-name, .org-name {
       font-family: var(--font-display) !important;
       font-weight: 700 !important;
       text-transform: uppercase;
       letter-spacing: 0.1em;
     }
-    .place-region { font-family: var(--font-body) !important; }
-    .place-photo { border-color: var(--border) !important; }
+    .place-region, .org-role { font-family: var(--font-body) !important; }
+    .place-photo, .org-preview { border-color: var(--border) !important; }
+    .org-cta {
+      font-family: var(--font-display) !important;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
 
     .social-icon {
       border-radius: 0 !important;
@@ -269,6 +361,65 @@
         <!-- 在这里继续添加介绍 -->
       </p>
 
+      <!-- 组织/合作：目前只有占位信息，后续补充简介、图片和链接后可以参考 tools.html
+           的 .tool-item 结构换成整行可点击的卡片。 -->
+      <p class="orgs-label">Groups</p>
+      <div class="orgs-list">
+        <div class="org-item">
+          <div class="org-preview">
+            <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <rect x="0" y="0" width="200" height="120" fill="var(--surface)"/>
+              <path d="M20 90 Q70 40 100 60 T180 30" fill="none" stroke="var(--border)" stroke-width="3" stroke-linecap="round" stroke-dasharray="1 10"/>
+              <circle cx="20" cy="90" r="5" fill="var(--accent)"/>
+              <circle cx="180" cy="30" r="5" fill="var(--accent)"/>
+            </svg>
+          </div>
+          <div class="org-body">
+            <p class="org-role">Company</p>
+            <h3 class="org-name">Srseair</h3>
+            <a href="#" class="org-cta">Visit Link →</a>
+          </div>
+        </div>
+        <div class="org-item">
+          <div class="org-preview">
+            <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <rect x="0" y="0" width="200" height="120" fill="var(--surface)"/>
+              <circle cx="100" cy="46" r="24" fill="var(--accent)" opacity="0.7"/>
+              <circle cx="55" cy="80" r="10" fill="var(--border)"/>
+              <circle cx="145" cy="80" r="10" fill="var(--border)"/>
+              <line x1="82" y1="60" x2="60" y2="74" stroke="var(--border)" stroke-width="2"/>
+              <line x1="118" y1="60" x2="140" y2="74" stroke="var(--border)" stroke-width="2"/>
+            </svg>
+          </div>
+          <div class="org-body">
+            <p class="org-role">Education</p>
+            <h3 class="org-name">Research Group</h3>
+            <a href="#" class="org-cta">Visit Link →</a>
+          </div>
+        </div>
+        <div class="org-item">
+          <div class="org-preview">
+            <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <rect x="0" y="0" width="200" height="120" fill="var(--surface)"/>
+              <rect x="20"  y="55" width="10" height="20" fill="var(--border)"/>
+              <rect x="38"  y="40" width="10" height="50" fill="var(--border)"/>
+              <rect x="56"  y="25" width="10" height="80" fill="var(--accent)"/>
+              <rect x="74"  y="45" width="10" height="40" fill="var(--border)"/>
+              <rect x="92"  y="15" width="10" height="100" fill="var(--accent)"/>
+              <rect x="110" y="35" width="10" height="60" fill="var(--border)"/>
+              <rect x="128" y="50" width="10" height="30" fill="var(--accent)"/>
+              <rect x="146" y="40" width="10" height="50" fill="var(--border)"/>
+              <rect x="164" y="58" width="10" height="14" fill="var(--border)"/>
+            </svg>
+          </div>
+          <div class="org-body">
+            <p class="org-role">Band</p>
+            <h3 class="org-name">Do-Nothing Cooperative</h3>
+            <a href="#" class="org-cta">Visit Link →</a>
+          </div>
+        </div>
+      </div>
+
       <p class="places-label">Places</p>
       <div class="places-list">
         <div class="place-item">
@@ -305,13 +456,6 @@
       <!-- 社交图标 -->
       <div class="social-icons">
 
-        <!-- LinkedIn -->
-        <a href="#" class="social-icon" aria-label="LinkedIn" title="LinkedIn">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-          </svg>
-        </a>
-
         <!-- Google Scholar -->
         <a href="#" class="social-icon" aria-label="Google Scholar" title="Google Scholar">
           <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -319,17 +463,10 @@
           </svg>
         </a>
 
-        <!-- ResearchGate -->
-        <a href="#" class="social-icon" aria-label="ResearchGate" title="ResearchGate">
+        <!-- Bandcamp -->
+        <a href="#" class="social-icon" aria-label="Bandcamp" title="Bandcamp">
           <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M19.586 0c-.818 0-1.508.19-2.073.565-.563.377-.97.936-1.213 1.68a12.67 12.67 0 0 0-.347 3.118v.604c-.018.792-.074 1.37-.176 1.732a1.953 1.953 0 0 1-.496.921 1.89 1.89 0 0 1-.92.496 12.5 12.5 0 0 1-1.733.176h-.604a12.56 12.56 0 0 0-3.118.347c-.744.244-1.303.65-1.68 1.213C6.846 11.097 6.656 11.787 6.656 12.605c0 .75.163 1.408.49 1.97.325.563.783 1.009 1.378 1.34.594.33 1.298.537 2.11.62.814.082 1.748.123 2.804.123.976 0 1.877-.042 2.706-.126a8.74 8.74 0 0 0 2.15-.496 5.66 5.66 0 0 0 1.651-.978 4.28 4.28 0 0 0 1.054-1.51c.253-.588.38-1.25.38-1.985 0-.682-.11-1.286-.33-1.814a4.132 4.132 0 0 0-.92-1.37 5.16 5.16 0 0 0-1.398-.934 9.894 9.894 0 0 0-1.733-.558 9.4 9.4 0 0 0-1.843-.208h-.66c-.44 0-.83-.038-1.174-.113a2.126 2.126 0 0 1-.82-.363 1.558 1.558 0 0 1-.476-.643 2.497 2.497 0 0 1-.157-.937c0-.4.064-.74.19-1.02.127-.28.3-.498.52-.654.22-.157.474-.265.763-.327.29-.06.6-.09.93-.09h.16c.357.008.693.04 1.007.096.313.057.59.148.832.27.24.123.43.283.57.483.14.198.21.446.21.74 0 .194-.03.367-.09.52a1.24 1.24 0 0 1-.266.408 1.46 1.46 0 0 1-.443.29 1.8 1.8 0 0 1-.6.12l-.84.022v1.315h.84c.42 0 .818-.06 1.194-.18a3.27 3.27 0 0 0 1-.527c.29-.232.52-.52.693-.862.17-.343.257-.74.257-1.19 0-.576-.14-1.07-.42-1.478a2.987 2.987 0 0 0-1.124-.976 5.65 5.65 0 0 0-1.608-.546A9.775 9.775 0 0 0 12.01 0c-.818 0-1.554.09-2.21.27a5.32 5.32 0 0 0-1.695.776A3.516 3.516 0 0 0 7.02 2.37C6.76 2.89 6.63 3.482 6.63 4.144c0 .71.15 1.325.45 1.847.3.522.72.946 1.26 1.272.54.327 1.176.562 1.908.706.73.144 1.534.216 2.41.216h.578c.456.009.877.042 1.263.1.385.057.728.146 1.03.267.3.12.558.277.77.47.214.193.377.424.49.693.112.27.168.578.168.924 0 .39-.07.727-.21 1.01a2.03 2.03 0 0 1-.564.716 2.57 2.57 0 0 1-.847.436 3.735 3.735 0 0 1-1.054.146c-.42 0-.804-.05-1.15-.147a2.683 2.683 0 0 1-.885-.437 1.978 1.978 0 0 1-.572-.736 2.46 2.46 0 0 1-.2-1.02h-1.8c0 .69.138 1.302.414 1.836.276.534.66.987 1.15 1.36.49.372 1.072.656 1.745.852a7.64 7.64 0 0 0 2.208.295c.78 0 1.5-.1 2.16-.3.66-.198 1.232-.49 1.718-.876a4.04 4.04 0 0 0 1.135-1.404c.274-.556.41-1.188.41-1.896 0-.68-.12-1.277-.36-1.79a3.766 3.766 0 0 0-.997-1.31 4.927 4.927 0 0 0-1.496-.843 9.175 9.175 0 0 0-1.852-.442 14.24 14.24 0 0 0-1.96-.12h-.578c-.735 0-1.39-.054-1.964-.163a4.73 4.73 0 0 1-1.397-.487 2.273 2.273 0 0 1-.84-.83 2.394 2.394 0 0 1-.287-1.198c0-.49.112-.907.337-1.252a2.3 2.3 0 0 1 .907-.797 4.526 4.526 0 0 1 1.32-.44A8.575 8.575 0 0 1 12 1.32c.558 0 1.07.047 1.537.14.468.094.87.244 1.207.452.337.207.597.476.78.808.184.33.276.724.276 1.18v.008h1.8V3.9c0-.724-.148-1.363-.444-1.914a3.755 3.755 0 0 0-1.23-1.35A5.862 5.862 0 0 0 14.09.27 8.975 8.975 0 0 0 12.01 0h-.022z"/>
-          </svg>
-        </a>
-
-        <!-- Spotify -->
-        <a href="#" class="social-icon" aria-label="Spotify" title="Spotify">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
+            <path d="M0 18.75l7.437-13.5H24l-7.436 13.5H0z"/>
           </svg>
         </a>
 

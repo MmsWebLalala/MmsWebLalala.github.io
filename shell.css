@@ -149,7 +149,7 @@ body > nav, body > footer { display: none !important; }
 
 /* Research keywords — also double as a publication filter bar on the header. */
 .kw-list { display: flex !important; align-items: center; flex-wrap: wrap; gap: .65rem !important; margin-top: 1.6rem !important; }
-.kw-heading { color: var(--shell-ink); font: 600 .67rem/1.2 var(--shell-mono); letter-spacing: .04em; }
+.kw-heading { flex-basis: 100%; margin-bottom: .3rem; color: var(--shell-ink); font: 600 .67rem/1.2 var(--shell-mono); letter-spacing: .04em; }
 .kw-list > .kw-tag, .pub-tags .kw-tag {
   display: inline-flex !important; flex-direction: row !important; align-items: center;
   width: auto !important; padding: 0 !important; border: 0 !important; border-radius: 0 !important;
@@ -189,7 +189,7 @@ body > nav, body > footer { display: none !important; }
 .page-header .kw-list > .kw-tag.red[aria-pressed="true"] { background: var(--kw-red) !important; }
 .page-header .kw-list > .kw-tag.violet[aria-pressed="true"] { background: var(--kw-violet) !important; }
 .pub-item[hidden] { display: none !important; }
-.pub-year-group[hidden] { display: none !important; }
+.pub-entry[hidden] { display: none !important; }
 @media (prefers-reduced-motion: no-preference) {
   .pub-item:not([hidden]) { animation: pub-item-in .32s ease both; }
 }
@@ -197,22 +197,12 @@ body > nav, body > footer { display: none !important; }
   from { opacity: 0; transform: translateY(5px); }
   to { opacity: 1; transform: translateY(0); }
 }
-.pub-year-group {
-  margin: 0 0 var(--shell-gap) !important;
-  padding: clamp(1.25rem, 3vw, 2.4rem) !important;
-  background: var(--shell-card) !important;
-  border: 0 !important;
-  border-radius: var(--shell-radius) !important;
-  box-shadow: none !important;
-}
-.pub-year { color: var(--shell-ink) !important; font: 700 clamp(1.3rem, 2.2vw, 1.75rem)/1 var(--shell-mono) !important; letter-spacing: -.05em !important; border-bottom-color: rgba(29,32,32,.18) !important; }
-.pub-list { gap: 1.25rem !important; }
-.pub-item { padding-top: 1.25rem; border-top: 1px solid var(--shell-line); }
-.pub-item:first-child { padding-top: 0; border-top: 0; }
-.pub-item::before, .pub-num { color: var(--shell-accent-text) !important; }
+.pub-rail { background: var(--shell-line) !important; }
+.pub-dot { background: var(--shell-accent-text) !important; }
+.pub-year { color: var(--shell-accent-text) !important; }
 .pub-text { color: var(--shell-ink) !important; line-height: 1.7 !important; }
 .pub-text a { color: var(--shell-accent-text) !important; overflow-wrap: anywhere; }
-.pub-tags { flex: 0 0 100% !important; width: 100% !important; margin: .2rem 0 0 !important; }
+.pub-tags { width: 100% !important; margin: .35rem 0 0 !important; }
 
 /* Tools: card-block treatment. */
 .tools-list { gap: var(--shell-gap) !important; }
@@ -332,6 +322,5 @@ html[data-theme="dark"] {
   --kw-red: #758d39;
   --kw-violet: #de5723;
 }
-html[data-theme="dark"] .pub-year { border-bottom-color: rgba(226,227,226,.18) !important; }
 html[data-theme="dark"] .page-header > p.research-intro,
 html[data-theme="dark"] .page-header > p.page-intro { color: var(--shell-ink) !important; }
