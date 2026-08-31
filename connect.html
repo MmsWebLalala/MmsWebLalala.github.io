@@ -44,7 +44,20 @@
        The field is a sibling of .about-intro, never a child of .about-card:
        shell.css pins .about-card to max-width 42rem with !important, which
        would strangle the field to a third of the page. */
-    .field-section { width: 100%; margin: 0 0 var(--shell-gap); padding: 0 var(--shell-title-inset); }
+    /* --rise lifts the field up alongside the intro block, so the clouds can
+       drift into the empty space to the right of the bio and the three buttons
+       instead of being penned into a rectangle underneath them. The field grows
+       by exactly what it rises, so nothing below it moves. The script measures
+       the rise and marks out the intro's own box as off limits — the region the
+       clouds roam is the field minus that box, an L, not a rectangle. */
+    .field-section {
+      width: 100%; margin: calc(-1 * var(--rise, 0px)) 0 var(--shell-gap);
+      padding: 0 var(--shell-title-inset);
+      position: relative; z-index: 0;
+    }
+    /* The text sits above the dots, and takes the clicks: the field spans the
+       intro now, so it must not swallow the links underneath it. */
+    .about-intro { position: relative; z-index: 1; }
 
     /* One source of truth for the layout decision. The script reads this
        computed value instead of repeating the media queries in JS, so the
@@ -115,7 +128,10 @@
     }
 
     /* ── Field modes, wide and phone ──────────────────────────────────────── */
-    .field[data-mode="field"] { height: clamp(520px, 62vh, 680px); }
+    .field[data-mode="field"] {
+      height: calc(clamp(520px, 62vh, 680px) + var(--rise, 0px));
+      pointer-events: none;   /* only the nodes are targets; see z-index above */
+    }
     /* Tall enough that a resolved mark and its labels never reach into the
        cloud below it — the three nodes sit at 15% / 50% / 85% of this height. */
     .field[data-mode="mobile"] { height: clamp(880px, 255vw, 1100px); }
@@ -124,6 +140,7 @@
     .field[data-mode="field"] .field-canvas,
     .field[data-mode="mobile"] .field-canvas {
       display: block; position: absolute; inset: 0; width: 100%; height: 100%;
+      pointer-events: none;
     }
     .field[data-mode="field"] .field-label,
     .field[data-mode="mobile"] .field-label { display: none; }
@@ -177,12 +194,6 @@
        has actually formed, which is also the first moment you can read it. */
     .field .fnode.is-resolved .fnode-cta { pointer-events: auto; }
 
-    /* On a phone the link is the only thing here you can actually hit, so give
-       it a finger-sized target instead of a line of 12px text. */
-    .field[data-mode="mobile"] .fnode-cta {
-      margin-top: 0.5rem; padding: 0.5rem 0.9rem;
-      border: 1px solid var(--border);
-    }
     .field[data-mode="mobile"] .fnode-name { font-size: 1.15rem; }
 
     /* ── Divider + social ─────────────────────────────────────────────────── */
@@ -248,15 +259,17 @@
   </section>
 
   <!-- The three groups drift in one field. Anchors are normalised to the field
-       box: --ax/--ay place them as a loose triangle on a wide screen, --mx/--my
-       as a gently staggered vertical spine on a phone. -->
+       box: --ax/--ay place them across the L on a wide screen — two below the
+       intro and one up in the empty margin beside it — and --mx/--my as a gently
+       staggered vertical spine on a phone. They are starting points and a weak
+       home, not fixed positions; the clouds roam. -->
   <section class="field-section">
     <div class="field" data-mode="rows">
       <canvas class="field-canvas" aria-hidden="true"></canvas>
 
       <p class="field-label">Groups</p>
       <ul class="field-nodes">
-        <li class="fnode" data-shape="route" style="--ax:.18; --ay:.28; --mx:.42; --my:.14">
+        <li class="fnode" data-shape="route" style="--ax:.17; --ay:.70; --mx:.42; --my:.14">
           <div class="fnode-figure">
             <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <path d="M20 90 Q70 40 100 60 T180 30" fill="none" stroke="var(--border)" stroke-width="3" stroke-linecap="round" stroke-dasharray="1 10"/>
@@ -268,7 +281,7 @@
           <h3 class="fnode-name">Srseair</h3>
           <a href="https://www.srseair.com" class="fnode-cta" target="_blank">Visit Link →</a>
         </li>
-        <li class="fnode" data-shape="nodes" style="--ax:.84; --ay:.26; --mx:.58; --my:.47">
+        <li class="fnode" data-shape="nodes" style="--ax:.85; --ay:.26; --mx:.58; --my:.47">
           <div class="fnode-figure">
             <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <circle cx="100" cy="46" r="24" fill="var(--accent)" opacity="0.7"/>
@@ -282,7 +295,7 @@
           <h3 class="fnode-name">Research Group</h3>
           <a href="#" class="fnode-cta">Visit Link →</a>
         </li>
-        <li class="fnode" data-shape="bars" style="--ax:.50; --ay:.60; --mx:.44; --my:.79">
+        <li class="fnode" data-shape="bars" style="--ax:.52; --ay:.72; --mx:.44; --my:.79">
           <div class="fnode-figure">
             <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <rect x="20"  y="55" width="10" height="20" fill="var(--border)"/>
@@ -339,7 +352,8 @@
       const DW = 260, DH = 195;                 // design space for the group marks
       const STEP = 4.5 / Math.sqrt(density);    // mark sampling grid
       const REST_R = 1.35;                      // resting dot radius
-      const DRIFT = .35;                        // px per frame a cloud travels
+      const DRIFT = .4;                         // px per frame a cloud travels
+      const KEEP_PAD = 26;                      // clearance around the intro text
 
       // ── The three group marks, sampled from the same motifs the rows use ──
       function buildShape(kind) {
@@ -404,7 +418,12 @@
       }
 
       // ── State ─────────────────────────────────────────────────────────────
+      const wrap = section.parentElement;
+      const intro = document.querySelector('.about-intro');
+      const introCard = intro && intro.querySelector('.about-card');
+
       let nodes = [], edges = [];
+      let keepOut = null;       // the intro's box, in field coordinates
       let mode = 'rows';
       let W = 0, H = 0, cw = 0, ch = 0;
       let time = 0, pointerX = 0, pointerY = 0, hasPointer = false;
@@ -419,9 +438,11 @@
       function toRows() {
         nodes = [];
         edges = [];
+        keepOut = null;
         W = H = 0;
         mode = 'rows';
         section.dataset.mode = 'rows';
+        wrap.style.setProperty('--rise', '0px');
       }
 
       function build(force) {
@@ -429,6 +450,23 @@
         if (want === 'rows') { toRows(); return; }
         mode = want;
         section.dataset.mode = want;
+        // How far up the field reaches. The field's width and the intro's box
+        // do not depend on the rise, so both can be measured before deciding it.
+        const probe = section.getBoundingClientRect();
+        const phone0 = want === 'mobile';
+        const cwWant = phone0 ? Math.max(180, Math.min(probe.width * .62, 240))
+                              : Math.max(200, Math.min(300, probe.width * .26));
+        const card = introCard ? introCard.getBoundingClientRect() : null;
+        // Only rise if the margin beside the intro is actually wide enough for a
+        // cloud to live in. Between roughly 900 and 1150px it is not, and a
+        // notch too narrow to enter is worse than no notch: it would pin a node
+        // against the bottom of the field for the whole visit.
+        const notch = card ? probe.width - (card.right - probe.left) - KEEP_PAD : 0;
+        const rise = want === 'field' && intro && notch >= cwWant + 24
+          ? Math.round(intro.getBoundingClientRect().height
+              + parseFloat(getComputedStyle(intro).marginBottom || 0))
+          : 0;
+        wrap.style.setProperty('--rise', rise + 'px');
         const rect = section.getBoundingClientRect();
         // Layout isn't ready until the stylesheets land; fall back rather than
         // guess, and let the ResizeObserver bring us back when it is.
@@ -511,6 +549,17 @@
         // never hang off an edge. On a phone the spine has to keep its reading
         // order for the scroll mapping below, so a node roams the full width but
         // stays in its own vertical band.
+        // The intro's own box, in field coordinates, plus a margin so a cloud
+        // never crowds the text. This is the notch that makes the roaming
+        // region an L instead of a rectangle.
+        keepOut = null;
+        if (rise > 0 && card) {
+          keepOut = {
+            x0: card.left - rect.left - KEEP_PAD, x1: card.right - rect.left + KEEP_PAD,
+            y0: card.top - rect.top - KEEP_PAD, y1: card.bottom - rect.top + KEEP_PAD
+          };
+        }
+
         for (const n of built) {
           const rx = cw * spread, ry = ch * (spread + .04);
           // The label block under the figure is whatever the text actually
@@ -519,6 +568,9 @@
           const padX = Math.max(cw / 2, rx);
           const padTop = Math.max(ch / 2, ry);
           const padBot = Math.max(ch / 2 + below, ry);
+          n.padX = padX;
+          n.padTop = padTop;
+          n.padBot = padBot;
           n.minX = padX;
           n.maxX = Math.max(padX, W - padX);
           n.minY = padTop;
@@ -543,6 +595,14 @@
         for (let i = 0; i < nodes.length; i++)
           for (let j = i + 1; j < nodes.length; j++) edges.push([nodes[i], nodes[j]]);
 
+        for (let pass = 0; pass < 3; pass++) {
+          for (const n of nodes) {
+            n.fx = Math.min(Math.max(n.fx, n.minX), n.maxX);
+            n.fy = Math.min(Math.max(n.fy, n.minY), n.maxY);
+            avoid(n, false);
+          }
+        }
+
         // A tell for first arrival on a wide screen: at rest only the three
         // names show, so without it nobody learns there is anything to walk
         // into. The phone needs no tell — scrolling resolves a node whether you
@@ -551,6 +611,29 @@
           tellNode = nodes[2] || nodes[0];
           tellStart = performance.now() + 900;
         }
+      }
+
+      // Shove a cloud out of the intro's box by the shallowest route that is
+      // still inside the field. Only two of the four ways out are ever real —
+      // the box runs off the field's left and top edges — so an exit that would
+      // land the node out of bounds is not offered at all.
+      function avoid(n, turn) {
+        if (!keepOut) return;
+        const x0 = n.fx - n.padX, x1 = n.fx + n.padX;
+        const y0 = n.fy - n.padTop, y1 = n.fy + n.padBot;
+        if (x1 <= keepOut.x0 || x0 >= keepOut.x1) return;
+        if (y1 <= keepOut.y0 || y0 >= keepOut.y1) return;
+        const INF = Infinity;
+        const right = n.fx + (keepOut.x1 - x0) <= n.maxX ? keepOut.x1 - x0 : INF;
+        const left = n.fx - (x1 - keepOut.x0) >= n.minX ? x1 - keepOut.x0 : INF;
+        const down = n.fy + (keepOut.y1 - y0) <= n.maxY ? keepOut.y1 - y0 : INF;
+        const up = n.fy - (y1 - keepOut.y0) >= n.minY ? y1 - keepOut.y0 : INF;
+        const m = Math.min(right, left, down, up);
+        if (m === INF) { n.fy = n.maxY; return; }   // nowhere to go: sit below it
+        if (m === left) { n.fx -= left; if (turn) n.ang = Math.PI - n.ang; }
+        else if (m === right) { n.fx += right; if (turn) n.ang = Math.PI - n.ang; }
+        else if (m === up) { n.fy -= up; if (turn) n.ang = -n.ang; }
+        else { n.fy += down; if (turn) n.ang = -n.ang; }
       }
 
       // ── Strand between two nodes: a dotted run, tapered so it never spears
@@ -650,16 +733,16 @@
           // started, not where it belongs.
           if (!REDUCED) {
             const speed = DRIFT * (1 - n.k);
-            n.ang += Math.sin(time * .37 + n.p1) * .035;
+            n.ang += Math.sin(time * .37 + n.p1) * .055;
             n.fx += Math.cos(n.ang) * speed;
-            n.fy += Math.sin(n.ang) * speed * .6;
+            n.fy += Math.sin(n.ang) * speed * .85;
             // A very weak pull back towards where it started. Roaming plus
             // mutual shoving alone ends with all three pressed together in the
             // middle of the field, permanently; this is slack enough to allow
             // excursions of a few hundred pixels but keeps the constellation
             // from collapsing over a long visit.
-            n.fx += (n.ax * W - n.fx) * .00035 * (1 - n.k);
-            n.fy += (n.ay * H - n.fy) * .00035 * (1 - n.k);
+            n.fx += (n.ax * W - n.fx) * .00012 * (1 - n.k);
+            n.fy += (n.ay * H - n.fy) * .00012 * (1 - n.k);
             if (n.fx < n.minX) { n.fx = n.minX; n.ang = Math.PI - n.ang; }
             else if (n.fx > n.maxX) { n.fx = n.maxX; n.ang = Math.PI - n.ang; }
             if (n.fy < n.minY) { n.fy = n.minY; n.ang = -n.ang; }
@@ -700,6 +783,7 @@
         for (const n of nodes) {
           n.fx = Math.min(Math.max(n.fx, n.minX), n.maxX);
           n.fy = Math.min(Math.max(n.fy, n.minY), n.maxY);
+          avoid(n, true);
           n.cx = n.fx;
           n.cy = n.fy;
           // Move the label with the cloud, but only when it has actually moved a
@@ -774,16 +858,19 @@
       }
 
       // ── Input ─────────────────────────────────────────────────────────────
-      section.addEventListener('pointermove', (e) => {
-        if (e.pointerType === 'touch') return;
+      // On window, not on the field: the field is pointer-events: none now, so
+      // that the bio and its buttons underneath stay clickable. Whether the
+      // cursor counts as "in the field" is decided by the rectangle instead.
+      window.addEventListener('pointermove', (e) => {
+        if (e.pointerType === 'touch' || !nodes.length) return;
         const r = section.getBoundingClientRect();
         pointerX = e.clientX - r.left;
         pointerY = e.clientY - r.top;
-        hasPointer = true;
+        hasPointer = pointerX >= 0 && pointerX <= r.width
+          && pointerY >= 0 && pointerY <= r.height;
         pointerMoved = true;
         tellNode = null;
-      });
-      section.addEventListener('pointerleave', () => { hasPointer = false; });
+      }, { passive: true });
 
       items.forEach((el) => {
         const of = () => nodes.find((n) => n.el === el) || null;
