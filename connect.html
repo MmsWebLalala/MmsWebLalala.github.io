@@ -9,12 +9,9 @@
   <script>(function(){var t=localStorage.getItem('mm-theme');if(t)document.documentElement.setAttribute('data-theme',t);else if(window.matchMedia('(prefers-color-scheme:dark)').matches)document.documentElement.setAttribute('data-theme','dark')})()</script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: var(--font-body);
@@ -24,321 +21,194 @@
       line-height: 1.6;
     }
 
-    .about-card {
-      max-width: 520px;
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
+    .about-card { width: 100%; display: flex; flex-direction: column; align-items: flex-start; text-align: left; }
 
-    /* 标题 */
-    .about-card h1 {
-      font-family: var(--font-display);
-      font-size: clamp(2.4rem, 6vw, 3.6rem);
-      line-height: 1.1;
-      color: var(--text);
-      margin-bottom: 2.4rem;
-    }
-
-    /* 头像 */
     .avatar-wrap {
-      width: 130px;
-      height: 130px;
-      border-radius: 12px;
-      overflow: hidden;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      margin-bottom: 2rem;
-      flex-shrink: 0;
+      width: 130px; height: 130px; overflow: hidden;
+      border: 1px solid var(--border); background: var(--surface);
+      margin-bottom: 2rem; flex-shrink: 0;
     }
+    .avatar-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-    .avatar-wrap img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    /* 介绍文字 */
     .about-bio {
-      font-size: 0.92rem;
-      font-weight: 300;
-      color: var(--text-muted);
-      line-height: 1.9;
-      margin-bottom: 2.4rem;
+      font-family: var(--font-body) !important;
+      font-size: 0.92rem; font-weight: 300;
+      color: var(--text-muted); line-height: 1.9;
     }
+    .about-bio strong { color: var(--text); font-weight: 500; }
 
-    .about-bio strong {
-      color: var(--text);
-      font-weight: 500;
+    /* ── The field ────────────────────────────────────────────────────────
+       The three groups are the whole of it — no photographs, no frames, one
+       substance.
+
+       The field is a sibling of .about-intro, never a child of .about-card:
+       shell.css pins .about-card to max-width 42rem with !important, which
+       would strangle the field to a third of the page. */
+    .field-section { width: 100%; margin: 0 0 var(--shell-gap); padding: 0 var(--shell-title-inset); }
+
+    /* One source of truth for the layout decision. The script reads this
+       computed value instead of repeating the media queries in JS, so the
+       canvas can never disagree with the layout about which mode is active.
+
+         1 — wide field: a loose triangle, resolved by pointer proximity.
+         2 — phone field: a vertical spine, resolved by scroll position, since
+             a drifting cloud of small targets is hostile to a finger.
+         0 — rows: the static fallback (no JS, or a wide touch screen that is
+             neither a phone to scroll nor a pointer to aim). */
+    .field { position: relative; --field-mode: 0; }
+    @media (min-width: 900px) and (hover: hover) { .field { --field-mode: 1; } }
+    @media (max-width: 899px) { .field { --field-mode: 2; } }
+
+    .field-canvas { display: none; }
+    .field-label {
+      font-family: var(--font-display) !important;
+      font-size: 0.7rem; font-weight: 700 !important;
+      letter-spacing: 0.18em !important; text-transform: uppercase !important;
+      color: var(--text-muted); margin-bottom: 1rem;
     }
+    .field-nodes { list-style: none; }
 
-    /* 组织/合作 */
-    .orgs-label {
-      font-family: var(--font-display);
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 1rem;
-    }
-
-    .orgs-list {
-      display: flex;
-      flex-direction: row;
-      gap: 1.5rem;
-      width: 100%;
-      margin-bottom: 2.4rem;
-    }
-
-    .org-item {
-      display: flex;
-      flex-direction: column;
-      flex: 1 1 0;
-      min-width: 0;
-    }
-
-    .org-preview {
-      aspect-ratio: 4 / 3;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
+    .fnode { --k: 0; }
+    .fnode-figure {
+      position: relative; aspect-ratio: 4 / 3; overflow: hidden;
+      border: 1px solid var(--border); background: var(--surface);
       margin-bottom: 0.9rem;
+      display: flex; align-items: center; justify-content: center;
     }
+    .fnode-figure svg { width: 72%; height: auto; display: block; }
 
-    .org-preview svg {
-      width: 72%;
-      height: auto;
-      display: block;
-      transition: transform 0.5s ease;
+    .fnode-kind {
+      font-family: var(--font-body) !important;
+      font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 0.35rem;
     }
-
-    .org-item:hover .org-preview svg {
-      transform: scale(1.04);
+    .fnode-name {
+      font-family: var(--font-display) !important;
+      font-size: 1.05rem; font-weight: 700 !important;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--text); margin-bottom: 0.3rem;
     }
-
-    .org-role {
-      font-size: 0.68rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 0.35rem;
-    }
-
-    .org-name {
-      font-size: 1.05rem;
-      font-weight: 500;
-      color: var(--text);
-      margin-bottom: 0.4rem;
-    }
-
-    .org-cta {
-      font-size: 0.78rem;
-      font-weight: 500;
-      color: var(--text-muted);
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      text-decoration: none;
+    .fnode-cta {
+      font-family: var(--font-display) !important;
+      font-size: 0.78rem; font-weight: 500;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--text-muted); text-decoration: none;
+      display: inline-flex; align-items: center; gap: 0.4rem;
       transition: color 0.2s, gap 0.2s;
     }
+    .fnode:hover .fnode-cta { color: var(--accent); gap: 0.6rem; }
 
-    .org-item:hover .org-cta {
-      color: var(--accent);
-      gap: 0.6rem;
+    /* ── Rows mode: the static fallback ───────────────────────────────────── */
+    .field[data-mode="rows"] {
+      max-width: 42rem;   /* the width the rest of the page's prose sits at */
     }
-
+    .field[data-mode="rows"] .field-nodes {
+      display: flex; flex-direction: row; gap: 1.5rem; width: 100%; margin-bottom: 2.4rem;
+    }
+    .field[data-mode="rows"] .fnode { display: flex; flex-direction: column; flex: 1 1 0; min-width: 0; }
     @media (max-width: 720px) {
-      .orgs-list { gap: 0.6rem; }
-      .org-role { font-size: 0.62rem; }
-      .org-name { font-size: 0.82rem; letter-spacing: 0.04em; }
-      .org-cta { font-size: 0.68rem; }
+      .field[data-mode="rows"] .field-nodes { gap: 0.6rem; }
+      .field[data-mode="rows"] .fnode-name { font-size: 0.82rem; letter-spacing: 0.04em; }
+      .field[data-mode="rows"] .fnode-kind { font-size: 0.62rem; }
+      .field[data-mode="rows"] .fnode-cta { font-size: 0.68rem; }
     }
 
-    /* 地点 */
-    .places-label {
-      font-family: var(--font-display);
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 1rem;
-    }
+    /* ── Field modes, wide and phone ──────────────────────────────────────── */
+    .field[data-mode="field"] { height: clamp(520px, 62vh, 680px); }
+    /* Tall enough that a resolved mark and its labels never reach into the
+       cloud below it — the three nodes sit at 15% / 50% / 85% of this height. */
+    .field[data-mode="mobile"] { height: clamp(880px, 255vw, 1100px); }
 
-    .places-list {
-      display: flex;
-      flex-direction: row;
-      gap: 1.5rem;
-      width: 100%;
-      margin-bottom: 2.4rem;
+    .field[data-mode="field"], .field[data-mode="mobile"] { margin-bottom: 2.4rem; }
+    .field[data-mode="field"] .field-canvas,
+    .field[data-mode="mobile"] .field-canvas {
+      display: block; position: absolute; inset: 0; width: 100%; height: 100%;
     }
+    .field[data-mode="field"] .field-label,
+    .field[data-mode="mobile"] .field-label { display: none; }
+    .field[data-mode="field"] .field-nodes,
+    .field[data-mode="mobile"] .field-nodes { position: absolute; inset: 0; pointer-events: none; }
 
-    .place-item {
-      display: flex;
-      flex-direction: column;
-      flex: 1 1 0;
-      min-width: 0;
+    .field[data-mode="field"] .fnode,
+    .field[data-mode="mobile"] .fnode {
+      position: absolute;
+      width: var(--cw, 260px);
+      margin-left: calc(var(--cw, 260px) / -2);
+      margin-top: calc(var(--ch, 195px) / -2);
+      pointer-events: auto;
+      text-align: center;
     }
+    .field[data-mode="field"] .fnode { left: calc(var(--ax) * 100%); top: calc(var(--ay) * 100%); }
+    .field[data-mode="mobile"] .fnode { left: calc(var(--mx) * 100%); top: calc(var(--my) * 100%); }
+    /* The name travels with its cloud rather than being left behind at the
+       anchor — a drifting cloud and a pinned label read as two objects, not
+       one. The offset is written per frame by the script and goes to zero as
+       the node resolves, so anything you can actually click has stopped moving
+       by the time it is legible. */
+    .field[data-mode="field"] .fnode,
+    .field[data-mode="mobile"] .fnode { transform: translate(var(--dx, 0px), var(--dy, 0px)); }
 
-    .place-photo {
-      aspect-ratio: 4 / 3;
-      overflow: hidden;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      margin-bottom: 0.9rem;
+    /* The figure is only a spacer here — its contents are drawn as particles
+       on the canvas. */
+    .field[data-mode="field"] .fnode-figure,
+    .field[data-mode="mobile"] .fnode-figure {
+      height: var(--ch, 195px); aspect-ratio: auto;
+      border: 0; background: none; margin-bottom: 0.7rem; visibility: hidden;
     }
-
-    .place-photo img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      filter: grayscale(100%);
-      transition: transform 0.5s ease;
-    }
-
-    .place-item:hover .place-photo img {
-      transform: scale(1.04);
-    }
-
-    .place-name {
-      font-size: 1.05rem;
-      font-weight: 500;
+    .field[data-mode="field"] .fnode-name,
+    .field[data-mode="mobile"] .fnode-name {
+      opacity: calc(0.3 + var(--k) * 0.7);
       color: var(--text);
-      margin-bottom: 0.2rem;
     }
-
-    .place-region {
-      font-size: 0.78rem;
-      font-weight: 300;
-      color: var(--text-muted);
+    .field[data-mode="field"] .fnode-kind,
+    .field[data-mode="field"] .fnode-cta,
+    .field[data-mode="mobile"] .fnode-kind,
+    .field[data-mode="mobile"] .fnode-cta {
+      opacity: var(--k);
+      transform: translateY(calc((1 - var(--k)) * 5px));
     }
+    .field[data-mode="field"] .fnode-kind,
+    .field[data-mode="mobile"] .fnode-kind { margin-bottom: 0.2rem; }
+    .field[data-mode="field"] .fnode-cta,
+    .field[data-mode="mobile"] .fnode-cta { margin-top: 0.15rem; pointer-events: none; }
+    /* Faded out, the link is still a link — and on a phone there is no hover to
+       reveal it before a tap lands. The script adds .is-resolved once the node
+       has actually formed, which is also the first moment you can read it. */
+    .field .fnode.is-resolved .fnode-cta { pointer-events: auto; }
 
-    @media (max-width: 720px) {
-      .places-list { gap: 0.6rem; }
-      .place-name { font-size: 0.82rem; letter-spacing: 0.04em; }
-      .place-region { font-size: 0.72rem; }
-    }
-
-    /* 分割线 */
-    .divider {
-      width: 40px;
-      height: 1px;
-      background: var(--border);
-      margin: 0 auto 2.4rem;
-    }
-
-    /* 社交图标 */
-    .social-icons {
-      display: flex;
-      gap: 1.2rem;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .social-icon {
-      width: 42px;
-      height: 42px;
-      border-radius: 10px;
+    /* On a phone the link is the only thing here you can actually hit, so give
+       it a finger-sized target instead of a line of 12px text. */
+    .field[data-mode="mobile"] .fnode-cta {
+      margin-top: 0.5rem; padding: 0.5rem 0.9rem;
       border: 1px solid var(--border);
-      background: var(--surface);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--text-muted);
-      text-decoration: none;
+    }
+    .field[data-mode="mobile"] .fnode-name { font-size: 1.15rem; }
+
+    /* ── Divider + social ─────────────────────────────────────────────────── */
+    .divider { width: 40px; height: 1px; background: var(--border); margin: 2rem 0 1.6rem; }
+    .social-icons { display: flex; gap: 1.2rem; align-items: center; justify-content: flex-start; }
+    .social-icon {
+      width: 42px; height: 42px; border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted); text-decoration: none; background: transparent;
       transition: border-color 0.2s, color 0.2s, background 0.2s;
     }
-
-    .social-icon:hover {
-      border-color: #444;
-      color: var(--text);
-      background: var(--surface-2);
-    }
-
-    .social-icon svg {
-      width: 18px;
-      height: 18px;
-      fill: currentColor;
-    }
-
-  </style>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <style>
-    body { max-width: none !important; width: 100%; margin: 0; box-shadow: none !important; font-family: var(--font-body) !important; font-size: 1rem; text-shadow: none !important; }
-
-    h1, h2 {
-      font-family: var(--font-display) !important;
-      font-weight: 700 !important;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-    }
-
-    .about-bio { font-family: var(--font-body) !important; }
-
-    .places-label, .orgs-label {
-      font-family: var(--font-display) !important;
-      font-weight: 700 !important;
-      letter-spacing: 0.18em !important;
-      text-transform: uppercase !important;
-    }
-    .place-name, .org-name {
-      font-family: var(--font-display) !important;
-      font-weight: 700 !important;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-    }
-    .place-region, .org-role { font-family: var(--font-body) !important; }
-    .place-photo, .org-preview { border-color: var(--border) !important; }
-    .org-cta {
-      font-family: var(--font-display) !important;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .social-icon {
-      border-radius: 0 !important;
-      border: 1px solid var(--border) !important;
-      background: transparent !important;
-    }
-    .social-icon:hover {
-      background: var(--text) !important;
-      color: var(--bg) !important;
-      border-color: var(--text) !important;
-    }
-    .avatar-wrap { border-radius: 0 !important; transform: none !important; }
-
-    .about-card { max-width: none; align-items: flex-start; text-align: left; }
-    .divider { margin-left: 0; margin-right: 0; }
-    .social-icons { justify-content: flex-start; }
+    .social-icon:hover { background: var(--text); color: var(--bg); border-color: var(--text); }
+    .social-icon svg { width: 18px; height: 18px; fill: currentColor; }
   </style>
   <link rel="stylesheet" href="shell.css?v=20260725-13" />
   <style>
-    /* Connect reuses Research's exact teal accent scheme (see
-       research.html), kept in sync with the home page's Connect nav-item
-       hover in index.html. */
-    :root {
-      --shell-accent: #067b85;
-      --shell-accent-text: #067b85;
-    }
-    html[data-theme="dark"] {
-      --shell-accent-text: #0799a5;
-    }
+    /* Same teal Connect wears on connect.html, kept in sync with the home
+       page's Connect nav-item hover in index.html. */
+    :root { --shell-accent: #067b85; --shell-accent-text: #067b85; }
+    html[data-theme="dark"] { --shell-accent-text: #0799a5; }
   </style>
   <script src="particles.js" defer></script>
   <script src="shell.js" defer></script>
 </head>
 <body>
 
-  <!-- ABOUT -->
   <header class="page-header about-header">
     <p class="section-label">Profile</p>
     <h1>Connect</h1>
@@ -347,43 +217,60 @@
 
   <section class="about-intro">
     <div class="about-card">
-
-      <!-- 头像：替换为 <img src="your-photo.jpg" alt="Max"> -->
       <div class="avatar-wrap">
         <img src="Image/mm.jpg" alt="Max">
       </div>
-
       <p class="about-bio">
-        Hi, I'm 马星杨 (Xingyang Ma, Max).<br>
-        Bla, bla, bla, <strong>bla, bla, bla.</strong><br>
+        Hi, I'm 马星杨 (Max).<br>
+        I'm an alien.<br>
         Thank you for visiting 😉😉😉.
-        <br><br>
-        <!-- 在这里继续添加介绍 -->
       </p>
 
-      <!-- 组织/合作：目前只有占位信息，后续补充简介、图片和链接后可以参考 tools.html
-           的 .tool-item 结构换成整行可点击的卡片。 -->
-      <p class="orgs-label">Groups</p>
-      <div class="orgs-list">
-        <div class="org-item">
-          <div class="org-preview">
+      <div class="divider"></div>
+      <div class="social-icons">
+        <a href="#" class="social-icon" aria-label="Google Scholar" title="Google Scholar">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 24a7 7 0 1 1 0-14 7 7 0 0 1 0 14zm0-24L0 9.5l4.838 3.94A8 8 0 0 1 12 10a8 8 0 0 1 7.162 3.44L24 9.5z"/>
+          </svg>
+        </a>
+        <a href="#" class="social-icon" aria-label="Bandcamp" title="Bandcamp">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 18.75l7.437-13.5H24l-7.436 13.5H0z"/>
+          </svg>
+        </a>
+        <a href="mailto:your@email.com" class="social-icon" aria-label="Email" title="Email">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- The three groups drift in one field. Anchors are normalised to the field
+       box: --ax/--ay place them as a loose triangle on a wide screen, --mx/--my
+       as a gently staggered vertical spine on a phone. -->
+  <section class="field-section">
+    <div class="field" data-mode="rows">
+      <canvas class="field-canvas" aria-hidden="true"></canvas>
+
+      <p class="field-label">Groups</p>
+      <ul class="field-nodes">
+        <li class="fnode" data-shape="route" style="--ax:.18; --ay:.28; --mx:.42; --my:.14">
+          <div class="fnode-figure">
             <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <rect x="0" y="0" width="200" height="120" fill="var(--surface)"/>
               <path d="M20 90 Q70 40 100 60 T180 30" fill="none" stroke="var(--border)" stroke-width="3" stroke-linecap="round" stroke-dasharray="1 10"/>
               <circle cx="20" cy="90" r="5" fill="var(--accent)"/>
               <circle cx="180" cy="30" r="5" fill="var(--accent)"/>
             </svg>
           </div>
-          <div class="org-body">
-            <p class="org-role">Company</p>
-            <h3 class="org-name">Srseair</h3>
-            <a href="#" class="org-cta">Visit Link →</a>
-          </div>
-        </div>
-        <div class="org-item">
-          <div class="org-preview">
+          <p class="fnode-kind">Company</p>
+          <h3 class="fnode-name">Srseair</h3>
+          <a href="https://www.srseair.com" class="fnode-cta" target="_blank">Visit Link →</a>
+        </li>
+        <li class="fnode" data-shape="nodes" style="--ax:.84; --ay:.26; --mx:.58; --my:.47">
+          <div class="fnode-figure">
             <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <rect x="0" y="0" width="200" height="120" fill="var(--surface)"/>
               <circle cx="100" cy="46" r="24" fill="var(--accent)" opacity="0.7"/>
               <circle cx="55" cy="80" r="10" fill="var(--border)"/>
               <circle cx="145" cy="80" r="10" fill="var(--border)"/>
@@ -391,16 +278,13 @@
               <line x1="118" y1="60" x2="140" y2="74" stroke="var(--border)" stroke-width="2"/>
             </svg>
           </div>
-          <div class="org-body">
-            <p class="org-role">Education</p>
-            <h3 class="org-name">Research Group</h3>
-            <a href="#" class="org-cta">Visit Link →</a>
-          </div>
-        </div>
-        <div class="org-item">
-          <div class="org-preview">
+          <p class="fnode-kind">Education</p>
+          <h3 class="fnode-name">Research Group</h3>
+          <a href="#" class="fnode-cta">Visit Link →</a>
+        </li>
+        <li class="fnode" data-shape="bars" style="--ax:.50; --ay:.60; --mx:.44; --my:.79">
+          <div class="fnode-figure">
             <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <rect x="0" y="0" width="200" height="120" fill="var(--surface)"/>
               <rect x="20"  y="55" width="10" height="20" fill="var(--border)"/>
               <rect x="38"  y="40" width="10" height="50" fill="var(--border)"/>
               <rect x="56"  y="25" width="10" height="80" fill="var(--accent)"/>
@@ -412,74 +296,543 @@
               <rect x="164" y="58" width="10" height="14" fill="var(--border)"/>
             </svg>
           </div>
-          <div class="org-body">
-            <p class="org-role">Band</p>
-            <h3 class="org-name">Do-Nothing Cooperative</h3>
-            <a href="#" class="org-cta">Visit Link →</a>
-          </div>
-        </div>
-      </div>
-
-      <p class="places-label">Places</p>
-      <div class="places-list">
-        <div class="place-item">
-          <div class="place-photo">
-            <img src="Image/Bridge.jpg" alt="Wetland boardwalk in Kunming">
-          </div>
-          <div class="place-body">
-            <h3 class="place-name">Kunming</h3>
-            <p class="place-region">Yunnan, China</p>
-          </div>
-        </div>
-        <div class="place-item">
-          <div class="place-photo">
-            <img src="Image/chongqing.jpg" alt="Hongyadong at night, Chongqing">
-          </div>
-          <div class="place-body">
-            <h3 class="place-name">Chongqing</h3>
-            <p class="place-region">Chongqing, China</p>
-          </div>
-        </div>
-        <div class="place-item">
-          <div class="place-photo">
-            <img src="Image/Pcity.jpg" alt="Perth city skyline across the Swan River">
-          </div>
-          <div class="place-body">
-            <h3 class="place-name">Perth</h3>
-            <p class="place-region">Western Australia</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="divider"></div>
-
-      <!-- 社交图标 -->
-      <div class="social-icons">
-
-        <!-- Google Scholar -->
-        <a href="#" class="social-icon" aria-label="Google Scholar" title="Google Scholar">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 24a7 7 0 1 1 0-14 7 7 0 0 1 0 14zm0-24L0 9.5l4.838 3.94A8 8 0 0 1 12 10a8 8 0 0 1 7.162 3.44L24 9.5z"/>
-          </svg>
-        </a>
-
-        <!-- Bandcamp -->
-        <a href="#" class="social-icon" aria-label="Bandcamp" title="Bandcamp">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0 18.75l7.437-13.5H24l-7.436 13.5H0z"/>
-          </svg>
-        </a>
-
-        <!-- Email -->
-        <a href="mailto:your@email.com" class="social-icon" aria-label="Email" title="Email">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/>
-          </svg>
-        </a>
-
-      </div>
+          <p class="fnode-kind">Band</p>
+          <h3 class="fnode-name">Do-Nothing Cooperative</h3>
+          <a href="#" class="fnode-cta">Visit Link →</a>
+        </li>
+      </ul>
     </div>
   </section>
+
+  <script>
+  // The field: three groups, one substance.
+  //
+  // Each group is a loose cloud of drifting dots wandering its own patch of the
+  // field. Bring it into focus and the dots gather into that group's mark; look
+  // away and they come apart again. Morphing follows the same construction as
+  // the home page's theme toggle (index.html, HomeThemeToggle): each particle
+  // carries both a resting position and a resolved one, and eases between them.
+  //
+  // What "bring into focus" means is the one thing that differs by device. With
+  // a pointer it is proximity — the cursor walks up to a cloud. On a phone there
+  // is no cursor to walk, so the field turns on its side and scroll position
+  // does the walking: whichever cloud is nearest the middle of the screen is the
+  // one that resolves. Both are the same continuous k; only its source changes.
+  //
+  // The canvas is decoration. The <li> elements carry the content, the hit
+  // targets and the tab order, and they never move — a drifting click target is
+  // hostile. Particles are alive; labels hold still.
+  (function () {
+    function start() {
+      const section = document.querySelector('.field');
+      const canvas = section && section.querySelector('.field-canvas');
+      const items = section ? Array.from(section.querySelectorAll('.fnode')) : [];
+      if (!section || !canvas || !items.length) return;
+
+      const root = document.documentElement;
+      const ctx = canvas.getContext('2d');
+      const TAU = Math.PI * 2;
+      const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const canHover = window.matchMedia('(hover: hover)').matches;
+      const density = parseFloat(getComputedStyle(root).getPropertyValue('--symbol-particle-density')) || 1;
+
+      const DW = 260, DH = 195;                 // design space for the group marks
+      const STEP = 4.5 / Math.sqrt(density);    // mark sampling grid
+      const REST_R = 1.35;                      // resting dot radius
+      const DRIFT = .35;                        // px per frame a cloud travels
+
+      // ── The three group marks, sampled from the same motifs the rows use ──
+      function buildShape(kind) {
+        const ink = [], accent = [];
+        const jitter = (v) => v + (Math.random() - .5) * STEP * .4;
+        const put = (list, x, y) => list.push({ x: jitter(x), y: jitter(y) });
+
+        const disc = (list, cx, cy, r) => {
+          for (let y = cy - r; y <= cy + r; y += STEP)
+            for (let x = cx - r; x <= cx + r; x += STEP)
+              if ((x - cx) * (x - cx) + (y - cy) * (y - cy) <= r * r) put(list, x, y);
+        };
+        const bar = (list, x, y, w, h) => {
+          for (let py = y; py <= y + h; py += STEP)
+            for (let px = x; px <= x + w; px += STEP) put(list, px, py);
+        };
+        const ribbon = (list, at, length, width) => {
+          for (let d = 0; d <= length; d += STEP) {
+            const p = at(d / length);
+            for (let o = -width / 2; o <= width / 2; o += STEP) put(list, p.x + p.nx * o, p.y + p.ny * o);
+          }
+        };
+        const seg = (list, x1, y1, x2, y2, width) => {
+          const len = Math.hypot(x2 - x1, y2 - y1) || 1;
+          ribbon(list, (t) => ({
+            x: x1 + (x2 - x1) * t, y: y1 + (y2 - y1) * t,
+            nx: -(y2 - y1) / len, ny: (x2 - x1) / len
+          }), len, width);
+        };
+        const quad = (list, p0, p1, p2, width) => {
+          const len = Math.hypot(p1[0] - p0[0], p1[1] - p0[1]) + Math.hypot(p2[0] - p1[0], p2[1] - p1[1]);
+          ribbon(list, (t) => {
+            const m = 1 - t;
+            const dx = 2 * m * (p1[0] - p0[0]) + 2 * t * (p2[0] - p1[0]);
+            const dy = 2 * m * (p1[1] - p0[1]) + 2 * t * (p2[1] - p1[1]);
+            const d = Math.hypot(dx, dy) || 1;
+            return {
+              x: m * m * p0[0] + 2 * m * t * p1[0] + t * t * p2[0],
+              y: m * m * p0[1] + 2 * m * t * p1[1] + t * t * p2[1],
+              nx: -dy / d, ny: dx / d
+            };
+          }, len, width);
+        };
+
+        if (kind === 'route') {
+          quad(ink, [35, 150], [105, 70], [140, 108], 10);
+          quad(ink, [140, 108], [178, 140], [225, 52], 10);
+          disc(accent, 35, 150, 10);
+          disc(accent, 225, 52, 10);
+        } else if (kind === 'nodes') {
+          disc(accent, 130, 68, 30);
+          disc(ink, 68, 138, 13);
+          disc(ink, 192, 138, 13);
+          seg(ink, 112, 92, 80, 124, 5);
+          seg(ink, 148, 92, 180, 124, 5);
+        } else {
+          [[26, 89, 32, 0], [49, 65, 81, 0], [73, 41, 130, 1], [96, 73, 65, 0],
+           [120, 24, 162, 1], [143, 57, 97, 0], [166, 81, 49, 1], [190, 65, 81, 0],
+           [213, 94, 23, 0]].forEach((b) => bar(b[3] ? accent : ink, b[0], b[1], 13, b[2]));
+        }
+        return { ink, accent };
+      }
+
+      // ── State ─────────────────────────────────────────────────────────────
+      let nodes = [], edges = [];
+      let mode = 'rows';
+      let W = 0, H = 0, cw = 0, ch = 0;
+      let time = 0, pointerX = 0, pointerY = 0, hasPointer = false;
+      let forced = null, onScreen = true, pointerMoved = false;
+      let tellNode = null, tellStart = 0;
+
+      const wantedMode = () => {
+        const v = parseFloat(getComputedStyle(section).getPropertyValue('--field-mode'));
+        return v === 1 ? 'field' : v === 2 ? 'mobile' : 'rows';
+      };
+
+      function toRows() {
+        nodes = [];
+        edges = [];
+        W = H = 0;
+        mode = 'rows';
+        section.dataset.mode = 'rows';
+      }
+
+      function build(force) {
+        const want = wantedMode();
+        if (want === 'rows') { toRows(); return; }
+        mode = want;
+        section.dataset.mode = want;
+        const rect = section.getBoundingClientRect();
+        // Layout isn't ready until the stylesheets land; fall back rather than
+        // guess, and let the ResizeObserver bring us back when it is.
+        if (rect.width < 260 || rect.height < 200) { toRows(); return; }
+        if (!force && nodes.length &&
+            Math.abs(rect.width - W) < 1 && Math.abs(rect.height - H) < 1) return;
+
+        W = rect.width;
+        H = rect.height;
+        const phone = mode === 'mobile';
+        // On a phone the cloud is most of the column width; on a wide screen it
+        // is a quarter of it, because three of them share the row.
+        cw = phone ? Math.max(180, Math.min(W * .62, 240))
+                   : Math.max(200, Math.min(300, W * .26));
+        ch = Math.round(cw * .75);
+        section.style.setProperty('--cw', cw + 'px');
+        section.style.setProperty('--ch', ch + 'px');
+
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = Math.round(W * dpr);
+        canvas.height = Math.round(H * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+        // Fewer resting dots on a phone: less to draw, and a tighter cloud that
+        // cannot reach into its neighbour's slot up or down the spine.
+        const restN = phone ? 140 : 220;
+        const spread = phone ? .5 : .5;
+
+        const built = [];
+        for (const el of items) {
+          const cs = getComputedStyle(el);
+          const ax = parseFloat(cs.getPropertyValue(phone ? '--mx' : '--ax'));
+          const ay = parseFloat(cs.getPropertyValue(phone ? '--my' : '--ay'));
+          const s = cw / DW;
+          const shape = buildShape(el.dataset.shape);
+          const targets = shape.ink.map((p) => ({
+            x: (p.x - DW / 2) * s, y: (p.y - DH / 2) * s, accent: 0
+          })).concat(shape.accent.map((p) => ({
+            x: (p.x - DW / 2) * s, y: (p.y - DH / 2) * s, accent: 1
+          })));
+
+          targets.sort(() => Math.random() - .5);
+          const restCount = Math.min(restN, targets.length);
+          // Resting spread is wider than the resolved mark, so idle really does
+          // read as "loose cloud" and gathering reads as a contraction.
+          const rx = cw * spread, ry = ch * (spread + .04);
+          const parts = targets.map((tgt, i) => {
+            // Dots beyond the resting count sit in the cloud at radius 0 and
+            // only materialise as the node resolves.
+            const a = Math.random() * TAU;
+            const d = Math.sqrt(Math.random());
+            const px = Math.cos(a) * rx * d;
+            const py = Math.sin(a) * ry * d;
+            return {
+              rx: px, ry: py, tx: tgt.x, ty: tgt.y, accent: tgt.accent,
+              rest: i < restCount ? 1 : 0,
+              x: px, y: py, r: 0, dx: px, dy: py,
+              phase: Math.random() * TAU, ph2: Math.random() * TAU,
+              dir: Math.random() * TAU
+            };
+          });
+
+          built.push({
+            el, ax, ay, parts,
+            k: 0, kT: 0, lastK: -1, lastDx: 999, lastDy: 999, legible: false,
+            cx: ax * W, cy: ay * H,
+            // Free position, and the box it is free inside. Each node roams its
+            // own territory around its anchor: real wandering, but two clouds
+            // can never trade places or pile up, and on a phone the spine keeps
+            // its reading order however far the clouds have floated.
+            fx: ax * W, fy: ay * H,
+            sep: cw * .42,          // how much elbow room it asks of its neighbours
+            ang: Math.random() * TAU,
+            p1: Math.random() * TAU, p2: Math.random() * TAU
+          });
+        }
+
+        // Where each cloud is allowed to wander. On a wide screen that is the
+        // whole field, inset just enough that a resolved mark and its labels
+        // never hang off an edge. On a phone the spine has to keep its reading
+        // order for the scroll mapping below, so a node roams the full width but
+        // stays in its own vertical band.
+        for (const n of built) {
+          const rx = cw * spread, ry = ch * (spread + .04);
+          // The label block under the figure is whatever the text actually
+          // needed — a name that wrapped to two lines takes more room.
+          const below = Math.max(0, n.el.offsetHeight - ch);
+          const padX = Math.max(cw / 2, rx);
+          const padTop = Math.max(ch / 2, ry);
+          const padBot = Math.max(ch / 2 + below, ry);
+          n.minX = padX;
+          n.maxX = Math.max(padX, W - padX);
+          n.minY = padTop;
+          n.maxY = Math.max(padTop, H - padBot);
+          if (phone) {
+            n.minY = Math.max(n.minY, n.ay * H - ch * .3);
+            n.maxY = Math.min(n.maxY, n.ay * H + ch * .3);
+            if (n.maxY < n.minY) n.maxY = n.minY;
+          }
+          n.fx = Math.min(Math.max(n.fx, n.minX), n.maxX);
+          n.fy = Math.min(Math.max(n.fy, n.minY), n.maxY);
+        }
+
+        // A rebuild replaces every node object, so any node the pointer or
+        // keyboard was holding has to be re-found by its element or it becomes
+        // a ghost that is never drawn and never released.
+        items.forEach((el) => el.classList.remove('is-resolved'));
+        const heldEl = forced && forced.el;
+        nodes = built;
+        forced = heldEl ? nodes.find((n) => n.el === heldEl) || null : null;
+        edges = [];
+        for (let i = 0; i < nodes.length; i++)
+          for (let j = i + 1; j < nodes.length; j++) edges.push([nodes[i], nodes[j]]);
+
+        // A tell for first arrival on a wide screen: at rest only the three
+        // names show, so without it nobody learns there is anything to walk
+        // into. The phone needs no tell — scrolling resolves a node whether you
+        // meant it to or not.
+        if (!REDUCED && !phone && !pointerMoved && !tellNode) {
+          tellNode = nodes[2] || nodes[0];
+          tellStart = performance.now() + 900;
+        }
+      }
+
+      // ── Strand between two nodes: a dotted run, tapered so it never spears
+      //    into either cloud. Radius carries the shimmer, so the whole layer
+      //    stays one path and one fill.
+      function strand(a, b) {
+        const dx = b.cx - a.cx, dy = b.cy - a.cy;
+        const len = Math.hypot(dx, dy);
+        const n = Math.max(6, Math.round(len / 14));
+        for (let i = 1; i < n; i++) {
+          const u = i / n;
+          if (u < .2 || u > .8) continue;
+          const taper = Math.sin((u - .2) / .6 * Math.PI);
+          const shimmer = REDUCED ? 1 : .6 + .4 * Math.sin(u * 9 - time * 2.2);
+          const r = 1.05 * taper * shimmer;
+          if (r < .12) continue;
+          const x = a.cx + dx * u, y = a.cy + dy * u;
+          ctx.moveTo(x + r, y);
+          ctx.arc(x, y, r, 0, TAU);
+        }
+      }
+
+      function draw() {
+        const styles = getComputedStyle(root);
+        const ink = styles.getPropertyValue('--shell-ink').trim() || '#1d2020';
+        const accent = styles.getPropertyValue('--shell-accent-text').trim() || '#067b85';
+        const phone = mode === 'mobile';
+
+        time += REDUCED ? 0 : .02;
+        ctx.clearRect(0, 0, W, H);
+
+        // Resolve amounts: one node dominates, so the field never shows three
+        // half-formed marks at once. What picks it is the device's own idea of
+        // "what you are looking at" — the cursor, or the middle of the screen.
+        nodes.forEach((n) => { n.kT = 0; });
+        if (forced) {
+          forced.kT = 1;
+        } else if (phone) {
+          // Scroll is the phone's cursor. The obvious rule — resolve whichever
+          // cloud is nearest a fixed reading line — has a hole in it: the last
+          // cloud sits near the bottom of the page, and there is no scroll left
+          // to lift it to that line, so it could never fully form. So instead of
+          // a line in the viewport, map the scroll travel that is actually
+          // available onto the span of the nodes: the first resolves where it
+          // naturally reaches the line, the last exactly as you hit the bottom.
+          const rect = section.getBoundingClientRect();
+          const vh = window.innerHeight;
+          const docTop = rect.top + window.scrollY;
+          const maxScroll = Math.max(1, root.scrollHeight - vh);
+          const ays = nodes.map((n) => n.ay);
+          const ay0 = Math.min(...ays), ay1 = Math.max(...ays);
+          const at = (ay) => Math.min(Math.max(docTop + ay * H - vh * .46, 0), maxScroll);
+          const s0 = at(ay0), s1 = at(ay1);
+          const span = s1 - s0;
+          // Position in the same units on both sides: 0 at the first node, 1 at
+          // the last, wherever the page's scroll range actually put them. A page
+          // too short to scroll has no travel to map, so it falls back to plain
+          // distance from the reading line.
+          const scrollable = span > 1;
+          const u = scrollable ? (window.scrollY - s0) / span : 0;
+          const R = scrollable ? .95 / Math.max(1, nodes.length - 1) : ch * 1.5;
+          let near = null, nd = Infinity;
+          for (const n of nodes) {
+            const d = scrollable
+              ? Math.abs(u - (n.ay - ay0) / (ay1 - ay0 || 1))
+              : Math.abs(rect.top + n.ay * H - vh * .46);
+            if (d < nd) { nd = d; near = n; }
+          }
+          // A plateau, not a peak: a node stays fully formed across a band of
+          // scroll, so it holds its shape while you read it instead of only
+          // sharpening at one exact offset.
+          if (near && nd < R) near.kT = Math.min(1, Math.pow(Math.max(0, 1 - nd / R) / .72, .75));
+        } else if (tellNode) {
+          const elapsed = performance.now() - tellStart;
+          if (elapsed < 0) { /* still waiting */ }
+          else if (elapsed < 1500) tellNode.kT = .85 * Math.sin(Math.PI * elapsed / 1500);
+          else tellNode = null;
+        } else if (hasPointer) {
+          const R = cw * 1.15;
+          let near = null, nd = Infinity;
+          for (const n of nodes) {
+            const d = Math.hypot(pointerX - n.cx, pointerY - n.cy);
+            if (d < nd) { nd = d; near = n; }
+          }
+          if (near && nd < R) near.kT = Math.pow(1 - nd / R, .75);
+        }
+
+        let maxK = 0, lead = null;
+        for (const n of nodes) {
+          n.k += (n.kT - n.k) * (REDUCED ? .3 : .08);
+          if (n.k < .0015) n.k = 0;
+          if (n.k > maxK) { maxK = n.k; lead = n; }
+          // The cloud drifts under its own steam — a heading that curves, and a
+          // bounce off the edges of where it is allowed to be. It does not get
+          // pulled home when you approach it: it slows to a stop where it is,
+          // and its label is already there with it. An anchor is only where it
+          // started, not where it belongs.
+          if (!REDUCED) {
+            const speed = DRIFT * (1 - n.k);
+            n.ang += Math.sin(time * .37 + n.p1) * .035;
+            n.fx += Math.cos(n.ang) * speed;
+            n.fy += Math.sin(n.ang) * speed * .6;
+            // A very weak pull back towards where it started. Roaming plus
+            // mutual shoving alone ends with all three pressed together in the
+            // middle of the field, permanently; this is slack enough to allow
+            // excursions of a few hundred pixels but keeps the constellation
+            // from collapsing over a long visit.
+            n.fx += (n.ax * W - n.fx) * .00035 * (1 - n.k);
+            n.fy += (n.ay * H - n.fy) * .00035 * (1 - n.k);
+            if (n.fx < n.minX) { n.fx = n.minX; n.ang = Math.PI - n.ang; }
+            else if (n.fx > n.maxX) { n.fx = n.maxX; n.ang = Math.PI - n.ang; }
+            if (n.fy < n.minY) { n.fy = n.minY; n.ang = -n.ang; }
+            else if (n.fy > n.maxY) { n.fy = n.maxY; n.ang = -n.ang; }
+          }
+          if (Math.abs(n.k - n.lastK) > .008) {
+            n.el.style.setProperty('--k', n.k.toFixed(3));
+            n.lastK = n.k;
+          }
+          const legible = n.k > .5;
+          if (legible !== n.legible) {
+            n.el.classList.toggle('is-resolved', legible);
+            n.legible = legible;
+          }
+        }
+        if (maxK < .15) lead = null;
+
+        // Keep them out of each other's way. Without this, roaming the whole
+        // field means two clouds eventually occupy the same place and you can no
+        // longer tell which dot belongs to which thing. A gentle shove, not a
+        // collision: a node that is resolving is not pushed at all, so a mark
+        // you are reading never gets nudged off its own label.
+        for (let i = 0; i < nodes.length; i++) {
+          for (let j = i + 1; j < nodes.length; j++) {
+            const a = nodes[i], b = nodes[j];
+            const dx = b.fx - a.fx, dy = b.fy - a.fy;
+            const d = Math.hypot(dx, dy) || .001;
+            const min = a.sep + b.sep;
+            if (d >= min) continue;
+            const push = (min - d) / d * .06;
+            a.fx -= dx * push * (1 - a.k);
+            a.fy -= dy * push * (1 - a.k);
+            b.fx += dx * push * (1 - b.k);
+            b.fy += dy * push * (1 - b.k);
+          }
+        }
+
+        for (const n of nodes) {
+          n.fx = Math.min(Math.max(n.fx, n.minX), n.maxX);
+          n.fy = Math.min(Math.max(n.fy, n.minY), n.maxY);
+          n.cx = n.fx;
+          n.cy = n.fy;
+          // Move the label with the cloud, but only when it has actually moved a
+          // pixel: three elements, so this is cheap, but not free.
+          const dx = n.cx - n.ax * W, dy = n.cy - n.ay * H;
+          if (Math.abs(dx - n.lastDx) > .5 || Math.abs(dy - n.lastDy) > .5) {
+            n.el.style.setProperty('--dx', dx.toFixed(1) + 'px');
+            n.el.style.setProperty('--dy', dy.toFixed(1) + 'px');
+            n.lastDx = dx;
+            n.lastDy = dy;
+          }
+        }
+
+        // Strands first, underneath everything, dimmed as a mark forms so no
+        // line ever crosses it. Drawn in ink at low alpha rather than
+        // --shell-line: that border grey is a hair off the page colour in the
+        // dark theme and the whole web vanishes.
+        const strandAlpha = .3 * (1 - .85 * maxK);
+        if (strandAlpha > .01) {
+          ctx.globalAlpha = strandAlpha;
+          ctx.fillStyle = ink;
+          ctx.beginPath();
+          for (const e of edges) if (e[0] !== lead && e[1] !== lead) strand(e[0], e[1]);
+          ctx.fill();
+          if (lead) {
+            ctx.globalAlpha = Math.min(1, strandAlpha + .45);
+            ctx.fillStyle = accent;
+            ctx.beginPath();
+            for (const e of edges) if (e[0] === lead || e[1] === lead) strand(e[0], e[1]);
+            ctx.fill();
+          }
+          ctx.globalAlpha = 1;
+        }
+
+        for (const n of nodes) {
+          const k = n.k;
+          // Loose when idle, settled when resolved: resolving is calming down.
+          const amp = REDUCED ? 0 : 2.4 - k * 2.1;
+          const roam = REDUCED ? 0 : (phone ? 5 : 7) * (1 - k);
+          for (const p of n.parts) {
+            const tx = p.rx + (p.tx - p.rx) * k;
+            const ty = p.ry + (p.ty - p.ry) * k;
+            p.x += (tx - p.x) * .1;
+            p.y += (ty - p.y) * .1;
+            const base = p.rest ? REST_R : 0;
+            p.r = base + (1.45 - base) * k;
+            const w = amp === 0 ? 0 : Math.sin(time * 1.5 + p.phase) * amp;
+            // Fast jitter along a fixed axis plus a slow two-axis drift: the
+            // second term is what makes an idle dot look like it is floating
+            // rather than vibrating in place, and it fades out as k rises.
+            p.dx = n.cx + p.x + Math.cos(p.dir) * w + (roam && Math.sin(time * .43 + p.ph2) * roam);
+            p.dy = n.cy + p.y + Math.sin(p.dir) * w + (roam && Math.cos(time * .37 + p.ph2) * roam);
+          }
+          // One path per colour: thousands of dots, two fills.
+          ctx.fillStyle = ink;
+          ctx.beginPath();
+          for (const p of n.parts) {
+            if (p.accent || p.r < .15) continue;
+            ctx.moveTo(p.dx + p.r, p.dy);
+            ctx.arc(p.dx, p.dy, p.r, 0, TAU);
+          }
+          ctx.fill();
+          ctx.fillStyle = accent;
+          ctx.beginPath();
+          for (const p of n.parts) {
+            if (!p.accent || p.r < .15) continue;
+            ctx.moveTo(p.dx + p.r, p.dy);
+            ctx.arc(p.dx, p.dy, p.r, 0, TAU);
+          }
+          ctx.fill();
+        }
+      }
+
+      // ── Input ─────────────────────────────────────────────────────────────
+      section.addEventListener('pointermove', (e) => {
+        if (e.pointerType === 'touch') return;
+        const r = section.getBoundingClientRect();
+        pointerX = e.clientX - r.left;
+        pointerY = e.clientY - r.top;
+        hasPointer = true;
+        pointerMoved = true;
+        tellNode = null;
+      });
+      section.addEventListener('pointerleave', () => { hasPointer = false; });
+
+      items.forEach((el) => {
+        const of = () => nodes.find((n) => n.el === el) || null;
+        // Hover holds a node open on a pointer device. A finger is not a
+        // cursor — mouseenter fires on tap and would then stick — so on a touch
+        // screen the scroll-driven resolve stays in charge. A narrow desktop
+        // window is in the same layout but does have a pointer, and keeps it.
+        el.addEventListener('mouseenter', () => {
+          if (mode === 'mobile' && !canHover) return;
+          forced = of();
+          tellNode = null;
+        });
+        el.addEventListener('mouseleave', () => { if (forced && forced.el === el) forced = null; });
+        el.addEventListener('focusin', () => { forced = of(); tellNode = null; });
+        el.addEventListener('focusout', () => { if (forced && forced.el === el) forced = null; });
+      });
+
+      // ── Build triggers: layout and breakpoint crossings ────────────────────
+      if (window.ResizeObserver) {
+        let pending = false;
+        new ResizeObserver(() => {
+          if (pending) return;
+          pending = true;
+          requestAnimationFrame(() => { pending = false; build(false); });
+        }).observe(section);
+      }
+      window.addEventListener('load', () => build(true), { once: true });
+      window.matchMedia('(min-width: 900px)').addEventListener('change', () => build(true));
+      build(true);
+
+      if (window.IntersectionObserver) {
+        new IntersectionObserver((entries) => {
+          onScreen = entries.some((e) => e.isIntersecting);
+        }, { rootMargin: '120px' }).observe(section);
+      }
+
+      (function loop() {
+        requestAnimationFrame(loop);
+        if (!onScreen || !nodes.length) return;
+        draw();
+      })();
+    }
+
+    // particles.js and shell.js are deferred; wait for them rather than
+    // running inline ahead of the shell they share a theme with.
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
+    else start();
+  })();
+  </script>
 
   <p class="site-footer">© 2026 Mm's Studio. All rights reserved.</p>
 
