@@ -538,7 +538,7 @@
             // can never trade places or pile up, and on a phone the spine keeps
             // its reading order however far the clouds have floated.
             fx: ax * W, fy: ay * H,
-            sep: cw * .42,          // how much elbow room it asks of its neighbours
+            sep: cw * .28,          // how much elbow room it asks of its neighbours
             ang: Math.random() * TAU,
             p1: Math.random() * TAU, p2: Math.random() * TAU
           });
@@ -741,8 +741,8 @@
             // middle of the field, permanently; this is slack enough to allow
             // excursions of a few hundred pixels but keeps the constellation
             // from collapsing over a long visit.
-            n.fx += (n.ax * W - n.fx) * .00012 * (1 - n.k);
-            n.fy += (n.ay * H - n.fy) * .00012 * (1 - n.k);
+            n.fx += (n.ax * W - n.fx) * .00005 * (1 - n.k);
+            n.fy += (n.ay * H - n.fy) * .00005 * (1 - n.k);
             if (n.fx < n.minX) { n.fx = n.minX; n.ang = Math.PI - n.ang; }
             else if (n.fx > n.maxX) { n.fx = n.maxX; n.ang = Math.PI - n.ang; }
             if (n.fy < n.minY) { n.fy = n.minY; n.ang = -n.ang; }
