@@ -153,7 +153,10 @@
       width: var(--cw, 260px);
       margin-left: calc(var(--cw, 260px) / -2);
       margin-top: calc(var(--ch, 195px) / -2);
-      pointer-events: auto;
+      /* The li itself is transparent to the pointer — a big invisible box
+         sitting on a neighbour's link would steal the click. Only .fnode-cta
+         opts back in, and only after it has resolved. */
+      pointer-events: none;
       text-align: center;
     }
     .field[data-mode="field"] .fnode { left: calc(var(--ax) * 100%); top: calc(var(--ay) * 100%); }
@@ -192,7 +195,9 @@
     /* Faded out, the link is still a link — and on a phone there is no hover to
        reveal it before a tap lands. The script adds .is-resolved once the node
        has actually formed, which is also the first moment you can read it. */
-    .field .fnode.is-resolved .fnode-cta { pointer-events: auto; }
+    .field .fnode.is-resolved .fnode-cta,
+    .field .fnode.is-resolved .fnode-name,
+    .field .fnode.is-resolved .fnode-kind { pointer-events: auto; }
 
     .field[data-mode="mobile"] .fnode-name { font-size: 1.15rem; }
 
