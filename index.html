@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mm's Studio</title>
-  <meta name="description" content="Mm's personal site — research publications, tools, music, and contact." />
+  <meta name="description" content="Mm's personal site — research publications, craft, music, and contact." />
   <link rel="icon" href="Image/mm-logo-icon.png" type="image/png" />
   <script>(function(){var t=localStorage.getItem('mm-theme');if(t)document.documentElement.setAttribute('data-theme',t);else if(window.matchMedia('(prefers-color-scheme:dark)').matches)document.documentElement.setAttribute('data-theme','dark')})()</script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -17,14 +17,14 @@
       --bg:        #F4F5F4;
       --ink:       #1D2020;
       --ink-soft:  #5C6262;
-      --accent:    #E04B00;
+      --accent:    #067b85;
       --symbol-particle-density: 1;
       /* Matches the inner pages exactly, so the Mm mark never jumps on navigation. */
       --shell-gutter: clamp(.5rem, .8vw, 1rem);
       --shell-edge: var(--shell-gutter);
       /* Fixed, not vw-fluid: must exactly match .nav-symbol's 130px so the Mm
          mark's particle cloud renders at the same physical size — and thus
-         the same visual dot density — as the four nav symbols below it. */
+         the same visual dot density — as the three nav symbols below it. */
       --shell-mark-width: 130px;
       --shell-top-width: clamp(3rem, 5vw, 4rem);
       --shell-rail-center: calc((var(--shell-edge) + var(--shell-mark-width) + var(--shell-gutter)) / 2);
@@ -70,7 +70,7 @@
       background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/><feComponentTransfer><feFuncA type='table' tableValues='0 0.05'/></feComponentTransfer></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
     }
 
-    /* ══════════ NAV GRID (2x2 centered) ══════════ */
+    /* ══════════ NAV TRIANGLE (1 over 2, equilateral) ══════════ */
     .stage {
       min-height: 100vh;
       min-height: 100dvh;
@@ -81,45 +81,56 @@
       padding: 4rem 2rem;
     }
 
+    /* The three symbol centres form an equilateral triangle: the bottom pair
+       sits --d apart, so the rows must sit --d·√3/2 apart centre-to-centre.
+       Every item has the same height (symbol + gap + fixed-height label), so
+       that centre distance is item height + row gap — solve for the gap. */
     .nav-grid {
+      --sym: 130px;
+      --item-gap: 1.1rem;
+      --label-h: 1.1rem;
+      --col-gap: clamp(5rem, 12vw, 10rem);
+      --d: calc(var(--sym) + var(--col-gap));
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: clamp(3rem, 8vw, 7rem) clamp(4rem, 12vw, 10rem);
+      grid-template-columns: repeat(2, var(--sym));
+      column-gap: var(--col-gap);
+      row-gap: calc(var(--d) * 0.8660254 - var(--sym) - var(--item-gap) - var(--label-h));
+    }
+
+    .nav-item:first-child {
+      grid-column: 1 / -1;
+      justify-self: center;
     }
 
     .nav-item {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 1.1rem;
+      gap: var(--item-gap);
       text-decoration: none;
       color: var(--ink);
       cursor: pointer;
     }
 
     .nav-symbol {
-      width: 130px;
-      height: 130px;
+      width: var(--sym);
+      height: var(--sym);
       display: block;
     }
 
     .nav-label {
       font-family: var(--font-mono);
       font-size: 0.86rem;
+      line-height: var(--label-h);
       font-weight: 700;
       letter-spacing: 0.22em;
       text-transform: uppercase;
+      white-space: nowrap;
       color: var(--ink);
       transition: color 0.25s;
     }
 
     .nav-item:hover .nav-label { color: var(--accent); }
-    /* Research's nav item hovers into the same teal as its own page's accent
-       (the "Values & Personality" keyword color), rather than the site-wide
-       orange every other nav item still uses. */
-    .nav-item[href="research.html"]:hover .nav-label { color: #067b85; }
-    /* Connect reuses Research's exact teal accent (see connect.html). */
-    .nav-item[href="connect.html"]:hover .nav-label { color: #067b85; }
 
     .site-caption {
       margin-top: clamp(2.5rem, 4vw, 3.5rem);
@@ -177,10 +188,7 @@
     }
 
     @media (max-width: 640px) {
-      .nav-grid {
-        gap: 2.5rem 3.5rem;
-      }
-      .nav-symbol { width: 92px; height: 92px; }
+      .nav-grid { --sym: 92px; --col-gap: 4.5rem; --label-h: 1rem; }
       .nav-label { font-size: 0.74rem; letter-spacing: 0.18em; }
 
       .stage { min-height: 100vh; min-height: 100dvh; padding: 4rem 1rem 2rem; }
@@ -190,7 +198,7 @@
        before first paint (localStorage, else the OS preference) and the toggle
        below keeps it current, so a prefers-color-scheme copy would be dead weight. */
     html[data-theme="dark"] {
-      --bg: #111211; --ink: #e2e3e2; --ink-soft: #7a7e7e;
+      --bg: #111211; --ink: #e2e3e2; --ink-soft: #7a7e7e; --accent: #0799a5;
     }
     html[data-theme="dark"] body::after { mix-blend-mode: screen; opacity: 0.12; }
 
@@ -220,15 +228,10 @@
         <canvas class="nav-symbol" width="260" height="260" aria-hidden="true"></canvas>
         <span class="nav-label">Research</span>
       </a>
-      <a class="nav-item" href="tools.html" data-symbol="minus">
-        <canvas class="nav-symbol" width="260" height="260" aria-hidden="true"></canvas>
-        <span class="nav-label">Tools</span>
-      </a>
-      <!-- Temporarily unlinked — no Craft page exists yet. -->
-      <div class="nav-item" data-symbol="triangle">
+      <a class="nav-item" href="craft.html" data-symbol="triangle">
         <canvas class="nav-symbol" width="260" height="260" aria-hidden="true"></canvas>
         <span class="nav-label">Craft</span>
-      </div>
+      </a>
       <a class="nav-item" href="connect.html" data-symbol="plus">
         <canvas class="nav-symbol" width="260" height="260" aria-hidden="true"></canvas>
         <span class="nav-label">Connect</span>
@@ -248,7 +251,7 @@
     <canvas width="260" height="260" aria-hidden="true"></canvas>
   </button>
 
-  <script src="particles.js"></script>
+  <script src="particles.js?v=20260923-4"></script>
   <script>
     // ─────────── particle symbol renderer ───────────
     // Each nav-item's canvas draws a symbol as a cloud of small ink dots that
@@ -305,11 +308,6 @@
 
       if (kind === 'circle') {
         fillRing(CENTER, CENTER, 78, T);
-      }
-
-      if (kind === 'minus') {
-        const halfLen = 80;
-        fillLine(CENTER - halfLen, CENTER, CENTER + halfLen, CENTER, T);
       }
 
       if (kind === 'triangle') {

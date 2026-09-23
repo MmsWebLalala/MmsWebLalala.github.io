@@ -6,11 +6,12 @@
   --shell-ink: #1d2020;
   --shell-soft: #5c6262;
   --shell-line: #c7cdce;
-  --shell-accent: #e04b00;
-  /* Darker orange for small/normal-size text on --shell-bg: #e04b00 only hits 3.7:1
-     there (fails WCAG AA's 4.5:1 for text), while large headline sizes are exempt
-     at the 3:1 large-text threshold and keep using --shell-accent directly. */
-  --shell-accent-text: #be3f00;
+  /* One teal accent site-wide — the same hue as the "Values & Personality"
+     keyword tag (--kw-amber) and the home page's nav hover. It clears WCAG AA
+     for normal text on --shell-bg (4.6:1), so headlines and small text share it;
+     dark mode lifts only the text variant (see below). */
+  --shell-accent: #067b85;
+  --shell-accent-text: #067b85;
   /* Same reasoning for the research keyword tags: their brighter hues only clear
      4.5:1 against the dark theme's near-black background, so light mode gets a
      darkened variant and dark mode keeps the original saturated hue. */
@@ -85,7 +86,7 @@ body > nav, body > footer { display: none !important; }
 
 /* The title sits directly on the page. Content, rather than every element,
    receives the quiet grey block treatment. */
-.pub-section, .tools-section {
+.pub-section, .works-section {
   width: 100% !important;
   max-width: none !important;
   margin: 0 0 var(--shell-gap) !important;
@@ -112,16 +113,16 @@ body > nav, body > footer { display: none !important; }
   border: 0 !important;
   box-shadow: none !important;
 }
-.page-header h1, .about-card h1, .chord-name, .kr-title {
+.page-header h1 {
   color: var(--shell-accent) !important;
   font-family: var(--shell-body) !important;
   font-weight: 600 !important;
   letter-spacing: -.035em !important;
   text-shadow: none !important;
 }
-.page-header h1, .about-card h1 { font-size: clamp(2.75rem, 5vw, 5.5rem) !important; line-height: .9 !important; margin: 0 0 1.4rem !important; text-wrap: balance; }
+.page-header h1 { font-size: clamp(2.75rem, 5vw, 5.5rem) !important; line-height: .9 !important; margin: 0 0 1.4rem !important; text-wrap: balance; }
 .page-header > p.research-intro, .page-header > p.page-intro { text-wrap: pretty; }
-.page-header p:not(.section-label), .about-bio, .music-desc, .music-subtitle, .chord-label, .chord-detail, .kf-hint, .kf-empty, .kr-notes {
+.page-header p:not(.section-label) {
   color: var(--shell-soft) !important;
   font-family: var(--shell-body) !important;
 }
@@ -204,27 +205,70 @@ body > nav, body > footer { display: none !important; }
 .pub-text a { color: var(--shell-accent-text) !important; overflow-wrap: anywhere; }
 .pub-tags { width: 100% !important; margin: .35rem 0 0 !important; }
 
-/* Tools: card-block treatment. */
-.tools-list { gap: var(--shell-gap) !important; }
-.tool-item {
-  grid-template-columns: minmax(170px, 34%) 1fr !important;
-  gap: clamp(1rem, 3vw, 2.4rem) !important;
-  padding: clamp(1.25rem, 3vw, 2.4rem) !important;
-  border: 0 !important;
-  border-radius: var(--shell-radius) !important;
-  background: var(--shell-card) !important;
-  box-shadow: none !important;
+/* Card grid shared by Craft and Connect: equal cards with a square preview on
+   top — the square fits an album cover, an app icon or a line mark as-is. A
+   card with somewhere to go is an <a class="work-card">; one without stays a
+   static <div>. */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  gap: var(--shell-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
-.tool-item:hover { background: var(--shell-card-muted) !important; }
-.tool-preview { border-radius: calc(var(--shell-radius) - .35rem) !important; background: var(--shell-card-muted) !important; }
-.tool-item:hover .tool-preview { background: var(--shell-bg) !important; }
-.tool-title { color: var(--shell-ink) !important; font-size: clamp(1.4rem, 2.6vw, 2rem) !important; }
-.tool-desc { color: var(--shell-soft) !important; }
-.tool-cta { color: var(--shell-accent-text) !important; }
-.tool-item:hover .tool-cta { color: var(--shell-accent) !important; }
+:where(.work-card p, .work-card h2, .work-card h3) { margin: 0; }
+.work-card {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  height: 100%;
+  padding: clamp(1rem, 2vw, 1.4rem);
+  border-radius: var(--shell-radius);
+  background: var(--shell-card);
+  color: inherit;
+  text-decoration: none;
+  transition: background-color .2s ease;
+}
+.work-preview {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  border-radius: calc(var(--shell-radius) - .35rem);
+  background: var(--shell-card-muted);
+  color: var(--shell-ink);
+  transition: background-color .2s ease;
+}
+.work-preview svg { width: 52%; height: auto; display: block; }
+.work-preview .accent { color: var(--shell-accent); }
+.work-kind {
+  color: var(--shell-accent-text);
+  font: 500 .72rem/1 var(--shell-mono);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+.work-title {
+  margin-top: -.45rem;
+  color: var(--shell-ink);
+  font: 700 clamp(1.25rem, 2.2vw, 1.6rem)/1.2 var(--shell-mono);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.work-status {
+  margin-top: auto;
+  color: var(--shell-soft);
+  font: 500 .78rem/1 var(--shell-mono);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+a.work-card .work-status { color: var(--shell-accent-text); }
+a.work-card:hover { background: var(--shell-card-muted); }
+a.work-card:hover .work-preview { background: var(--shell-bg); }
+a.work-card:hover .work-status { color: var(--shell-accent); }
 
-/* About and the interactive tool receive the same enclosed work-surface. */
-body > main, .main {
+/* About receives an enclosed work-surface. */
+body > main {
   width: 100% !important;
   max-width: none !important;
   margin: 0 0 var(--shell-gap) !important;
@@ -236,28 +280,6 @@ body > main, .main {
   border-radius: var(--shell-radius) !important;
   box-shadow: none !important;
 }
-.about-card { max-width: 42rem !important; align-items: flex-start !important; text-align: left !important; }
-.about-intro { width: 100%; margin: 0 0 var(--shell-gap); padding: 0 var(--shell-title-inset); }
-.avatar-wrap { border-radius: calc(var(--shell-radius) - .35rem) !important; border-color: var(--shell-line) !important; }
-.about-bio { max-width: 35rem; font-size: 1rem !important; line-height: 1.75 !important; }
-.about-bio strong { color: var(--shell-ink) !important; }
-.divider { background: var(--shell-line) !important; margin-left: 0 !important; }
-.social-icons { justify-content: flex-start !important; }
-.social-icon { border-radius: 0 !important; border-color: var(--shell-line) !important; background: transparent !important; color: var(--shell-ink) !important; }
-.social-icon:hover { background: var(--shell-ink) !important; color: var(--shell-card) !important; border-color: var(--shell-ink) !important; }
-
-.main { min-height: 0 !important; }
-.tabs, .selector-row, .diatonic-row { justify-content: flex-start !important; }
-.tab-btn, .sel-btn {
-  border-color: var(--shell-line) !important;
-  border-radius: 0 !important;
-  background: transparent !important;
-  color: var(--shell-ink) !important;
-  font-family: var(--shell-mono) !important;
-}
-.tab-btn.active, .sel-btn.active { background: var(--shell-ink) !important; border-color: var(--shell-ink) !important; color: var(--shell-card) !important; }
-.chord-card, .kr-card, .key-match { border-color: var(--shell-line) !important; border-radius: calc(var(--shell-radius) - .35rem) !important; background: var(--shell-card-muted) !important; box-shadow: none !important; }
-.chord-detail b, .kr-deg-note { color: var(--shell-ink) !important; }
 
 /* Fixed right rail: Mm returns home; the arrow only appears after scrolling. */
 .shell-card {
@@ -299,11 +321,10 @@ body > main, .main {
 @media (max-width: 720px) {
   :root { --shell-edge: var(--shell-gutter); --shell-mark-width: 70px; --shell-gutter: .5rem; --shell-title-inset: .75rem; --shell-radius: 1rem; --shell-gap: .65rem; --symbol-particle-density: .65; }
   body { padding: .8rem calc(var(--shell-edge) + var(--shell-mark-width) + var(--shell-gutter)) var(--shell-pad-bottom) var(--shell-gutter) !important; }
-  .page-header, .pub-section, .tools-section, body > main, .main { margin-bottom: 1rem !important; }
+  .page-header, .pub-section, .works-section, body > main { margin-bottom: 1rem !important; }
   .page-header { min-height: 0 !important; padding-top: 3.5rem !important; }
-  .page-header h1, .about-card h1 { font-size: clamp(2.75rem, 14vw, 4.5rem) !important; }
+  .page-header h1 { font-size: clamp(2.75rem, 14vw, 4.5rem) !important; }
   .page-header > p.research-intro, .page-header > p.page-intro { font-size: clamp(1.5rem, 7vw, 2.1rem) !important; line-height: 1.3 !important; }
-  .tool-item { grid-template-columns: 1fr !important; }
 }
 
 /* One dark palette, keyed off the attribute only. The <head> boot script sets
@@ -317,7 +338,7 @@ html[data-theme="dark"] {
   --shell-ink: #e2e3e2;
   --shell-soft: #7a7e7e;
   --shell-line: #2e3232;
-  --shell-accent-text: #e04b00;
+  --shell-accent-text: #0799a5;
   --kw-amber: #0799a5;
   --kw-red: #758d39;
   --kw-violet: #de5723;

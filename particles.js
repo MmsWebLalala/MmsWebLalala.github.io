@@ -72,12 +72,54 @@ window.MmParticles = (function () {
     return points.sort(() => Math.random() - .5);
   }
 
+  // Samples any drawing into a cloud on the same grid as the Mm mark. `draw`
+  // receives a SIZE×SIZE 2D context and two callbacks — ink() and accent() —
+  // that switch which layer the following fills and strokes land on; accent
+  // points come back flagged so the cloud can colour them separately.
+  function sampleDrawing(draw, step) {
+    const layers = { ink: [], accent: [] };
+    const stencil = document.createElement('canvas');
+    stencil.width = SIZE;
+    stencil.height = SIZE;
+    const context = stencil.getContext('2d', { willReadFrequently: true });
+    for (const layer of Object.keys(layers)) {
+      context.clearRect(0, 0, SIZE, SIZE);
+      context.fillStyle = context.strokeStyle = '#000';
+      context.save();
+      // Drawing on the other layer still happens, just at zero alpha, so the
+      // callback never has to know which pass it is in. Ink is the default.
+      context.globalAlpha = layer === 'ink' ? 1 : 0;
+      draw(context, {
+        ink: () => { context.globalAlpha = layer === 'ink' ? 1 : 0; },
+        accent: () => { context.globalAlpha = layer === 'accent' ? 1 : 0; }
+      });
+      context.restore();
+      const pixels = context.getImageData(0, 0, SIZE, SIZE).data;
+      for (let y = 0; y < SIZE; y += step) {
+        for (let x = 0; x < SIZE; x += step) {
+          if (pixels[(Math.round(y) * SIZE + Math.round(x)) * 4 + 3] > 180) {
+            layers[layer].push({ x: x + (Math.random() - .5), y: y + (Math.random() - .5), accent: layer === 'accent' });
+          }
+        }
+      }
+    }
+    return layers.ink.concat(layers.accent).sort(() => Math.random() - .5);
+  }
+
   // getColor is a function, not a value, so each page keeps reading its own ink
-  // variable and the cloud recolours itself when the theme flips.
+  // variable and the cloud recolours itself when the theme flips. getAccent is
+  // optional and only used for points sampled with the accent flag.
+  //
+  // `scale` is for clouds shown far smaller than the Mm mark: the canvas is
+  // always SIZE px inside, so a small icon would shrink its dots and motion to
+  // dust. Sample with glyphStep × scale and pass the same scale here, and the
+  // dots, their spacing and their movement read at the Mm mark's size on screen.
   class ParticleCloud {
-    constructor(canvas, points, getColor) {
+    constructor(canvas, points, getColor, getAccent, { scale = 1 } = {}) {
       this.context = canvas.getContext('2d');
       this.getColor = getColor;
+      this.getAccent = getAccent || getColor;
+      this.scale = scale;
       this.points = points.map((point) => ({
         ...point,
         phase: Math.random() * Math.PI * 2,
@@ -101,21 +143,23 @@ window.MmParticles = (function () {
       this.hover += (this.hoverTarget - this.hover) * .08;
       this.time += .025;
       this.context.clearRect(0, 0, SIZE, SIZE);
-      this.context.fillStyle = this.getColor();
+      const ink = this.getColor();
+      const accent = this.getAccent();
       this.points.forEach((point) => {
+        this.context.fillStyle = point.accent ? accent : ink;
         const movement = this.reducedMotion ? 0
-          : Math.sin(this.time * 1.5 + point.phase) * (1.1 + this.hover * 3)
-            + this.hover * (5 + Math.sin(this.time + point.phase) * 3);
+          : (Math.sin(this.time * 1.5 + point.phase) * (1.1 + this.hover * 3)
+            + this.hover * (5 + Math.sin(this.time + point.phase) * 3)) * this.scale;
         this.context.beginPath();
         this.context.arc(
           point.x + Math.cos(point.direction) * movement,
           point.y + Math.sin(point.direction) * movement,
-          1.35 + this.hover * .55, 0, Math.PI * 2
+          (1.35 + this.hover * .55) * this.scale, 0, Math.PI * 2
         );
         this.context.fill();
       });
     }
   }
 
-  return { SIZE, glyphStep, sampleMmMark, ParticleCloud };
+  return { SIZE, glyphStep, sampleMmMark, sampleDrawing, ParticleCloud };
 })();

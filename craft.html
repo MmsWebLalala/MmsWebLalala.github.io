@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Craft — Mm'sWeb</title>
+  <meta name="description" content="Things I make — apps, music, and plugins." />
+  <link rel="icon" href="Image/mm-logo-icon.png" type="image/png" />
+  <script>(function(){var t=localStorage.getItem('mm-theme');if(t)document.documentElement.setAttribute('data-theme',t);else if(window.matchMedia('(prefers-color-scheme:dark)').matches)document.documentElement.setAttribute('data-theme','dark')})()</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shell.css?v=20260923-4" />
+  <script src="particles.js?v=20260923-4" defer></script>
+  <script src="shell.js" defer></script>
+</head>
+<body>
+
+  <header class="page-header">
+    <p class="section-label">Works</p>
+    <h1>Craft</h1>
+    <p class="page-intro">Apps, music, and plugins.</p>
+  </header>
+
+  <section class="works-section" aria-label="Works">
+    <ul class="card-grid">
+
+      <li>
+        <div class="work-card">
+          <div class="work-preview">
+            <!-- 4×4 pad grid -->
+            <svg viewBox="0 0 100 100" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3">
+              <rect x="2" y="2" width="96" height="96" rx="9"/>
+              <g stroke-width="2.5">
+                <rect x="9"  y="9"  width="16" height="16" rx="2.5"/><rect x="31" y="9"  width="16" height="16" rx="2.5"/><rect x="53" y="9"  width="16" height="16" rx="2.5" class="accent" fill="currentColor"/><rect x="75" y="9"  width="16" height="16" rx="2.5"/>
+                <rect x="9"  y="31" width="16" height="16" rx="2.5"/><rect x="31" y="31" width="16" height="16" rx="2.5" class="accent" fill="currentColor"/><rect x="53" y="31" width="16" height="16" rx="2.5"/><rect x="75" y="31" width="16" height="16" rx="2.5"/>
+                <rect x="9"  y="53" width="16" height="16" rx="2.5"/><rect x="31" y="53" width="16" height="16" rx="2.5"/><rect x="53" y="53" width="16" height="16" rx="2.5"/><rect x="75" y="53" width="16" height="16" rx="2.5" class="accent" fill="currentColor"/>
+                <rect x="9"  y="75" width="16" height="16" rx="2.5"/><rect x="31" y="75" width="16" height="16" rx="2.5"/><rect x="53" y="75" width="16" height="16" rx="2.5"/><rect x="75" y="75" width="16" height="16" rx="2.5"/>
+              </g>
+            </svg>
+          </div>
+          <p class="work-kind">App</p>
+          <h2 class="work-title">MIDI Box</h2>
+          <p class="work-status">Coming Soon</p>
+        </div>
+      </li>
+
+      <li>
+        <div class="work-card">
+          <div class="work-preview">
+            <!-- vinyl record -->
+            <svg viewBox="0 0 100 100" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3">
+              <circle cx="50" cy="50" r="46"/>
+              <circle cx="50" cy="50" r="36" stroke-width="1.5" opacity=".55"/>
+              <circle cx="50" cy="50" r="28" stroke-width="1.5" opacity=".55"/>
+              <circle cx="50" cy="50" r="16" class="accent" fill="currentColor" stroke="none"/>
+              <circle cx="50" cy="50" r="3" fill="var(--shell-card-muted)" stroke="none"/>
+            </svg>
+          </div>
+          <p class="work-kind">Music</p>
+          <h2 class="work-title">Album</h2>
+          <p class="work-status">Coming Soon</p>
+        </div>
+      </li>
+
+      <li>
+        <div class="work-card">
+          <div class="work-preview">
+            <!-- linked notes graph -->
+            <svg viewBox="0 0 100 100" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3">
+              <path d="M50 50 L18 22 M50 50 L84 28 M50 50 L24 82 M50 50 L80 76 M18 22 L84 28 M24 82 L80 76" stroke-width="2" opacity=".55"/>
+              <circle cx="18" cy="22" r="8" fill="var(--shell-card-muted)"/>
+              <circle cx="84" cy="28" r="8" fill="var(--shell-card-muted)"/>
+              <circle cx="24" cy="82" r="8" fill="var(--shell-card-muted)"/>
+              <circle cx="80" cy="76" r="8" fill="var(--shell-card-muted)"/>
+              <circle cx="50" cy="50" r="13" class="accent" fill="currentColor" stroke="none"/>
+            </svg>
+          </div>
+          <p class="work-kind">Obsidian Plugin</p>
+          <h2 class="work-title">Academic RAG</h2>
+          <p class="work-status">Coming Soon</p>
+        </div>
+      </li>
+
+    </ul>
+  </section>
+
+  <p class="site-footer">© 2026 Mm's Studio. All rights reserved.</p>
+
+</body>
+</html>
