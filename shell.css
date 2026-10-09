@@ -189,6 +189,8 @@ body > nav, body > footer { display: none !important; }
 .page-header .kw-list > .kw-tag.amber[aria-pressed="true"] { background: var(--kw-amber) !important; }
 .page-header .kw-list > .kw-tag.red[aria-pressed="true"] { background: var(--kw-red) !important; }
 .page-header .kw-list > .kw-tag.violet[aria-pressed="true"] { background: var(--kw-violet) !important; }
+.pub-count { flex-basis: 100%; margin-top: .2rem; color: var(--shell-soft); font: 500 .72rem/1 var(--shell-mono); letter-spacing: .08em; text-transform: uppercase; }
+.pub-self { font-weight: 700; }
 .pub-item[hidden] { display: none !important; }
 .pub-entry[hidden] { display: none !important; }
 @media (prefers-reduced-motion: no-preference) {

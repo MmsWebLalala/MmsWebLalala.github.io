@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="51 -115 700 700">
+  <!-- design/logo-01 geometry, cropped to a square around the mark (x 55–747,
+       y 60–410). The ink flips to paper on dark browser chrome. -->
+  <style>
+    path { fill: #1D2020; }
+    @media (prefers-color-scheme: dark) { path { fill: #F4F5F4; } }
+  </style>
+  <path d="M 55 410 L 55 89 Q 55 60 84 60 Q 98 60 110 73 L 230 192 L 350 73 Q 363 60 384 60 Q 410 60 410 86 L 410 236 C 428 216 445 210 464 210 C 505 210 525 225 552 244 C 575 218 601 210 625 210 C 672 210 710 247 710 294 L 710 410 L 636 410 L 636 301 C 636 273 623 260 594 260 C 565 260 552 274 552 301 L 552 410 L 480 410 L 480 301 C 480 273 465 260 445 260 C 425 260 410 274 410 301 L 410 410 L 336 410 L 336 194 L 244 286 Q 230 300 216 286 L 125 194 L 125 410 Z"/>
+  <circle cx="700" cy="162" r="47" fill="#067B85"/>
+</svg>

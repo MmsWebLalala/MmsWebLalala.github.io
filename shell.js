@@ -1,6 +1,9 @@
 // Shared inner-page shell: Mm returns home; a particle arrow appears when needed.
 (function () {
   const { SIZE, glyphStep, sampleMmMark, ParticleCloud } = window.MmParticles;
+  // Resolved against this script rather than the page, so the home link still
+  // works from 404.html, which GitHub Pages serves at whatever path was missing.
+  const HOME = new URL('index.html', document.currentScript.src).href;
   const density = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--symbol-particle-density')) || 1;
   const GLYPH_STEP = glyphStep(density);
   let shellInk = getComputedStyle(document.documentElement).getPropertyValue('--shell-ink').trim() || '#1d2020';
@@ -53,7 +56,7 @@
     document.body.appendChild(top);
 
     const card = document.createElement('a');
-    card.href = 'index.html';
+    card.href = HOME;
     card.className = 'shell-card';
     card.setAttribute('aria-label', 'Back to home');
     card.innerHTML = `<canvas class="shell-card-symbol" width="${SIZE}" height="${SIZE}" aria-hidden="true"></canvas>`;
