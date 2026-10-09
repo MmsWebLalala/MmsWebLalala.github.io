@@ -206,7 +206,7 @@
       .page-header h1 { font-size: clamp(2rem, 10vw, 3rem); }
     }
   </style>
-  <link rel="stylesheet" href="shell.css?v=20261009" />
+  <link rel="stylesheet" href="shell.css?v=20261009b" />
   <script src="particles.js?v=20260923-4" defer></script>
   <script src="shell.js?v=20261009" defer></script>
 </head>
@@ -441,13 +441,12 @@
       pubRail.style.height = Math.max(0, bottom - top) + 'px';
     }
 
-    // Live count under the pills; aria-live announces it after each toggle.
+    // Count under the pills, only while a filter is on; aria-live announces it
+    // after each toggle.
     const pubCount = document.querySelector('.pub-count');
     function updateCount() {
       const shown = Array.from(pubEntries).filter((entry) => !entry.hidden).length;
-      pubCount.textContent = activeFilter
-        ? `Showing ${shown} of ${pubEntries.length} publications`
-        : `${pubEntries.length} publications`;
+      pubCount.textContent = activeFilter ? `Showing ${shown} of ${pubEntries.length} publications` : '';
     }
 
     function applyFilter() {
