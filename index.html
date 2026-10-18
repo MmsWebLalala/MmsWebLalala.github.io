@@ -24,11 +24,12 @@
       /* Matches the inner pages exactly, so the Mm mark never jumps on navigation. */
       --shell-gutter: clamp(.5rem, .8vw, 1rem);
       --shell-edge: var(--shell-gutter);
-      /* Fixed, not vw-fluid: must exactly match .nav-symbol's 130px so the Mm
+      /* Fixed, not vw-fluid: must exactly match .nav-symbol's 84px so the Mm
          mark's particle cloud renders at the same physical size — and thus
          the same visual dot density — as the three nav symbols below it. */
-      --shell-mark-width: 130px;
-      --shell-top-width: clamp(3rem, 5vw, 4rem);
+      --shell-mark-width: 84px;
+      --shell-top-width: 2.4rem;
+      --dot: rgba(29, 32, 32, .3);
       --shell-rail-center: calc((var(--shell-edge) + var(--shell-mark-width) + var(--shell-gutter)) / 2);
       --font-body: 'DM Sans', 'Noto Sans SC', -apple-system, sans-serif;
       --font-mono: 'JetBrains Mono', ui-monospace, monospace;
@@ -36,7 +37,11 @@
 
     html, body {
       height: 100%;
-      background: var(--bg);
+      background-color: var(--bg);
+      /* Dot grid — the same measuring surface as the inner pages. */
+      background-image: radial-gradient(var(--dot) 1.2px, transparent 1.5px);
+      background-size: 24px 24px;
+      background-position: 12px 12px;
       color: var(--ink);
       font-family: var(--font-body);
       -webkit-font-smoothing: antialiased;
@@ -88,10 +93,10 @@
        Every item has the same height (symbol + gap + fixed-height label), so
        that centre distance is item height + row gap — solve for the gap. */
     .nav-grid {
-      --sym: 130px;
-      --item-gap: 1.1rem;
-      --label-h: 1.1rem;
-      --col-gap: clamp(5rem, 12vw, 10rem);
+      --sym: 84px;
+      --item-gap: .9rem;
+      --label-h: .8rem;
+      --col-gap: clamp(6rem, 11vw, 9rem);
       --d: calc(var(--sym) + var(--col-gap));
       display: grid;
       grid-template-columns: repeat(2, var(--sym));
@@ -122,10 +127,10 @@
 
     .nav-label {
       font-family: var(--font-mono);
-      font-size: 0.86rem;
+      font-size: 0.62rem;
       line-height: var(--label-h);
-      font-weight: 700;
-      letter-spacing: 0.22em;
+      font-weight: 500;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
       white-space: nowrap;
       color: var(--ink);
@@ -135,16 +140,16 @@
     .nav-item:hover .nav-label { color: var(--accent); }
 
     .site-caption {
-      margin-top: clamp(2.5rem, 4vw, 3.5rem);
+      margin-top: 3.5rem;
       color: var(--ink-soft);
       font-family: var(--font-mono);
-      font-size: clamp(0.68rem, 1vw, 0.82rem);
-      letter-spacing: 0.08em;
+      font-size: 0.58rem;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
     }
 
     .site-caption + .site-caption {
-      margin-top: 0.4rem;
+      margin-top: 0.5rem;
     }
 
     /* ══════════ FOOTER ══════════ */
@@ -159,7 +164,7 @@
       text-align: center;
       color: var(--ink-soft);
       font-family: var(--font-body);
-      font-size: 0.78rem;
+      font-size: 0.66rem;
       font-weight: 300;
     }
 
@@ -186,12 +191,12 @@
 
     /* ══════════ RESPONSIVE ══════════ */
     @media (max-width: 720px) {
-      :root { --shell-gutter: .5rem; --shell-edge: var(--shell-gutter); --shell-mark-width: 70px; --shell-top-width: 2.6rem; --symbol-particle-density: .65; }
+      :root { --shell-gutter: .5rem; --shell-edge: var(--shell-gutter); --shell-mark-width: 56px; --shell-top-width: 2rem; --symbol-particle-density: .65; }
     }
 
     @media (max-width: 640px) {
-      .nav-grid { --sym: 92px; --col-gap: 4.5rem; --label-h: 1rem; }
-      .nav-label { font-size: 0.74rem; letter-spacing: 0.18em; }
+      .nav-grid { --sym: 68px; --col-gap: 4.5rem; --label-h: .8rem; }
+      .nav-label { font-size: 0.58rem; letter-spacing: 0.18em; }
 
       .stage { min-height: 100vh; min-height: 100dvh; padding: 4rem 1rem 2rem; }
     }
@@ -201,6 +206,7 @@
        below keeps it current, so a prefers-color-scheme copy would be dead weight. */
     html[data-theme="dark"] {
       --bg: #111211; --ink: #e2e3e2; --ink-soft: #7a7e7e; --accent: #0799a5;
+      --dot: rgba(226, 227, 226, .12);
     }
     html[data-theme="dark"] body::after { mix-blend-mode: screen; opacity: 0.12; }
 

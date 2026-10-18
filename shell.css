@@ -6,6 +6,10 @@
   --shell-ink: #1d2020;
   --shell-soft: #5c6262;
   --shell-line: #c7cdce;
+  /* Cards are lifted off the page as white sheets with a hairline edge, and
+     the page itself is a dot grid — a measuring surface rather than flat grey. */
+  --shell-surface: #ffffff;
+  --shell-dot: rgba(29, 32, 32, .3);
   /* One teal accent site-wide — the same hue as the "Values & Personality"
      keyword tag (--kw-amber) and the home page's nav hover. It clears WCAG AA
      for normal text on --shell-bg (4.6:1), so headlines and small text share it;
@@ -20,15 +24,16 @@
   --kw-violet: #c04a1d;
   --shell-mono: 'JetBrains Mono', ui-monospace, monospace;
   --shell-body: 'DM Sans', 'Noto Sans SC', -apple-system, sans-serif;
-  /* Grey blocks sit close to the browser edge, like the MAD reference. */
   --shell-gutter: clamp(.5rem, .8vw, 1rem);
-  --shell-title-inset: clamp(1rem, 1.2vw, 1.35rem);
   --shell-edge: var(--shell-gutter);
-  /* Fixed, not vw-fluid: matches the home page's .nav-symbol at 130px so the
+  /* Fixed, not vw-fluid: matches the home page's .nav-symbol at 84px so the
      Mm mark is the same physical size (and same particle density) whether
      it's floating over the nav grid or pinned to the corner of an inner page. */
-  --shell-mark-width: 130px;
-  --shell-top-width: clamp(3rem, 5vw, 4rem);
+  --shell-mark-width: 84px;
+  --shell-top-width: 2.4rem;
+  /* Content sits in one centred column with air on both sides, so every block
+     keeps a fixed, deliberate size instead of stretching with the window. */
+  --shell-col: 58rem;
   --shell-radius: clamp(.85rem, 1.2vw, 1.15rem);
   --shell-gap: clamp(.65rem, 1.2vw, 1rem);
   /* Room below the last card — sized to clear the *top* of the fixed arrow
@@ -58,6 +63,11 @@ html {
   background: var(--shell-bg) !important;
   scroll-behavior: smooth;
 }
+html, body {
+  background-image: radial-gradient(var(--shell-dot) 1.2px, transparent 1.5px) !important;
+  background-size: 24px 24px !important;
+  background-position: 12px 12px !important;
+}
 
 /* Kill the default mobile WebKit/Chrome tap-highlight rectangle — our own
    hover/active/focus states already give feedback, and the browser default
@@ -78,18 +88,24 @@ body {
   position: relative;
   /* A compact right rail lets the MM mark sit outside the content blocks. */
   padding: clamp(1rem, 2.5vw, 2rem) calc(var(--shell-edge) + var(--shell-mark-width) + var(--shell-gutter)) var(--shell-pad-bottom) var(--shell-gutter) !important;
-  background: var(--shell-bg) !important;
+  background-color: var(--shell-bg) !important;
   color: var(--shell-ink) !important;
   font-family: var(--shell-body) !important;
 }
 body > nav, body > footer { display: none !important; }
 
+.page-header, body > section, body > main {
+  max-width: var(--shell-col) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
 /* The title sits directly on the page. Content, rather than every element,
    receives the quiet grey block treatment. */
 .pub-section, .works-section {
   width: 100% !important;
-  max-width: none !important;
-  margin: 0 0 var(--shell-gap) !important;
+  margin-top: 0 !important;
+  margin-bottom: var(--shell-gap) !important;
   padding: 0 !important;
   background: transparent !important;
   border: 0 !important;
@@ -101,10 +117,10 @@ body > nav, body > footer { display: none !important; }
 
 .page-header {
   width: 100% !important;
-  max-width: none !important;
   min-height: 0 !important;
-  margin: 0 0 var(--shell-gap) !important;
-  padding: clamp(3rem, 6vw, 6.25rem) var(--shell-title-inset) clamp(2rem, 4vw, 4rem) !important;
+  margin-top: 0 !important;
+  margin-bottom: var(--shell-gap) !important;
+  padding: clamp(5rem, 12vh, 9rem) 0 clamp(2.5rem, 5vh, 4rem) !important;
   display: flex !important;
   flex-direction: column;
   justify-content: flex-start;
@@ -114,13 +130,13 @@ body > nav, body > footer { display: none !important; }
   box-shadow: none !important;
 }
 .page-header h1 {
-  color: var(--shell-accent) !important;
+  color: var(--shell-accent-text) !important;
   font-family: var(--shell-body) !important;
   font-weight: 600 !important;
   letter-spacing: -.035em !important;
   text-shadow: none !important;
 }
-.page-header h1 { font-size: clamp(2.75rem, 5vw, 5.5rem) !important; line-height: .9 !important; margin: 0 0 1.4rem !important; text-wrap: balance; }
+.page-header h1 { font-size: clamp(4rem, 9vw, 8.5rem) !important; line-height: .85 !important; margin: 0 0 .9rem !important; letter-spacing: -.05em !important; text-wrap: balance; }
 .page-header > p.research-intro, .page-header > p.page-intro { text-wrap: pretty; }
 .page-header p:not(.section-label) {
   color: var(--shell-soft) !important;
@@ -128,23 +144,24 @@ body > nav, body > footer { display: none !important; }
 }
 .page-header > p:not(.section-label) { max-width: 39rem !important; font-size: clamp(.95rem, 1.4vw, 1.08rem) !important; line-height: 1.65 !important; }
 .section-label {
-  margin-bottom: 1.1rem !important;
+  margin-bottom: 1.2rem !important;
   color: var(--shell-accent-text) !important;
-  font: 500 .72rem/1 var(--shell-mono) !important;
-  letter-spacing: .14em !important;
+  font: 500 .6rem/1 var(--shell-mono) !important;
+  letter-spacing: .16em !important;
   text-transform: uppercase !important;
 }
 .page-header .section-label::before { content: none !important; display: none !important; }
 
-/* Shared inner-page title pattern: category → title → concise summary. */
-.page-header > .section-label { margin-bottom: .85rem !important; }
+/* Shared inner-page title pattern: category → title → concise summary. Only
+   the title is large; everything around it stays small so it reads as one
+   precise mark rather than a wall of headline. */
 .page-header h1 + p:not(.section-label) { margin-top: 0 !important; }
 .page-header > p.research-intro,
 .page-header > p.page-intro {
-  max-width: none !important;
-  color: #000 !important;
-  font: 600 clamp(2.75rem, 5vw, 5.5rem)/1.05 var(--shell-body) !important;
-  letter-spacing: -.035em !important;
+  max-width: 28rem !important;
+  color: var(--shell-ink) !important;
+  font: 400 clamp(1.05rem, 1.5vw, 1.35rem)/1.35 var(--shell-body) !important;
+  letter-spacing: -.01em !important;
 }
 .page-header.research-header { padding-bottom: clamp(.75rem, 1.5vw, 1.25rem) !important; }
 
@@ -167,24 +184,33 @@ body > nav, body > footer { display: none !important; }
 .pub-tags .kw-tag.amber::before { content: '+' !important; background: none !important; }
 .pub-tags .kw-tag.red::before { content: '▲' !important; background: none !important; font-size: .8em; }
 .pub-tags .kw-tag.violet::before { content: '●' !important; background: none !important; font-size: .78em; }
-.page-header .kw-heading,
 .page-header .kw-list > .kw-tag {
   font-family: var(--shell-body) !important;
-  font-size: 1rem !important;
+  font-size: .78rem !important;
   line-height: 1.5 !important;
 }
-.page-header .kw-heading { font-weight: 600 !important; letter-spacing: normal !important; }
+.page-header .kw-heading {
+  color: var(--shell-soft) !important;
+  font: 500 .6rem/1 var(--shell-mono) !important;
+  letter-spacing: .16em !important;
+  text-transform: uppercase;
+}
 .page-header .kw-list > .kw-tag {
   font-weight: 700 !important;
   cursor: pointer;
   padding: .3rem .8rem .3rem .55rem !important;
   border-radius: 999px !important;
-  transition: background-color .18s ease, color .18s ease;
+  /* White chips with a hairline edge: they read cleanly over the dot grid and
+     look like the buttons they are. */
+  background: var(--shell-surface) !important;
+  box-shadow: inset 0 0 0 1px var(--shell-line);
+  transition: background-color .18s ease, color .18s ease, box-shadow .18s ease;
 }
-.kw-badge { display: block; width: 1.5rem; height: 1.5rem; margin-right: .35rem; }
-.page-header .kw-list > .kw-tag:hover { background: var(--shell-card) !important; }
+.kw-badge { display: block; width: 1.1rem; height: 1.1rem; margin-right: .35rem; }
+.page-header .kw-list > .kw-tag:hover { box-shadow: inset 0 0 0 1px currentColor; }
 .page-header .kw-list > .kw-tag[aria-pressed="true"] {
   color: var(--shell-bg) !important;
+  box-shadow: none;
 }
 .page-header .kw-list > .kw-tag.amber[aria-pressed="true"] { background: var(--kw-amber) !important; }
 .page-header .kw-list > .kw-tag.red[aria-pressed="true"] { background: var(--kw-red) !important; }
@@ -201,21 +227,35 @@ body > nav, body > footer { display: none !important; }
   from { opacity: 0; transform: translateY(5px); }
   to { opacity: 1; transform: translateY(0); }
 }
-.pub-rail { background: var(--shell-line) !important; }
+/* Long-form reading sits on the same white sheet as the cards, so the dot grid
+   frames the list instead of running behind the citations. The edge is an
+   inset shadow rather than a border so the rail script's offsets stay exact. */
+.pub-section {
+  --pub-pad: clamp(1rem, 2.5vw, 1.75rem);
+  padding: var(--pub-pad) !important;
+  background: var(--shell-surface) !important;
+  border-radius: .7rem !important;
+  box-shadow: inset 0 0 0 1px var(--shell-line) !important;
+}
+.pub-rail { left: calc(var(--pub-pad) + 3px) !important; background: var(--shell-line) !important; }
 .pub-dot { background: var(--shell-accent-text) !important; }
-.pub-year { color: var(--shell-accent-text) !important; }
-.pub-text { color: var(--shell-ink) !important; line-height: 1.7 !important; }
+.pub-year { color: var(--shell-accent-text) !important; font-size: .6rem !important; }
+.pub-text { color: var(--shell-ink) !important; font-size: .86rem !important; line-height: 1.6 !important; }
 .pub-text a { color: var(--shell-accent-text) !important; overflow-wrap: anywhere; }
 .pub-tags { width: 100% !important; margin: .35rem 0 0 !important; }
+.pub-tags .kw-tag { font-size: .64rem !important; }
 
-/* Card grid shared by Craft and Connect: equal cards with a square preview on
-   top — the square fits an album cover, an app icon or a line mark as-is. A
-   card with somewhere to go is an <a class="work-card">; one without stays a
-   static <div>. */
+/* Card grid shared by Craft and Connect: fixed-width cards that never stretch
+   to fill the row, each a white sheet with a 4:3 preview on top. A card with
+   somewhere to go is an <a class="work-card">; one without stays a static
+   <div>. */
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
-  gap: var(--shell-gap);
+  grid-template-columns: repeat(auto-fill, minmax(0, 13.5rem));
+  /* Every row as tall as the tallest card, so cards with and without a link
+     or status line stay one uniform size even when they wrap to a new row. */
+  grid-auto-rows: 1fr;
+  gap: .75rem;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -225,56 +265,55 @@ body > nav, body > footer { display: none !important; }
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: 1.1rem;
+  gap: .5rem;
   height: 100%;
-  padding: clamp(1rem, 2vw, 1.4rem);
-  border-radius: var(--shell-radius);
-  background: var(--shell-card);
+  padding: .75rem .75rem 1rem;
+  border: 1px solid var(--shell-line);
+  border-radius: .7rem;
+  background: var(--shell-surface);
   color: inherit;
   text-decoration: none;
-  transition: background-color .2s ease;
+  transition: border-color .2s ease;
 }
 .work-preview {
   display: grid;
   place-items: center;
-  aspect-ratio: 1;
-  border-radius: calc(var(--shell-radius) - .35rem);
-  background: var(--shell-card-muted);
+  aspect-ratio: 4 / 3;
+  margin-bottom: .35rem;
   color: var(--shell-ink);
-  transition: background-color .2s ease;
+  /* The SVG marks punch holes with --shell-card-muted; point it at the card. */
+  --shell-card-muted: var(--shell-surface);
 }
-.work-preview svg { width: 52%; height: auto; display: block; }
+.work-preview svg { width: 38%; height: auto; display: block; }
 .work-preview .accent { color: var(--shell-accent); }
 .work-kind {
   color: var(--shell-accent-text);
-  font: 500 .72rem/1 var(--shell-mono);
-  letter-spacing: .14em;
+  font: 500 .58rem/1 var(--shell-mono);
+  letter-spacing: .16em;
   text-transform: uppercase;
 }
 .work-title {
-  margin-top: -.45rem;
   color: var(--shell-ink);
-  font: 700 clamp(1.25rem, 2.2vw, 1.6rem)/1.2 var(--shell-mono);
-  letter-spacing: .06em;
-  text-transform: uppercase;
+  font: 600 .95rem/1.2 var(--shell-body);
+  letter-spacing: -.01em;
 }
 .work-status {
   margin-top: auto;
+  padding-top: .6rem;
   color: var(--shell-soft);
-  font: 500 .78rem/1 var(--shell-mono);
-  letter-spacing: .1em;
+  font: 500 .6rem/1 var(--shell-mono);
+  letter-spacing: .14em;
   text-transform: uppercase;
 }
 a.work-card .work-status { color: var(--shell-accent-text); }
-a.work-card:hover { background: var(--shell-card-muted); }
-a.work-card:hover .work-preview { background: var(--shell-bg); }
+a.work-card:hover { border-color: var(--shell-accent); }
 a.work-card:hover .work-status { color: var(--shell-accent); }
 
 /* About receives an enclosed work-surface. */
 body > main {
   width: 100% !important;
-  max-width: none !important;
-  margin: 0 0 var(--shell-gap) !important;
+  margin-top: 0 !important;
+  margin-bottom: var(--shell-gap) !important;
   padding: clamp(1.5rem, 3.5vw, 3rem) !important;
   min-height: min(620px, calc(100vh - 4rem)) !important;
   display: block !important;
@@ -322,12 +361,12 @@ body > main {
 }
 
 @media (max-width: 720px) {
-  :root { --shell-edge: var(--shell-gutter); --shell-mark-width: 70px; --shell-gutter: .5rem; --shell-title-inset: .75rem; --shell-radius: 1rem; --shell-gap: .65rem; --symbol-particle-density: .65; }
+  :root { --shell-edge: var(--shell-gutter); --shell-mark-width: 56px; --shell-top-width: 2rem; --shell-gutter: .5rem; --shell-radius: 1rem; --shell-gap: .65rem; --symbol-particle-density: .65; }
   body { padding: .8rem calc(var(--shell-edge) + var(--shell-mark-width) + var(--shell-gutter)) var(--shell-pad-bottom) var(--shell-gutter) !important; }
   .page-header, .pub-section, .works-section, body > main { margin-bottom: 1rem !important; }
-  .page-header { min-height: 0 !important; padding-top: 3.5rem !important; }
-  .page-header h1 { font-size: clamp(2.75rem, 14vw, 4.5rem) !important; }
-  .page-header > p.research-intro, .page-header > p.page-intro { font-size: clamp(1.5rem, 7vw, 2.1rem) !important; line-height: 1.3 !important; }
+  .page-header { min-height: 0 !important; padding: 3.5rem 0 2rem !important; }
+  .page-header h1 { font-size: clamp(3rem, 16vw, 4.5rem) !important; }
+  .card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 /* One dark palette, keyed off the attribute only. The <head> boot script sets
@@ -341,10 +380,10 @@ html[data-theme="dark"] {
   --shell-ink: #e2e3e2;
   --shell-soft: #7a7e7e;
   --shell-line: #2e3232;
+  --shell-surface: #1a1b1a;
+  --shell-dot: rgba(226, 227, 226, .12);
   --shell-accent-text: #0799a5;
   --kw-amber: #0799a5;
   --kw-red: #758d39;
   --kw-violet: #de5723;
 }
-html[data-theme="dark"] .page-header > p.research-intro,
-html[data-theme="dark"] .page-header > p.page-intro { color: var(--shell-ink) !important; }

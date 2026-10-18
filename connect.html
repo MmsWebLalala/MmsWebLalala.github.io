@@ -12,64 +12,22 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="shell.css?v=20261009b" />
+  <link rel="stylesheet" href="shell.css?v=20261018" />
   <style>
-    /* ── Profile: who, then how to reach me ─────────────────────────────── */
-    .profile {
-      box-sizing: border-box;
-      display: grid;
-      grid-template-columns: auto 1fr;
-      align-items: center;
-      gap: clamp(1.25rem, 3vw, 2.4rem);
-      margin: 0 0 var(--shell-gap);
-      padding: clamp(1.25rem, 3vw, 2.4rem);
-      border-radius: var(--shell-radius);
-      background: var(--shell-card);
+    /* Profile is simply the first card in the grid, the same size as the rest:
+       the avatar takes the preview slot, contacts sit where a status would. */
+    .profile-preview img {
+      width: 46%; height: auto; aspect-ratio: 1; object-fit: cover; display: block;
+      border: 1px solid var(--shell-line); border-radius: .45rem;
     }
-
-    .profile-avatar {
-      width: clamp(96px, 12vw, 150px);
-      aspect-ratio: 1;
-      overflow: hidden;
-      border: 1px solid var(--shell-line);
-      border-radius: calc(var(--shell-radius) - .35rem);
-    }
-    .profile-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
-    .profile-bio {
-      margin: 0;
-      color: var(--shell-soft);
-      font: 400 1rem/1.75 var(--shell-body);
-    }
-
-    /* Icon-only contacts, each drawn as a particle cloud. Hover scatters the
-       dots and turns them teal — including Bandcamp, which has no page yet and
-       so is a plain element rather than a link. The negative left margin lines
-       the first glyph up with the bio text instead of its hover plate. */
-    .contact-icons {
-      display: flex;
-      gap: .35rem;
-      margin: 1.1rem 0 0 -.55rem;
-      padding: 0;
-      list-style: none;
-    }
-
+    .profile-note { margin: 0; color: var(--shell-soft); font: 400 .8rem/1.45 var(--shell-body); }
+    .contact-icons { display: flex; gap: .1rem; margin: auto 0 -.3rem -.4rem; padding: .4rem 0 0; list-style: none; }
     .contact-icon {
-      display: grid;
-      place-items: center;
-      width: 3.6rem;
-      height: 3.6rem;
-      border-radius: calc(var(--shell-radius) - .35rem);
-      transition: background-color .2s ease;
+      display: grid; place-items: center; width: 2.2rem; height: 2.2rem;
+      border-radius: .45rem; transition: background-color .2s ease;
     }
-    .contact-icon:hover { background: var(--shell-card-muted); }
-    .contact-icon canvas { width: 2.5rem; height: 2.5rem; display: block; }
-
-    @media (max-width: 560px) {
-      .profile { grid-template-columns: 1fr; align-items: start; }
-    }
-
-    .groups-label { margin: clamp(1.5rem, 3vw, 2.5rem) 0 1rem !important; padding: 0 var(--shell-title-inset); }
+    .contact-icon:hover { background: var(--shell-bg); }
+    .contact-icon canvas { width: 1.5rem; height: 1.5rem; display: block; }
   </style>
   <script src="particles.js?v=20260923-4" defer></script>
   <script src="shell.js?v=20261009" defer></script>
@@ -82,19 +40,17 @@
     <p class="page-intro">Personal profile and contact.</p>
   </header>
 
-  <section class="profile" aria-label="Profile">
-    <div class="profile-avatar">
-      <img src="Image/mm.webp" width="300" height="300" alt="Max">
-    </div>
-    <div>
-      <p class="profile-bio">
-        Hi, I'm Xingyang (Max) Ma (<span lang="zh">马星杨</span>).<br>
-        I'm an alien.<br>
-        Thank you for visiting 😉😉😉.
-      </p>
-      <!-- Each icon's glyph lives in data-icon (a 24×24 SVG path) and is drawn
-           as particles by the script below. -->
-      <ul class="contact-icons">
+  <section class="works-section" aria-label="Profile and groups">
+    <ul class="card-grid">
+      <li class="profile-li">
+        <div class="work-card profile-card">
+          <div class="work-preview profile-preview">
+            <img src="Image/mm.webp" width="300" height="300" alt="Max">
+          </div>
+          <p class="work-kind">Profile · <span lang="zh">马星杨</span></p>
+          <h2 class="work-title">Xingyang (Max) Ma</h2>
+          <p class="profile-note">I'm an alien. Thank you for visiting 😉😉😉</p>
+          <ul class="contact-icons">
         <li>
           <a class="contact-icon" href="https://scholar.google.com/citations?user=yq12VgYAAAAJ&hl=en" target="_blank" rel="noopener" aria-label="Google Scholar" title="Google Scholar">
             <canvas width="260" height="260" aria-hidden="true" data-icon="M12 24a7 7 0 1 1 0-14 7 7 0 0 1 0 14zm0-24L0 9.5l4.838 3.94A8 8 0 0 1 12 10a8 8 0 0 1 7.162 3.44L24 9.5z"></canvas>
@@ -111,12 +67,8 @@
           </a>
         </li>
       </ul>
-    </div>
-  </section>
-
-  <section aria-labelledby="groups-label">
-    <h2 class="section-label groups-label" id="groups-label">Groups</h2>
-    <ul class="card-grid">
+        </div>
+      </li>
 
       <li>
         <a class="work-card" href="https://www.srseair.com" target="_blank" rel="noopener">
@@ -150,10 +102,10 @@
         </div>
       </li>
 
+      <!-- Band — hidden for now; remove these comment markers to bring it back.
       <li>
         <div class="work-card">
           <div class="work-preview">
-            <!-- a waveform -->
             <svg viewBox="0 0 100 100" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round">
               <path d="M10 42 V58 M20 30 V70 M40 34 V66 M60 24 V76 M80 38 V62 M90 46 V54"/>
               <path class="accent" d="M30 16 V84 M50 6 V94 M70 20 V80"/>
@@ -163,6 +115,7 @@
           <h3 class="work-title">Do-Nothing Cooperative</h3>
         </div>
       </li>
+      -->
 
     </ul>
   </section>
@@ -178,8 +131,8 @@
       const { SIZE, glyphStep, sampleDrawing, ParticleCloud } = window.MmParticles;
       const root = document.documentElement;
       const density = parseFloat(getComputedStyle(root).getPropertyValue('--symbol-particle-density')) || 1;
-      // The Mm mark is drawn 130px wide on screen; match its on-screen dot size.
-      const MARK_WIDTH = 130;
+      // The Mm mark is drawn 84px wide on screen; match its on-screen dot size.
+      const MARK_WIDTH = 84;
 
       let ink, accent;
       const readColors = () => {
