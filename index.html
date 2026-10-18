@@ -35,6 +35,10 @@
       --font-mono: 'JetBrains Mono', ui-monospace, monospace;
     }
 
+    /* Same reserved scrollbar width as the inner pages, so the Mm mark sits
+       in exactly the same spot when navigating between them. */
+    html { scrollbar-gutter: stable; }
+
     html, body {
       height: 100%;
       background-color: var(--bg);

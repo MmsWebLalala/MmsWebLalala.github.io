@@ -34,6 +34,8 @@
   /* Content sits in one centred column with air on both sides, so every block
      keeps a fixed, deliberate size instead of stretching with the window. */
   --shell-col: 58rem;
+  /* Extra side air between the browser edge and the column on narrow screens. */
+  --shell-inset: .5rem;
   --shell-radius: clamp(.85rem, 1.2vw, 1.15rem);
   --shell-gap: clamp(.65rem, 1.2vw, 1rem);
   /* Room below the last card — sized to clear the *top* of the fixed arrow
@@ -62,6 +64,9 @@
 html {
   background: var(--shell-bg) !important;
   scroll-behavior: smooth;
+  /* Reserve the scrollbar's width on every page, long or short, so the
+     centred column and the Mm mark never shift between pages. */
+  scrollbar-gutter: stable;
 }
 html, body {
   background-image: radial-gradient(var(--shell-dot) 1.2px, transparent 1.5px) !important;
@@ -87,7 +92,10 @@ body {
      bottom of this box — including the reserved padding below, not past it. */
   position: relative;
   /* A compact right rail lets the MM mark sit outside the content blocks. */
-  padding: clamp(1rem, 2.5vw, 2rem) calc(var(--shell-edge) + var(--shell-mark-width) + var(--shell-gutter)) var(--shell-pad-bottom) var(--shell-gutter) !important;
+  /* Explicit margin: 0 — not every page resets the browser's default 8px body
+     margin, and the inset below is the only side spacing pages should get. */
+  margin: 0 !important;
+  padding: clamp(1rem, 2.5vw, 2rem) calc(var(--shell-edge) + var(--shell-mark-width) + var(--shell-gutter) + var(--shell-inset)) var(--shell-pad-bottom) calc(var(--shell-gutter) + var(--shell-inset)) !important;
   background-color: var(--shell-bg) !important;
   color: var(--shell-ink) !important;
   font-family: var(--shell-body) !important;
@@ -362,7 +370,7 @@ body > main {
 
 @media (max-width: 720px) {
   :root { --shell-edge: var(--shell-gutter); --shell-mark-width: 56px; --shell-top-width: 2rem; --shell-gutter: .5rem; --shell-radius: 1rem; --shell-gap: .65rem; --symbol-particle-density: .65; }
-  body { padding: .8rem calc(var(--shell-edge) + var(--shell-mark-width) + var(--shell-gutter)) var(--shell-pad-bottom) var(--shell-gutter) !important; }
+  body { padding: .8rem calc(var(--shell-edge) + var(--shell-mark-width) + var(--shell-gutter) + var(--shell-inset)) var(--shell-pad-bottom) calc(var(--shell-gutter) + var(--shell-inset)) !important; }
   .page-header, .pub-section, .works-section, body > main { margin-bottom: 1rem !important; }
   .page-header { min-height: 0 !important; padding: 3.5rem 0 2rem !important; }
   .page-header h1 { font-size: clamp(3rem, 16vw, 4.5rem) !important; }
