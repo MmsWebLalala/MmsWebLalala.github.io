@@ -1,6 +1,6 @@
 // Shared inner-page shell: Mm returns home; a particle arrow appears when needed.
 (function () {
-  const { SIZE, glyphStep, sampleMmMark, ParticleCloud } = window.MmParticles;
+  const { SIZE, glyphStep, sampleLogoMark, ParticleCloud } = window.MmParticles;
   // Resolved against this script rather than the page, so the home link still
   // works from 404.html, which GitHub Pages serves at whatever path was missing.
   const HOME = new URL('index.html', document.currentScript.src).href;
@@ -63,7 +63,8 @@
     document.body.appendChild(card);
 
     const ink = () => shellInk;
-    const mark = new ParticleCloud(card.querySelector('.shell-card-symbol'), sampleMmMark(GLYPH_STEP), ink);
+    const accent = () => getComputedStyle(document.documentElement).getPropertyValue('--shell-accent-text').trim() || '#067b85';
+    const mark = new ParticleCloud(card.querySelector('.shell-card-symbol'), sampleLogoMark(GLYPH_STEP), ink, accent);
     const arrow = new ParticleCloud(top.querySelector('.shell-top-symbol'), sampleArrow(), ink);
     mark.bindHover(card);
     arrow.bindHover(top);

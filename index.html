@@ -263,7 +263,7 @@
     <canvas width="260" height="260" aria-hidden="true"></canvas>
   </button>
 
-  <script src="particles.js?v=20260923-4"></script>
+  <script src="particles.js?v=20261028"></script>
   <script>
     // ─────────── particle symbol renderer ───────────
     // Each nav-item's canvas draws a symbol as a cloud of small ink dots that
@@ -490,8 +490,9 @@
     const floatingCard = document.querySelector('.mm-card');
     const floatingM = new MmParticles.ParticleCloud(
       floatingCard.querySelector('.mm-symbol'),
-      MmParticles.sampleMmMark(GLYPH_STEP),
-      () => particleInk
+      MmParticles.sampleLogoMark(GLYPH_STEP),
+      () => particleInk,
+      () => getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#067b85'
     );
     floatingM.bindHover(floatingCard);
 
