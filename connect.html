@@ -32,18 +32,24 @@
     /* Phones: the profile spans both columns as a wide card, avatar on the
        left and words on the right. Its height is exactly one column's width
        (the grid is a size container, so 100cqw is the grid's width), and the
-       avatar is a square filling that height. */
+       avatar is a square filling that height. The avatar column is given an
+       explicit width (the height minus the card's padding and border) rather
+       than auto: Safari sizes an auto column from the image's own 300px, which
+       squeezes the text column. */
     @media (max-width: 720px) {
       .works-section .card-grid { container-type: inline-size; }
       .profile-li { grid-column: 1 / -1; }
       .profile-card {
-        display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto auto 1fr;
-        column-gap: .9rem; row-gap: .3rem; overflow: hidden;
         /* Floor for the narrowest phones, where one column is too short for the text. */
-        height: max(calc((100cqw - .75rem) / 2), 7.75rem);
+        --profile-h: max(calc((100cqw - .75rem) / 2), 7.75rem);
+        display: grid; grid-template-rows: auto auto auto 1fr;
+        grid-template-columns: calc(var(--profile-h) - 1.75rem - 2px) minmax(0, 1fr);
+        column-gap: .9rem; row-gap: .3rem; overflow: hidden;
+        height: var(--profile-h);
       }
-      .profile-preview { grid-row: 1 / -1; height: 100%; width: auto; aspect-ratio: 1; margin: 0; }
+      .profile-preview { grid-row: 1 / -1; width: 100%; height: 100%; margin: 0; }
       .profile-preview img { width: 100%; height: 100%; }
+      .profile-card .work-kind { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
       .profile-card .work-title { font-size: .9rem; }
       .profile-note { font-size: .74rem; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
       .contact-icons { align-self: end; margin: 0 0 -.4rem -.4rem; padding: 0; }
