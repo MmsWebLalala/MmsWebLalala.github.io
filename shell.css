@@ -367,6 +367,8 @@ body > main {
   font-size: 0.78rem;
   font-weight: 300;
 }
+/* Only "max" is bold in the name; "minimalism" keeps the footer's weight. */
+.site-footer b { font-weight: 700; }
 
 @media (max-width: 720px) {
   :root { --shell-edge: var(--shell-gutter); --shell-mark-width: 56px; --shell-top-width: 2rem; --shell-gutter: .5rem; --shell-radius: 1rem; --shell-gap: .65rem; --symbol-particle-density: .65; }

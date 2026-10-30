@@ -11,7 +11,7 @@ window.MmParticles = (function () {
     return 1 / Math.sqrt(0.55 * 0.50 * (density || 1));
   }
 
-  // The Mm's Studio logo (design/logo-01, 01a soft faithful — the same paths
+  // The maxminimalism logo (design/logo-01, 01a soft faithful — the same paths
   // as Image/favicon.svg) sampled into a cloud. Its outline spans x 164–1096,
   // y 200–683 in the source file; it is fitted to a 244px width and centred.
   // The round dot is drawn on the accent layer so it can be teal.
