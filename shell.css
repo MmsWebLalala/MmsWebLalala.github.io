@@ -364,7 +364,7 @@ body > main {
   text-align: center;
   color: var(--shell-soft);
   font-family: var(--shell-body);
-  font-size: 0.78rem;
+  font-size: 0.7rem;
   font-weight: 300;
 }
 /* Only "max" is bold in the name; "minimalism" keeps the footer's weight. */
