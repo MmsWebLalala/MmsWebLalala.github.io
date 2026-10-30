@@ -1,2 +1,2 @@
-# MmsWebLalala.github.io
+# Maxminimalism.github.io
 Mm's website
