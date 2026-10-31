@@ -206,7 +206,7 @@
       .page-header h1 { font-size: clamp(2rem, 10vw, 3rem); }
     }
   </style>
-  <link rel="stylesheet" href="shell.css?v=20261030b" />
+  <link rel="stylesheet" href="shell.css?v=20261031" />
   <script src="particles.js?v=20261031" defer></script>
   <script src="shell.js?v=20261031" defer></script>
 </head>
@@ -329,7 +329,7 @@
     function sampleBadgePoints(shape) {
       const pts = [];
       const push = (x, y) => pts.push({ x, y });
-      const T = 6;
+      const T = 8;
 
       function fillLine(ax, ay, bx, by, thickness) {
         const dx = bx - ax, dy = by - ay;
@@ -404,7 +404,7 @@
         ctx.fillStyle = this.colorGetter();
         const waveAmp = REDUCED_MOTION ? 0 : 0.5 + this.hover * 1.6;
         const burstAmp = REDUCED_MOTION ? 0 : this.burst * 9;
-        const dotSize = 0.85 + this.hover * 0.25 + this.burst * 0.3;
+        const dotSize = 1.1 + this.hover * 0.25 + this.burst * 0.3;
         for (const p of this.particles) {
           const spatial = (p.tx - BADGE_CENTER) * 0.05 + (p.ty - BADGE_CENTER) * 0.05;
           const wave = Math.sin(this.t * 1.6 + p.phase + spatial);

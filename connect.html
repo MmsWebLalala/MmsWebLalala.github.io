@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="shell.css?v=20261030b" />
+  <link rel="stylesheet" href="shell.css?v=20261031" />
   <style>
     /* Profile is two Craft cards and their gap wide, at the same height, so every
        other card stays exactly Craft's size: the avatar is a square on the left
@@ -31,14 +31,13 @@
       border: 1px solid var(--shell-line); border-radius: .45rem;
     }
     .profile-note { margin: 0; color: var(--shell-soft); font: 400 .8rem/1.45 var(--shell-body); }
-    /* The icons take exactly the height of a Craft status line. */
-    .contact-icons { display: flex; gap: .1rem; margin: auto 0 -.4rem -.2rem; padding: 0; list-style: none; }
+    .contact-icons { display: flex; gap: .1rem; margin: auto 0 -.4rem -.45rem; padding: 0; list-style: none; }
     .contact-icon {
-      display: grid; place-items: center; width: 1.6rem; height: 1.6rem;
-      border-radius: .35rem; transition: background-color .2s ease;
+      display: grid; place-items: center; width: 2.2rem; height: 2.2rem;
+      border-radius: .45rem; transition: background-color .2s ease;
     }
     .contact-icon:hover { background: var(--shell-bg); }
-    .contact-icon canvas { width: 1.25rem; height: 1.25rem; display: block; }
+    .contact-icon canvas { width: 28px; height: 28px; display: block; }
 
     /* Phones: the profile spans both columns. Its height is exactly one column's
        width (the grid is a size container, so 100cqw is the grid's width). */
@@ -55,6 +54,10 @@
       .profile-card .work-kind { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
       .profile-card .work-title { font-size: .9rem; }
       .profile-note { font-size: .74rem; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+    }
+    /* The narrowest phones have no room left for the note once the name wraps. */
+    @media (max-width: 360px) {
+      .profile-note { display: none; }
     }
   </style>
   <script src="particles.js?v=20261031" defer></script>
