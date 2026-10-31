@@ -17,7 +17,7 @@
     }
   });
 
-  function sampleArrow() {
+  function sampleArrow(step) {
     // A single, filled arrow silhouette gives the sharp tip and clean shoulder
     // transitions that separate thick particle strokes cannot achieve.
     const outline = [
@@ -33,11 +33,11 @@
       }
       return hit;
     };
-    // Match Mm's sampling grid and per-area density so both marks carry the
-    // same visual weight as the nav symbols.
+    // Match Mm's per-area density on screen: `step` is scaled up with the dots,
+    // since the arrow is drawn far smaller than the mark.
     const points = [];
-    for (let y = 28; y <= 224; y += GLYPH_STEP) {
-      for (let x = 36; x <= 224; x += GLYPH_STEP) {
+    for (let y = 28; y <= 224; y += step) {
+      for (let x = 36; x <= 224; x += step) {
         if (inside(x, y)) points.push({ x: x + (Math.random() - .5), y: y + (Math.random() - .5) });
       }
     }
@@ -65,7 +65,9 @@
     const ink = () => shellInk;
     const accent = () => getComputedStyle(document.documentElement).getPropertyValue('--shell-accent-text').trim() || '#067b85';
     const mark = new ParticleCloud(card.querySelector('.shell-card-symbol'), sampleLogoMark(GLYPH_STEP), ink, accent);
-    const arrow = new ParticleCloud(top.querySelector('.shell-top-symbol'), sampleArrow(), ink);
+    const arrowCanvas = top.querySelector('.shell-top-symbol');
+    const arrowScale = card.querySelector('.shell-card-symbol').clientWidth / arrowCanvas.clientWidth;
+    const arrow = new ParticleCloud(arrowCanvas, sampleArrow(GLYPH_STEP * arrowScale), ink, null, { scale: arrowScale });
     mark.bindHover(card);
     arrow.bindHover(top);
 

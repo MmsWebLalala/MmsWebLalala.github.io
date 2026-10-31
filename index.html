@@ -265,7 +265,7 @@
     <canvas width="260" height="260" aria-hidden="true"></canvas>
   </button>
 
-  <script src="particles.js?v=20261028"></script>
+  <script src="particles.js?v=20261031"></script>
   <script>
     // ─────────── particle symbol renderer ───────────
     // Each nav-item's canvas draws a symbol as a cloud of small ink dots that
@@ -275,74 +275,39 @@
     const SIZE = MmParticles.SIZE;    // internal canvas resolution (matches width/height attrs)
     const CENTER = SIZE / 2;
 
-    // sample target positions along each symbol's stroke
+    // sample target positions along each symbol's stroke, on the same grid as
+    // the Mm mark and at the thickness of its stems, so they carry its weight
     function samplePoints(kind) {
-      const pts = [];
-      const push = (x, y) => pts.push({ tx: x, ty: y });
+      const T = 30;   // uniform stroke thickness for every symbol
+      return MmParticles.sampleDrawing((g) => {
+        g.lineWidth = T;
+        g.lineJoin = 'round';
+        g.beginPath();
 
-      // uniform look: sample any stroke of length L, thickness T with
-      // a fixed per-unit density so every symbol reads as the same "cloud".
-      const DENSITY_ALONG = 0.55 * PARTICLE_DENSITY;   // dots per pixel along the stroke
-      const DENSITY_ACROSS = 0.50 * PARTICLE_DENSITY;  // dots per pixel across the thickness
-
-      function fillLine(ax, ay, bx, by, thickness) {
-        const dx = bx - ax, dy = by - ay;
-        const len = Math.hypot(dx, dy);
-        const nx = -dy / len, ny = dx / len;
-        const nAlong  = Math.max(2, Math.round(len * DENSITY_ALONG));
-        const nAcross = Math.max(2, Math.round(thickness * DENSITY_ACROSS));
-        for (let s = 0; s < nAcross; s++) {
-          const off = -thickness/2 + (s / (nAcross - 1)) * thickness;
-          for (let i = 0; i < nAlong; i++) {
-            const t = i / (nAlong - 1);
-            // small random jitter so grid patterns don't show
-            const jx = (Math.random() - 0.5) * 1.2;
-            const jy = (Math.random() - 0.5) * 1.2;
-            push(ax + dx * t + nx * off + jx, ay + dy * t + ny * off + jy);
-          }
+        if (kind === 'circle') {
+          g.arc(CENTER, CENTER, 78, 0, Math.PI * 2);
         }
-      }
 
-      function fillRing(cx, cy, radius, thickness) {
-        const circumference = 2 * Math.PI * radius;
-        const nAlong  = Math.max(24, Math.round(circumference * DENSITY_ALONG));
-        const nAcross = Math.max(2,  Math.round(thickness * DENSITY_ACROSS));
-        for (let s = 0; s < nAcross; s++) {
-          const r = radius - thickness/2 + (s / (nAcross - 1)) * thickness;
-          for (let i = 0; i < nAlong; i++) {
-            const a = (i / nAlong) * Math.PI * 2;
-            const jx = (Math.random() - 0.5) * 1.2;
-            const jy = (Math.random() - 0.5) * 1.2;
-            push(cx + Math.cos(a) * r + jx, cy + Math.sin(a) * r + jy);
-          }
+        if (kind === 'triangle') {
+          const size = 92;                        // half-base
+          const h = size * Math.sqrt(3);
+          const cy = CENTER + h / 3;              // centroid at CENTER
+          g.moveTo(CENTER, cy - h);
+          g.lineTo(CENTER - size, cy);
+          g.lineTo(CENTER + size, cy);
+          g.closePath();
         }
-      }
 
-      const T = 22;   // uniform stroke thickness for every symbol
+        if (kind === 'plus') {
+          const halfLen = 78;
+          g.moveTo(CENTER - halfLen, CENTER);
+          g.lineTo(CENTER + halfLen, CENTER);
+          g.moveTo(CENTER, CENTER - halfLen);
+          g.lineTo(CENTER, CENTER + halfLen);
+        }
 
-      if (kind === 'circle') {
-        fillRing(CENTER, CENTER, 78, T);
-      }
-
-      if (kind === 'triangle') {
-        const size = 92;                        // half-base
-        const h = size * Math.sqrt(3);
-        const cy = CENTER + h / 3;              // centroid at CENTER
-        const A = { x: CENTER,          y: cy - h };
-        const B = { x: CENTER - size,   y: cy };
-        const C = { x: CENTER + size,   y: cy };
-        fillLine(A.x, A.y, B.x, B.y, T);
-        fillLine(B.x, B.y, C.x, C.y, T);
-        fillLine(C.x, C.y, A.x, A.y, T);
-      }
-
-      if (kind === 'plus') {
-        const halfLen = 78;
-        fillLine(CENTER - halfLen, CENTER, CENTER + halfLen, CENTER, T);
-        fillLine(CENTER, CENTER - halfLen, CENTER, CENTER + halfLen, T);
-      }
-
-      return pts;
+        g.stroke();
+      }, GLYPH_STEP).map(p => ({ tx: p.x, ty: p.y }));
     }
 
     class ParticleSymbol {
@@ -405,8 +370,8 @@
     // Ambient breathing/scatter is decorative motion; OS-level reduced-motion
     // preference turns it off, keeping only user-triggered transitions (e.g. the toggle morph).
     const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    // Same per-area weight as the nav symbols (0.55 × 0.50 dots/px²), shared by
-    // every other particle shape (Mm mark, toggle) so no cloud reads thinner.
+    // Shared by every particle shape (Mm mark, nav symbols, toggle) so no cloud
+    // reads thinner than its neighbours.
     const GLYPH_STEP = MmParticles.glyphStep(PARTICLE_DENSITY);
     let particleInk = getComputedStyle(document.documentElement).getPropertyValue('--ink').trim() || '#1D2020';
     function updateParticleInk() {
@@ -421,33 +386,37 @@
 
     // Moon/Sun theme toggle
     const TC = SIZE / 2;
-    function sampleCrescent() {
+    function sampleCrescent(step) {
       const R = 80, r = 65, ox = 32, oy = -22, pts = [];
-      for (let y = 0; y < SIZE; y += GLYPH_STEP)
-        for (let x = 0; x < SIZE; x += GLYPH_STEP)
+      for (let y = 0; y < SIZE; y += step)
+        for (let x = 0; x < SIZE; x += step)
           if (Math.hypot(x - TC, y - TC) <= R && Math.hypot(x - TC - ox, y - TC - oy) > r)
             pts.push({ x: x + (Math.random() - .5), y: y + (Math.random() - .5) });
       return pts.sort(() => Math.random() - .5);
     }
-    function sampleSunShape() {
+    function sampleSunShape(step) {
       const R = 38, pts = [];
-      for (let y = TC - R; y <= TC + R; y += GLYPH_STEP)
-        for (let x = TC - R; x <= TC + R; x += GLYPH_STEP)
+      for (let y = TC - R; y <= TC + R; y += step)
+        for (let x = TC - R; x <= TC + R; x += step)
           if (Math.hypot(x - TC, y - TC) <= R) pts.push({ x, y });
       for (let i = 0; i < 8; i++) {
         const a = (i / 8) * Math.PI * 2, c = Math.cos(a), s = Math.sin(a);
-        for (let r = R + 14; r <= R + 35; r += GLYPH_STEP)
-          for (let w = -5; w <= 5; w += GLYPH_STEP)
+        for (let r = R + 14; r <= R + 35; r += step)
+          for (let w = -5; w <= 5; w += step)
             pts.push({ x: TC + c * r - s * w, y: TC + s * r + c * w });
       }
       return pts.sort(() => Math.random() - .5);
     }
 
     class HomeThemeToggle {
-      constructor(canvas, isDark) {
+      // `scale` keeps the dots and their motion at the Mm mark's on-screen size
+      // even though the toggle is drawn far smaller.
+      constructor(canvas, isDark, scale) {
         this.ctx = canvas.getContext('2d');
+        this.scale = scale;
         this.hover = 0; this.hoverTarget = 0; this.t = 0; this.isDark = isDark;
-        const moonAll = sampleCrescent(), sunAll = sampleSunShape();
+        const step = GLYPH_STEP * scale;
+        const moonAll = sampleCrescent(step), sunAll = sampleSunShape(step);
         const count = Math.min(moonAll.length, sunAll.length);
         const moon = moonAll.slice(0, count), sun = sunAll.slice(0, count);
         this.particles = moon.map((m, i) => ({
@@ -463,7 +432,7 @@
         this.t += .025;
         this.ctx.clearRect(0, 0, SIZE, SIZE);
         this.ctx.fillStyle = particleInk;
-        const amp = REDUCED_MOTION ? 0 : 1.0 + this.hover * 4, dot = 1.35 + this.hover * .55;
+        const amp = (REDUCED_MOTION ? 0 : 1.0 + this.hover * 4) * this.scale, dot = (1.35 + this.hover * .55) * this.scale;
         for (const p of this.particles) {
           p.x += ((this.isDark ? p.sunX : p.moonX) - p.x) * .06;
           p.y += ((this.isDark ? p.sunY : p.moonY) - p.y) * .06;
@@ -501,7 +470,9 @@
     // theme toggle
     const toggleEl = document.querySelector('.theme-toggle');
     const isDarkNow = document.documentElement.getAttribute('data-theme') === 'dark';
-    const themeToggle = new HomeThemeToggle(toggleEl.querySelector('canvas'), isDarkNow);
+    const toggleCanvas = toggleEl.querySelector('canvas');
+    const toggleScale = floatingCard.querySelector('.mm-symbol').clientWidth / toggleCanvas.clientWidth;
+    const themeToggle = new HomeThemeToggle(toggleCanvas, isDarkNow, toggleScale);
     toggleEl.addEventListener('click', () => {
       const cur = document.documentElement.getAttribute('data-theme');
       const next = cur === 'dark' ? 'light' : 'dark';

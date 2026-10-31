@@ -5,8 +5,8 @@
 window.MmParticles = (function () {
   const SIZE = 260;
 
-  // Same per-area weight as the home page's nav symbols (0.55 × 0.50 dots/px²)
-  // so no cloud on the site reads thinner than its neighbours.
+  // One per-area weight (0.55 × 0.50 dots/px²) for every shape on the site, so
+  // no cloud reads thinner than its neighbours.
   function glyphStep(density) {
     return 1 / Math.sqrt(0.55 * 0.50 * (density || 1));
   }
