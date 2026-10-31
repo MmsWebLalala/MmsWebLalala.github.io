@@ -28,7 +28,7 @@
          mark's particle cloud renders at the same physical size — and thus
          the same visual dot density — as the three nav symbols below it. */
       --shell-mark-width: 84px;
-      --shell-top-width: 2.4rem;
+      --shell-top-width: 56px;
       --dot: rgba(29, 32, 32, .3);
       --shell-rail-center: calc((var(--shell-edge) + var(--shell-mark-width) + var(--shell-gutter)) / 2);
       --font-body: 'DM Sans', 'Noto Sans SC', -apple-system, sans-serif;
@@ -197,7 +197,7 @@
 
     /* ══════════ RESPONSIVE ══════════ */
     @media (max-width: 720px) {
-      :root { --shell-gutter: .5rem; --shell-edge: var(--shell-gutter); --shell-mark-width: 56px; --shell-top-width: 2rem; --symbol-particle-density: .65; }
+      :root { --shell-gutter: .5rem; --shell-edge: var(--shell-gutter); --shell-mark-width: 56px; --shell-top-width: 38px; --symbol-particle-density: .65; }
     }
 
     @media (max-width: 640px) {
@@ -246,7 +246,7 @@
         <canvas class="nav-symbol" width="260" height="260" aria-hidden="true"></canvas>
         <span class="nav-label">Craft</span>
       </a>
-      <a class="nav-item" href="connect.html" data-symbol="plus">
+      <a class="nav-item" href="connect.html" data-symbol="square">
         <canvas class="nav-symbol" width="260" height="260" aria-hidden="true"></canvas>
         <span class="nav-label">Connect</span>
       </a>
@@ -298,12 +298,9 @@
           g.closePath();
         }
 
-        if (kind === 'plus') {
-          const halfLen = 78;
-          g.moveTo(CENTER - halfLen, CENTER);
-          g.lineTo(CENTER + halfLen, CENTER);
-          g.moveTo(CENTER, CENTER - halfLen);
-          g.lineTo(CENTER, CENTER + halfLen);
+        if (kind === 'square') {
+          const half = 72;
+          g.rect(CENTER - half, CENTER - half, half * 2, half * 2);
         }
 
         g.stroke();
