@@ -14,45 +14,47 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="shell.css?v=20261030b" />
   <style>
-    /* Profile is simply the first card in the grid, the same size as the rest:
-       the avatar takes the preview slot, contacts sit where a status would. */
+    /* Profile is two Craft cards and their gap wide, at the same height, so every
+       other card stays exactly Craft's size: the avatar is a square on the left
+       and the words sit beside it. --profile-av is the height of a Craft card
+       minus the padding and border; an explicit width rather than auto, because
+       Safari sizes an auto column from the image's own 300px. */
+    .profile-li { grid-column: span 2; }
+    .profile-card {
+      --profile-av: 13.65rem;
+      display: grid; grid-template-columns: var(--profile-av) minmax(0, 1fr); grid-template-rows: auto auto auto 1fr;
+      column-gap: 1.1rem; row-gap: .5rem;
+    }
+    .profile-preview { grid-row: 1 / -1; display: block; aspect-ratio: auto; margin: 0; }
     .profile-preview img {
-      width: 46%; height: auto; aspect-ratio: 1; object-fit: cover; display: block;
+      box-sizing: border-box; width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; display: block;
       border: 1px solid var(--shell-line); border-radius: .45rem;
     }
     .profile-note { margin: 0; color: var(--shell-soft); font: 400 .8rem/1.45 var(--shell-body); }
-    .contact-icons { display: flex; gap: .1rem; margin: auto 0 -.3rem -.4rem; padding: .4rem 0 0; list-style: none; }
+    /* The icons take exactly the height of a Craft status line. */
+    .contact-icons { display: flex; gap: .1rem; margin: auto 0 -.4rem -.2rem; padding: 0; list-style: none; }
     .contact-icon {
-      display: grid; place-items: center; width: 2.2rem; height: 2.2rem;
-      border-radius: .45rem; transition: background-color .2s ease;
+      display: grid; place-items: center; width: 1.6rem; height: 1.6rem;
+      border-radius: .35rem; transition: background-color .2s ease;
     }
     .contact-icon:hover { background: var(--shell-bg); }
-    .contact-icon canvas { width: 1.5rem; height: 1.5rem; display: block; }
+    .contact-icon canvas { width: 1.25rem; height: 1.25rem; display: block; }
 
-    /* Phones: the profile spans both columns as a wide card, avatar on the
-       left and words on the right. Its height is exactly one column's width
-       (the grid is a size container, so 100cqw is the grid's width), and the
-       avatar is a square filling that height. The avatar column is given an
-       explicit width (the height minus the card's padding and border) rather
-       than auto: Safari sizes an auto column from the image's own 300px, which
-       squeezes the text column. */
+    /* Phones: the profile spans both columns. Its height is exactly one column's
+       width (the grid is a size container, so 100cqw is the grid's width). */
     @media (max-width: 720px) {
       .works-section .card-grid { container-type: inline-size; }
       .profile-li { grid-column: 1 / -1; }
       .profile-card {
         /* Floor for the narrowest phones, where one column is too short for the text. */
         --profile-h: max(calc((100cqw - .75rem) / 2), 7.75rem);
-        display: grid; grid-template-rows: auto auto auto 1fr;
-        grid-template-columns: calc(var(--profile-h) - 1.75rem - 2px) minmax(0, 1fr);
+        --profile-av: calc(var(--profile-h) - 1.75rem - 2px);
         column-gap: .9rem; row-gap: .3rem; overflow: hidden;
         height: var(--profile-h);
       }
-      .profile-preview { grid-row: 1 / -1; width: 100%; height: 100%; margin: 0; }
-      .profile-preview img { width: 100%; height: 100%; }
       .profile-card .work-kind { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
       .profile-card .work-title { font-size: .9rem; }
       .profile-note { font-size: .74rem; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
-      .contact-icons { align-self: end; margin: 0 0 -.4rem -.4rem; padding: 0; }
     }
   </style>
   <script src="particles.js?v=20261028" defer></script>
